@@ -1,0 +1,2227 @@
+<!DOCTYPE html>
+<html lang="en"><head><style id="qw-theme">:root {
+  --color-bg: #faf9fc;
+  --color-text: #131920;
+  --color-navbar-bg: #f9f9fb;
+  --color-bg-chat-view: #fcfcfd;
+  --color-bg-secondary: #ffffff;
+  --color-bg-tertiary: #f9fafb;
+  --color-bg-hover: #f3f4f6;
+  --color-surface: #f9fafb;
+  --color-surface-hover: #f3f4f6;
+  --color-surface-active: #e5e7eb;
+  --color-border: rgba(0, 0, 0, .12);
+  --color-border-light: rgba(0, 0, 0, .06);
+  --color-border-strong: #d1d5db;
+  --color-primary: #4200db;
+  --color-primary-dark: #35009e;
+  --color-primary-light: #8575ff;
+  --color-primary-bg: #e8e6ff;
+  --color-primary-hover-border: #35009e;
+  --color-nav-icon-active: #4200db;
+  --color-nav-hover-border: #4200db;
+  --color-primary-alpha-3: color-mix(in srgb, #4200db 3%, transparent);
+  --color-primary-alpha-5: color-mix(in srgb, #4200db 5%, transparent);
+  --color-primary-alpha-8: color-mix(in srgb, #4200db 8%, transparent);
+  --color-primary-alpha-12: color-mix(in srgb, #4200db 12%, transparent);
+  --color-primary-alpha-15: color-mix(in srgb, #4200db 15%, transparent);
+  --color-primary-alpha-20: color-mix(in srgb, #4200db 20%, transparent);
+  --color-primary-alpha-25: color-mix(in srgb, #4200db 25%, transparent);
+  --color-primary-alpha-30: color-mix(in srgb, #4200db 30%, transparent);
+  --color-primary-alpha-40: color-mix(in srgb, #4200db 40%, transparent);
+  --color-primary-alpha-50: color-mix(in srgb, #4200db 50%, transparent);
+  --color-primary-alpha-60: color-mix(in srgb, #4200db 60%, transparent);
+  --color-primary-subtle: color-mix(in srgb, #4200db 12%, transparent);
+  --color-primary-border: color-mix(in srgb, #4200db 30%, transparent);
+  --color-focus-ring: color-mix(in srgb, #4200db 50%, transparent);
+  --color-sidebar-hover: color-mix(in srgb, #4200db 12%, transparent);
+  --color-accent: #4200db;
+  --color-accent-foreground: #4200db;
+  --color-accent-dark: #35009e;
+  --color-accent-light: #e8e6ff;
+  --color-accent-inverse: #ffffff;
+  --color-link: #4200db;
+  --color-primary-gradient-end: #e8e6ff;
+  --color-primary-bg-solid: #e8e6ff;
+  --color-user-bubble: #F3F3F7;
+  --color-user-bubble-text: #131920;
+  --color-text-secondary: #5e5e5e;
+  --color-text-tertiary: #656871;
+  --color-text-muted: #9ca3af;
+  --color-text-on-primary: #ffffff;
+  --color-success: #00802f;
+  --color-success-dark: #00471e;
+  --color-success-light: #d9ffd6;
+  --color-success-hover: #005c26;
+  --color-success-bg: #e6f5eb;
+  --color-success-border: #b3d9bf;
+  --color-success-foreground: #00802f;
+  --color-success-dark-foreground: #00471e;
+  --color-success-text: #00471e;
+  --color-error: #db0000;
+  --color-error-dark: #700000;
+  --color-error-light: #ffe0e0;
+  --color-error-hover: #ffe0e0;
+  --color-error-bg: #fceaea;
+  --color-error-border: #f2cccc;
+  --color-error-active-border: #db0000;
+  --color-error-foreground: #db0000;
+  --color-error-dark-foreground: #700000;
+  --color-error-inverse: #ffffff;
+  --color-error-text: #700000;
+  --color-warning: #f2b100;
+  --color-warning-dark: #573a00;
+  --color-warning-light: #fffbbd;
+  --color-warning-hover: #db9200;
+  --color-warning-bg: #fef7e6;
+  --color-warning-border: #f9dfa3;
+  --color-warning-foreground: #f2b100;
+  --color-warning-dark-foreground: #573a00;
+  --color-warning-inverse: #573a00;
+  --color-surface-warning: #fffbbd;
+  --color-text-warning: #573a00;
+  --color-info: #006ce0;
+  --color-info-dark: #002a66;
+  --color-info-light: #d1f1ff;
+  --color-info-hover: #003b8f;
+  --color-info-bg: #ebf3fc;
+  --color-info-border: #b3d1f0;
+  --color-info-foreground: #006ce0;
+  --color-info-dark-foreground: #002a66;
+  --color-info-inverse: #ffffff;
+  --color-overlay: rgba(0, 0, 0, .5);
+  --color-shadow: rgba(0, 0, 0, .08);
+  --color-hover: rgba(0, 0, 0, .05);
+  --color-tooltip-bg: rgba(0, 0, 0, .85);
+  --color-tooltip-text: #ffffff;
+  --color-voice-purple: #8575ff;
+  --color-voice-purple-dark: #4200db;
+  --color-voice-purple-light: #8575ff;
+  --color-voice-red: #db0000;
+  --color-voice-red-dark: #700000;
+  --color-voice-amber: #f2b100;
+  --color-voice-purple-glow: rgba(66, 0, 219, .4);
+  --color-voice-red-glow: rgba(219, 0, 0, .4);
+  --font-sans: "Amazon Ember", "Helvetica Neue", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: "SF Mono", "Monaco", "Menlo", "Consolas", monospace;
+  --text-2xs: .5625rem;
+  --text-xs: .625rem;
+  --text-sm: .6875rem;
+  --text-base: .75rem;
+  --text-md: .8125rem;
+  --text-lg: .875rem;
+  --text-xl: 1rem;
+  --text-2xl: 1.125rem;
+  --text-3xl: 1.25rem;
+  --text-4xl: 1.5rem;
+  --text-5xl: 2rem;
+  --spacing-1: calc(.25rem * 1);
+  --spacing-1-5: calc(.25rem * 1.5);
+  --spacing-2: calc(.25rem * 2);
+  --spacing-3: calc(.25rem * 3);
+  --spacing-4: calc(.25rem * 4);
+  --spacing-5: calc(.25rem * 5);
+  --spacing-6: calc(.25rem * 6);
+  --spacing-7: calc(.25rem * 7);
+  --spacing-8: calc(.25rem * 8);
+  --spacing-9: calc(.25rem * 9);
+  --spacing-10: calc(.25rem * 10);
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-card: 12px;
+  --radius-lg: 16px;
+  --radius-pill: 8px;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, .05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, .08);
+  --color-success-bg-solid: #d9ffd6;
+  --color-error-bg-solid: #ffe0e0;
+  --color-error-border-solid: #ffe0e0;
+  --color-warning-bg-solid: #fffbbd;
+  --color-warning-text: #573a00;
+  --color-info-bg-solid: #d1f1ff;
+  --color-info-bg-solid-alt: #d1f1ff;
+  --color-info-text: #002a66;
+  --color-info-text-alt: #002a66;
+  --color-emerald: #10b981;
+  --color-teal: #4ecdc4;
+  --color-code-bg: #F3F3F7;
+  --color-code-header-bg: #f1f3f5;
+  --color-code-text: #24292e;
+  --color-code-border: #e1e4e8;
+  --color-code-muted: #6a737d;
+  --color-inline-code-bg: #F3F3F7;
+  --color-inline-code-text: #24292e;
+  --color-inline-code-border: #e1e4e8;
+  --color-scrollbar-thumb: #d1d5db;
+  --color-scrollbar-track: transparent;
+  --color-graph-node-text: #333333;
+  --color-graph-node-text-dim: #7F8C8D;
+  --color-graph-edge-default: #95A5A6;
+  --color-graph-edge-cross: #E67E22;
+  --color-graph-edge-text: #666666;
+  --color-graph-edge-stroke: #ffffff;
+  --color-graph-highlight-bg: #FF6B6B;
+  --color-graph-highlight-border: #E74C3C;
+  --color-graph-search-bg: #FFD700;
+  --color-graph-search-border: #FFA500;
+  --color-graph-focus-border: #C0392B;
+  --color-graph-external-border: #95A5A6;
+  --color-graph-cat-file: #3498DB;
+  --color-graph-cat-folder: #7F8C8D;
+  --color-graph-cat-file-aggregate: #2980B9;
+  --color-graph-cat-class: #9B59B6;
+  --color-graph-cat-function: #2ECC71;
+  --color-graph-cat-method: #1ABC9C;
+  --color-graph-cat-variable: #F39C12;
+  --color-graph-cat-import: #D35400;
+  --color-graph-cat-module: #5B6ABF;
+  --color-graph-cat-concept: #E74C3C;
+  --color-graph-cat-person: #FF6B6B;
+  --color-graph-cat-org: #4ECDC4;
+  --color-graph-cat-organization: #4ECDC4;
+  --color-graph-cat-product: #A29BFE;
+  --color-graph-cat-metric: #FD79A8;
+  --color-graph-cat-location: #34495E;
+  --color-graph-cat-date: #E056A0;
+  --color-graph-cat-code: #3498DB;
+  --color-graph-cat-doc: #7F8C8D;
+  --color-graph-cat-url: #00B894;
+  --color-graph-cat-email: #6C5CE7;
+  --color-graph-cat-unknown: #BDC3C7;
+  --color-graph-rel-contains: #BDC3C7;
+  --color-graph-rel-extends: #9B59B6;
+  --color-graph-rel-implements: #3498DB;
+  --color-graph-rel-imports: #E67E22;
+  --color-graph-rel-uses: #2ECC71;
+  --color-graph-rel-calls: #27AE60;
+  --color-graph-rel-references: #F39C12;
+  --color-graph-rel-related-to: #95A5A6;
+  --color-graph-rel-works-on: #E74C3C;
+  --color-graph-rel-owns: #1ABC9C;
+  --color-graph-rel-depends-on: #E67E22;
+  --color-graph-rel-parent-of: #BDC3C7;
+  --qs-content: #fff;
+  --qs-main: #fff;
+  --qs-primary-foreground: #131920;
+  --qs-secondary-foreground: #656871;
+  --qs-tertiary-foreground: #9ca3af;
+  --qs-placeholder-foreground: #8c8c94;
+  --qs-divider: #dedee3;
+  --qs-default-border: #8c8c94;
+  --qs-neutral-soft: #b4b4bb;
+  --qs-neutral-gray-50: #f9fafb;
+  --qs-tertiary-background: #f9fafb;
+  --qs-action-hover: #f3f3f7;
+  --qs-primary-default: #4200db;
+  --qs-primary-dark: #35009e;
+  --qs-primary-light: #e8e6ff;
+  --qs-success-default: #00802f;
+  --qs-error-default: #db0000;
+  --qs-font-sans: "Amazon Ember", "Helvetica Neue", "Segoe UI", Helvetica, Arial, sans-serif;
+  --qs-font-family: "Amazon Ember", "Helvetica Neue", "Segoe UI", Helvetica, Arial, sans-serif;
+  --qs-font-base-letter-spacing: .15px;
+  --qs-shadow-sm: 0 0 2px 0 #00000029, 0 0 4px 0 #00000029;
+  --qs-shadow-md: 0 0 2px 0 #00000029, 0 2px 8px 1px #00000029;
+  --qs-shadow-lg: 0 4px 16px 4px #00000029, 0 2px 6px 1px #00000029;
+  --qs-shadow-xl: 0 4px 8px 2px #00000029, 0 6px 20px 4px #00000029;
+  --qs-width-modal-sm: 384px;
+  --qs-width-modal-md: 600px;
+  --qs-width-modal-lg: 1136px;
+  --qs-grid-gap: 16px;
+  --qs-grid-gap-xl: 24px;
+  --qs-primary-medium: #8575ff;
+  --qs-primary-inverse: #fff;
+  --qs-neutral-lightest: #f9f9fb;
+  --qs-neutral-light: #f3f3f7;
+  --qs-neutral-default: #dedee3;
+  --qs-neutral-medium: #8c8c94;
+  --qs-neutral-deep: #656871;
+  --qs-neutral-dark: #333843;
+  --qs-neutral-strong: #131920;
+  --qs-neutral-white: #fff;
+  --qs-neutral-black: #000;
+  --qs-success-medium: #005c26;
+  --qs-success-dark: #00471e;
+  --qs-success-light: #d9ffd6;
+  --qs-success-inverse: #fff;
+  --qs-info-default: #006ce0;
+  --qs-info-medium: #003b8f;
+  --qs-info-dark: #002a66;
+  --qs-info-light: #d1f1ff;
+  --qs-info-inverse: #fff;
+  --qs-warning-default: #f2b100;
+  --qs-warning-medium: #db9200;
+  --qs-warning-dark: #573a00;
+  --qs-warning-light: #fffbbd;
+  --qs-warning-inverse: #573a00;
+  --qs-warning-experimental: #f2b100;
+  --qs-warning-experimental-light: #fffbbd;
+  --qs-warning-experimental-light-foreground: #fffbbd;
+  --qs-error-medium: #900;
+  --qs-error-dark: #700000;
+  --qs-error-light: #ffe0e0;
+  --qs-error-inverse: #fff;
+  --qs-connection-default: #db3300;
+  --qs-connection-soft: #ff997a;
+  --qs-connection-light: #ffe0d6;
+  --qs-connection-dark: #661800;
+  --qs-automation-default: #b3008f;
+  --qs-automation-medium: #d600ba;
+  --qs-automation-soft: #ff94f1;
+  --qs-automation-light: #ffe0fb;
+  --qs-automation-dark: #660052;
+  --qs-insight-default: #a000b8;
+  --qs-insight-soft: #f299ff;
+  --qs-insight-light: #fce6ff;
+  --qs-insight-dark: #590066;
+  --qs-visualization-default: #7300e5;
+  --qs-visualization-soft: #d4a8ff;
+  --qs-visualization-light: #f2e5ff;
+  --qs-visualization-dark: #45008a;
+  --qs-spice: #ff9800;
+  --qs-coachmark: #006ce0;
+  --qs-brand: #fff;
+  --qs-brand-foreground: #131920;
+  --qs-brand-navbar: #131920;
+  --qs-brand-navbar-foreground: #fff;
+  --qs-brand-navbar-light: #dedee3;
+  --qs-brand-navbar-dark: #000;
+  --qs-application-navbar: #4200db;
+  --qs-application-navbar-foreground: #fff;
+  --qs-application-navbar-light: #e8e6ff;
+  --qs-application-navbar-dark: #35009e;
+  --qs-dimension: #4200db;
+  --qs-dimension-foreground: #fff;
+  --qs-dimension-experimental: #4200db;
+  --qs-dimension-experimental-foreground: #4200db;
+  --qs-measure: #00802f;
+  --qs-measure-foreground: #fff;
+  --qs-measure-experimental: #f2b100;
+  --qs-measure-experimental-foreground: #f2b100;
+  --qs-content-inverse: #333843;
+  --qs-content-inverse-active: #131920;
+  --qs-secondary: #dedee3;
+  --qs-disabled: #8c8c94;
+  --qs-divider-light: #f3f3f7;
+  --qs-hover-border: #333843;
+  --qs-active-border: #4200db;
+  --qs-disabled-border: #dedee3;
+  --qs-error-border: #ffe0e0;
+  --qs-error-active-border: #db0000;
+  --qs-disabled-foreground: #b4b4bb;
+  --qs-primary-inverse-foreground: #fff;
+  --qs-error-foreground: #db0000;
+  --qs-contrast-foreground: #131920;
+  --qs-main-foreground: #131920;
+  --qs-main-secondary-foreground: #656871;
+  --qs-action-disabled: #f3f3f7;
+  --qs-action-active: #e8e6ff;
+  --qs-default-badge: #dedee3;
+  --qs-tag-default: #dedee3;
+  --qs-tag-soft-border: #b4b4bb;
+  --qs-focus-offset: 1px;
+  --qs-toggle-tile-sm: calc(.25rem * 8);
+  --qs-toggle-tile-md: calc(.25rem * 12);
+  --qs-toggle-tile-lg: calc(.25rem * 15);
+  --qs-shadow-pin-right: inset 4px 0 4px -4px #00000029;
+  --qs-shadow-pin-left: inset -4px 0 4px -4px #00000029;
+  --react-pdf-text-layer: 1;
+  --highlight-bg-color: rgba(180, 0, 170, 1);
+  --highlight-selected-bg-color: rgba(0, 100, 0, 1);
+  --react-pdf-annotation-layer: 1;
+  --annotation-unfocused-field-background: url("data:image/svg+xml;charset=UTF-8,<svg width='1px' height='1px' xmlns='http://www.w3.org/2000/svg'><rect width='100%' height='100%' style='fill:rgba(0, 54, 255, 0.13);'/></svg>");
+  --input-focus-border-color: Highlight;
+  --input-focus-outline: 1px solid Canvas;
+  --input-unfocused-border-color: transparent;
+  --input-disabled-border-color: transparent;
+  --input-hover-border-color: black;
+  --link-outline: none;
+  color-scheme: light;
+}
+body { background: var(--color-bg); color: var(--color-text); }
+a { color: var(--color-link, var(--color-primary)); }</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Work Allocation Dashboard</title>
+<style>
+  :root{
+    /* Light, sleek theme — Amazon orange + navy accents on white */
+    --bg:#f4f6f9;--surface:#ffffff;--surface2:#f7f9fc;--surface3:#eef2f7;--border:#dde3ec;
+    --text:#1a2332;--text2:#5a6b7f;--muted:#94a3b5;
+    --primary:#FF9900;--primary-d:#e88a00;--accent:#146EB4;   /* Amazon orange + Amazon blue */
+    --navy:#232F3E;--navy2:#37475A;
+    --success:#1CA750;--warn:#F59E0B;--danger:#e5453b;--purple:#6c5ce7;
+    --radius:14px;--radius-sm:9px;
+    --font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    --shadow:0 1px 3px rgba(16,24,40,.06),0 1px 2px rgba(16,24,40,.04);
+    --shadow-md:0 4px 12px rgba(16,24,40,.08);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.5;padding:20px;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1240px;margin:0 auto}
+  header{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+  .logo{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#FF9900,#FF6A00);display:flex;align-items:center;justify-content:center;font-size:22px}
+  h1{font-size:21px;font-weight:700;letter-spacing:-.3px}
+  .sub{color:var(--text2);font-size:12.5px}
+  /* nav blocks */
+  .nav{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:20px}
+  .navb{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;cursor:pointer;transition:.18s;position:relative;overflow:hidden;box-shadow:var(--shadow)}
+  .navb:hover{border-color:var(--primary)}
+  .navb.on{background:linear-gradient(135deg,rgba(255,153,0,.16),rgba(255,153,0,.04));border-color:var(--primary);box-shadow:0 2px 10px rgba(255,153,0,.18)}
+  .navb .n{font-size:11px;color:var(--muted);font-weight:700}
+  .navb .t{font-size:14px;font-weight:700;margin-top:2px}
+  .navb .d{font-size:11px;color:var(--text2);margin-top:2px}
+  .navb.on .t{color:var(--primary)}
+  /* panel */
+  .panel{display:none}
+  .panel.on{display:block;animation:fade .25s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:16px;box-shadow:var(--shadow)}
+  .card h2{font-size:13px;text-transform:uppercase;letter-spacing:.5px;color:var(--text2);margin-bottom:14px;display:flex;align-items:center;gap:8px;justify-content:space-between}
+  .card h2 .l{display:flex;align-items:center;gap:8px}
+  .pill{font-size:11px;background:var(--surface3);padding:3px 9px;border-radius:20px;color:var(--text2);font-weight:600}
+  /* tables */
+  table{border-collapse:collapse;width:100%;font-size:12.5px}
+  th{background:var(--navy);color:#fff;padding:8px 10px;text-align:left;border:1px solid var(--border);font-weight:700;white-space:nowrap}
+  td{padding:6px 10px;border:1px solid var(--border)}
+  tr:nth-child(even) td{background:var(--surface2)}
+  .num{width:74px;background:#fff;border:1px solid var(--border);color:var(--text);border-radius:6px;padding:4px 6px;font-size:12px;text-align:right}
+  .txt{background:#fff;border:1px solid var(--border);color:var(--text);border-radius:6px;padding:4px 6px;font-size:12px;width:100%}
+  select.txt{cursor:pointer}
+  /* buttons */
+  .btn{background:linear-gradient(135deg,#FF9900,#FF7A00);color:#fff;border:none;border-radius:10px;padding:11px 20px;font-size:13.5px;font-weight:700;cursor:pointer;transition:.18s;box-shadow:0 4px 14px rgba(59,130,246,.28)}
+  .btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(59,130,246,.4)}
+  .btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+  .btn.g{background:linear-gradient(135deg,var(--success),#16a34a);box-shadow:0 4px 14px rgba(34,197,94,.28)}
+  .btn.sm{padding:6px 12px;font-size:12px}
+  .btn.ghost{background:var(--surface3);color:var(--text);box-shadow:none;border:1px solid var(--border)}
+  .btn.danger{background:var(--danger);box-shadow:none;padding:5px 10px;font-size:12px}
+  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .spacer{flex:1}
+  /* upload */
+  .drop{border:2px dashed var(--border);border-radius:var(--radius-sm);padding:22px;text-align:center;cursor:pointer;transition:.2s;background:var(--surface2)}
+  .drop:hover,.drop.hot{border-color:var(--primary);background:rgba(59,130,246,.08)}
+  .drop .ico{font-size:28px;opacity:.8}
+  .fname{margin-top:8px;font-size:12px;color:var(--success);font-weight:600;display:none}
+  /* kpis */
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+  .kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow)}
+  .kpi .v{font-size:24px;font-weight:800;letter-spacing:-1px}
+  .kpi .l{font-size:10.5px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px}
+  .b1 .v{color:var(--accent)}.b2 .v{color:var(--success)}.b3 .v{color:var(--warn)}.b4 .v{color:var(--purple)}.b5 .v{color:#8a8fa3}
+  /* leaves */
+  .lsearch{width:100%;background:#fff;border:1px solid var(--border);color:var(--text);border-radius:8px;padding:8px 11px;font-size:13px;margin-bottom:10px}
+  .leave-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:7px;max-height:340px;overflow-y:auto;padding-right:4px;scrollbar-width:thin;scrollbar-color:var(--muted) transparent}
+  .leave-grid::-webkit-scrollbar{width:8px}.leave-grid::-webkit-scrollbar-thumb{background:#c3cad6;border-radius:8px}
+  .lrow{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:6px 9px;font-size:12px}
+  .lrow .seg button{background:transparent;border:1px solid var(--border);color:var(--text2);border-radius:5px;font-size:10px;padding:3px 7px;cursor:pointer;margin-left:3px}
+  .lrow .seg button.full{background:var(--danger);border-color:var(--danger);color:#fff}
+  .lrow .seg button.half{background:var(--warn);border-color:var(--warn);color:#1a1a1a}
+  .lrow .seg button.skip{background:var(--muted);border-color:var(--muted);color:#fff}
+  #leToggle{display:inline-flex;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+  #leToggle button{background:var(--surface);border:none;color:var(--text2);font-size:13px;font-weight:700;padding:8px 18px;cursor:pointer}
+  #leToggle button.on{background:var(--success);color:#fff}
+  .render .bdg-s{background:#e0e0e0;color:#555;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:700}
+  /* scrollable table wells: sticky header + slim custom scrollbar */
+  .scrollwell{scrollbar-width:thin;scrollbar-color:var(--muted) transparent}
+  .scrollwell::-webkit-scrollbar{width:8px;height:8px}
+  .scrollwell::-webkit-scrollbar-track{background:transparent}
+  .scrollwell::-webkit-scrollbar-thumb{background:#c3cad6;border-radius:8px}
+  .scrollwell::-webkit-scrollbar-thumb:hover{background:var(--muted)}
+  .scrollwell thead th{position:sticky;top:0;z-index:2;box-shadow:0 1px 0 var(--border)}
+  /* mail */
+  .mailbar{display:flex;align-items:center;justify-content:space-between;padding:12px 0 10px}
+  .copy{background:var(--success);color:#fff;border:none;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer}
+  .render{background:#fff;color:#1a1a1a;border-radius:8px;padding:20px;max-height:560px;overflow:auto}
+  .render table{font-size:12px}.render th{background:#232F3E;color:#fff;border:1px solid #999}
+  .render td{border:1px solid #999;color:#1a1a1a}.render tr:nth-child(even) td{background:#f4f8f4}
+  .render .greet{font-size:13px;margin-bottom:8px}.render .note{font-size:12px;color:#333;margin:2px 0}
+  .render .quip{font-size:12px;color:#1155cc;margin:8px 0;word-break:break-all}
+  .render .tsec{font-weight:700;font-size:13px;margin:16px 0 6px;color:#e88a00;border-left:4px solid #FF9900;padding-left:8px}
+  .render .bdg-l{background:#ffd9d9;color:#a00;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:700}
+  .render .bdg-h{background:#ffe9c2;color:#8a5a00;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:700}
+  .empty{padding:44px;text-align:center;color:var(--muted)}.empty .ico{font-size:38px;opacity:.5;margin-bottom:10px}
+  .hint{font-size:12px;color:var(--text2);background:var(--surface2);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:8px;padding:10px 12px;margin:10px 0}
+  .banner{font-size:12px;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.4);color:#f5c26b;border-radius:8px;padding:8px 12px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--success);color:#fff;padding:10px 20px;border-radius:10px;font-weight:700;font-size:13px;opacity:0;transition:.3s;pointer-events:none;z-index:99}
+  .toast.show{opacity:1}
+  code{background:var(--surface3);padding:2px 6px;border-radius:5px;font-size:11.5px}
+  @media(max-width:900px){.nav{grid-template-columns:repeat(2,1fr)}.kpis{grid-template-columns:repeat(2,1fr)}}
+
+  /* ---- polish ---- */
+  .btn,.navb,.card,.copy,.tab{transition:all .18s ease}
+  .num:focus,.txt:focus,select:focus,input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(255,153,0,.15)}
+  tbody tr:hover td{background:#fff7ec !important}
+  .copy:hover{filter:brightness(1.05);transform:translateY(-1px)}
+  .btn.sm:hover{transform:translateY(-1px)}
+  h1{background:linear-gradient(90deg,#232F3E,#FF9900);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">⚡</div>
+    <div><h1>Work Allocation Dashboard</h1><div class="sub">Main · Daily Planning · Work Allocation · Verification</div></div>
+    <div class="spacer"></div>
+    <button class="btn ghost sm" id="resetBtn">↺ Reset config</button>
+  </header>
+
+  <!-- upload strip (shared) -->
+  <div class="card">
+    <div class="row">
+      <div style="flex:1">
+        <div class="drop" id="drop"><span class="ico">📥</span> &nbsp; <b>Drop SIM-T dump CSV</b> (28-col export) or click <div class="fname" id="fname"></div></div>
+        <input type="file" id="file" accept=".csv,.xlsx,.xls" hidden="">
+      </div>
+      <div style="width:180px"><label style="font-size:11px;color:var(--text2)">Report date</label>
+        <input type="date" id="rdate" class="txt" style="margin-top:4px"></div>
+    </div>
+  </div>
+
+  <!-- nav -->
+  <div class="nav">
+    <div class="navb on" data-p="main"><div class="n">BLOCK 1</div><div class="t">🧩 Main</div><div class="d">Processes · Auditors · Mapping</div></div>
+    <div class="navb" data-p="planning"><div class="n">BLOCK 2</div><div class="t">📅 Daily Planning</div><div class="d">Leaves → Mail 1</div></div>
+    <div class="navb" data-p="work"><div class="n">BLOCK 3</div><div class="t">🎯 Work Allocation</div><div class="d">Assign → Mail 2 + Excel</div></div>
+    <div class="navb" data-p="verif"><div class="n">BLOCK 4</div><div class="t">✅ Verification</div><div class="d">Sample → Mail 3</div></div>
+    <div class="navb" data-p="lookup"><div class="n">BLOCK 5</div><div class="t">🔎 Ticket Lookup</div><div class="d">Paste IDs → find owner</div></div>
+  </div>
+
+  <!-- ============ BLOCK 1: MAIN ============ -->
+  <div class="panel on" id="p-main">
+    <div class="card">
+      <h2><span class="l">📊 Processes &amp; Headcount</span><span class="pill">HC = open tickets × AHT ÷ 480</span></h2>
+      <div id="procTable"></div>
+      <div class="row" style="margin-top:10px">
+        <input class="txt" id="newProc" placeholder="New process name" style="width:220px">
+        <input class="num" id="newAht" placeholder="AHT" style="width:80px">
+        <button class="btn sm" id="addProc">+ Add process</button>
+      </div>
+    </div>
+    <div class="card">
+      <h2><span class="l">👥 Auditors &amp; Process Mapping</span><span class="pill" id="audCount"></span></h2>
+      <div class="hint">Each row = an auditor tagged to a process with a capacity (HC) and a Priority (1–6). Auditors work Priority 1 first; if that process has 0 tickets, the engine falls through to Priority 2, then 3, and so on.</div>
+      <div id="mapTable" class="scrollwell" style="max-height:420px;overflow:auto"></div>
+      <div class="row" style="margin-top:10px">
+        <input class="txt" id="newAud" placeholder="Auditor login" style="width:150px">
+        <select class="txt" id="newAudProc" style="width:200px"></select>
+        <input class="num" id="newAudHc" placeholder="HC" value="1" style="width:70px">
+        <select class="txt" id="newAudPr" style="width:80px">
+          <option value="1" selected>P1</option><option value="2">P2</option><option value="3">P3</option>
+          <option value="4">P4</option><option value="5">P5</option><option value="6">P6</option>
+        </select>
+        <button class="btn sm" id="addMap">+ Add mapping</button>
+        <button class="btn sm ghost" id="suggestHc">🔮 Auto-suggest HC</button>
+      </div>
+    </div>
+    <div class="card">
+      <h2><span class="l">⏱️ Auditor Availability</span><span class="pill">Default 480 min · editable per person</span></h2>
+      <div class="hint">Minutes each auditor has today. Defaults to a full 480-min shift; edit for part-day, overtime, or short shifts. This directly caps how many tickets the engine gives them.</div>
+      <div id="availTable" class="scrollwell" style="max-height:360px;overflow:auto"></div>
+    </div>
+    <div class="card">
+      <h2><span class="l">✅ Verifiers &amp; Verification Mapping</span><span class="pill" id="verCountMain"></span></h2>
+      <div class="hint">Verifiers tagged per process, with the daily verification count. Edit count, change process, delete, or add. This drives the verification numbers in Daily Planning.</div>
+      <div id="verTableMain" class="scrollwell" style="max-height:360px;overflow:auto"></div>
+      <div class="row" style="margin-top:10px">
+        <input class="txt" id="newVerMain" placeholder="Verifier login" style="width:150px">
+        <select class="txt" id="newVerProcMain" style="width:200px"></select>
+        <input class="num" id="newVerCount" placeholder="Count" value="0" style="width:80px">
+        <button class="btn sm" id="addVerMain">+ Add verifier</button>
+      </div>
+    </div>
+    <div class="card">
+      <h2><span class="l">🧪 Verification AHT</span><span class="pill">seconds → auto-converted to minutes</span></h2>
+      <div class="hint">AHT for verifying a ticket, per process (some processes have more than one verification sub-type, e.g. MBO's Approval/RP/Count). Edit the seconds column — minutes updates automatically. This will drive verifier ticket-count allocation.</div>
+      <div id="verifAhtTable" class="scrollwell" style="max-height:360px;overflow:auto"></div>
+    </div>
+  </div>
+
+  <!-- ============ BLOCK 2: DAILY PLANNING ============ -->
+  <div class="panel" id="p-planning">
+    <div class="card">
+      <h2><span class="l">🌴 Update Leaves</span><span class="pill">Full = no work · Half = ½ capacity</span></h2>
+      <input class="lsearch" id="lsearch" placeholder="🔍 Search auditor…">
+      <div class="leave-grid" id="leaveGrid"></div>
+    </div>
+    <div class="row"><button class="btn g" id="genMail1">✨ Generate All 4 Tables</button></div>
+    <div class="card" id="mail1card" style="display:none;margin-top:16px">
+      <div class="mailbar"><b>Daily Planning — 4 Tables</b><button class="copy" id="copy1">📋 Copy all 4 tables</button></div>
+      <div class="render scrollwell" id="render1"></div>
+    </div>
+  </div>
+
+  <!-- ============ BLOCK 3: WORK ALLOCATION ============ -->
+  <div class="panel" id="p-work">
+    <div class="card" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+      <div>
+        <h2 style="margin:0"><span class="l">🧪 Assign LE Validation filler?</span></h2>
+        <div class="hint" style="margin:4px 0 0">If Yes, leftover time after real tickets becomes LE Validation. If No, leftover time is simply left unassigned.</div>
+      </div>
+      <span class="seg" id="leToggle">
+        <button data-v="yes">Yes</button>
+        <button data-v="no">No</button>
+      </span>
+    </div>
+    <div class="kpis" id="workKpis" style="display:none">
+      <div class="kpi b1"><div class="v" id="wk1">0</div><div class="l">Total Tickets</div></div>
+      <div class="kpi b2"><div class="v" id="wk2">0</div><div class="l">TT To Allocate</div></div>
+      <div class="kpi b5"><div class="v" id="wk5">0</div><div class="l">LE Validation (fill time)</div></div>
+      <div class="kpi b3"><div class="v" id="wk3">0</div><div class="l">On Leave</div></div>
+      <div class="kpi b4"><div class="v" id="wk4">0</div><div class="l">Active Auditors</div></div>
+    </div>
+    <div class="card">
+      <h2><span class="l">🎯 TT Counts per Auditor</span><span class="pill">Defaults from tickets + AHT · editable</span></h2>
+      <div class="banner" id="leaveBanner" style="display:none">🌴 <span id="leaveBannerT"></span> (auto-carried from Daily Planning — no work assigned)</div>
+      <div class="banner" id="verifReserveNote" style="display:none"></div>
+      <div class="hint">Default TT counts are auto-balanced by capacity across the tickets available for each process. Edit any cell, then Generate.</div>
+      <div id="workTable" class="scrollwell" style="max-height:420px;overflow:auto"></div>
+    </div>
+    <div class="row">
+      <button class="btn g" id="genMail2">✨ Generate Allocation</button>
+      <button class="btn ghost" id="resetTT">↺ Reset TT to defaults</button>
+      <button class="btn ghost" id="dlAudit" style="display:none">⬇️ Download Allocation (Excel)</button>
+    </div>
+    <div class="card" id="mail2card" style="display:none;margin-top:16px">
+      <div class="mailbar"><b>Allocation Summary — who got how many</b><button class="copy" id="copy2">📋 Copy table</button></div>
+      <div id="workSummary"></div>
+    </div>
+  </div>
+
+  <!-- ============ BLOCK 4: VERIFICATION ============ -->
+  <div class="panel" id="p-verif">
+    <div class="card">
+      <h2><span class="l">📥 Upload Worked/Resolved Dump</span><span class="pill">Verifiers &amp; sample %: set in Main</span></h2>
+      <div class="hint">Upload the day's completed audits (columns: Task/Task_Name, Date, SIM_ID/Short ID, Auditor). The tool samples each auditor's work per the process sample %, assigns to your Main verifiers (verifier ≠ auditor), and produces one CSV per verifier per process with every sampled ticket in it. If a process has only one verifier and they also worked the ticket, it's flagged in its own file instead of being dropped.</div>
+      <div class="drop" id="wdrop"><span class="ico">📥</span> &nbsp; <b>Drop worked dump</b> (CSV or Excel) or click <div class="fname" id="wfname"></div></div>
+      <input type="file" id="wfile" accept=".csv,.xlsx,.xls" hidden="">
+    </div>
+    <div class="row">
+      <button class="btn g" id="genVerif" disabled="">✨ Generate Verification Files</button>
+      <button class="btn ghost" id="dlVerifZip" style="display:none">⬇️ Download all as ZIP</button>
+      <button class="btn ghost" id="dlVerifIndiv" style="display:none">⬇️ Download files individually (no ZIP)</button>
+    </div>
+    <div class="card" id="verifCard" style="display:none;margin-top:16px">
+      <div class="mailbar"><b>Verification Allocation — files per verifier</b><button class="copy" id="copy3">📋 Copy table</button></div>
+      <div id="verifSummary"></div>
+    </div>
+  </div>
+
+  <!-- ============ BLOCK 5: TICKET LOOKUP ============ -->
+  <div class="panel" id="p-lookup">
+    <div class="card">
+      <h2><span class="l">🔎 Ticket Lookup</span><span class="pill">Checks the last generated Work Allocation</span></h2>
+      <div class="hint">Paste one or more Short IDs (any mix of new-lines, commas, or spaces) — e.g. tickets a manager already assigned to someone. This checks them against the most recent allocation you generated in Work Allocation, so it doesn't re-assign anything.</div>
+      <textarea id="lookupInput" placeholder="Paste ticket IDs here, one per line or comma-separated…" style="width:100%;min-height:120px;border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-family:inherit;font-size:13px;box-sizing:border-box;resize:vertical"></textarea>
+      <div class="row" style="margin-top:10px">
+        <button class="btn g" id="lookupBtn">🔎 Check</button>
+        <button class="btn ghost" id="lookupClear">✕ Clear</button>
+      </div>
+      <div id="lookupResults" style="margin-top:16px"></div>
+    </div>
+  </div>
+  <div class="sub" style="text-align:center;margin-top:18px;color:var(--muted)">Runs entirely in your browser · edits saved locally · no team data leaves this page</div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   Daily Work Allocation Dashboard — core engine + state
+   All data lives in localStorage so edits persist across sessions.
+   ============================================================ */
+
+const LS_KEY = "wad_config_v2";
+const SESSION_KEY = "wad_session_v1";   // uploaded dump, allocation results, leaves, overrides — survives refresh/close, until Reset
+
+/* -------- default config (editable in Main block) -------- */
+const DEFAULTS = {
+  aht: {
+    "Invalid and Hijack clean up":31.98,"BLMA & GTIN Exemption":5.47,"GTA Listing Error 8572 (MBO matching)":9.33,
+    "Legacy Barcode Suppressions":5.17,"Non BLMA Barcode Suppression":19.0,
+    "KPEX Ops":13.53,"UPCx Appeals":7.07,"Item Identity Anchoring":10.45
+  },
+  // mapping: [associate, process, hc]
+  mapping: [
+    ["kishorsq","Invalid and Hijack clean up",1],["umadhury","Invalid and Hijack clean up",1],["hriteshs","Invalid and Hijack clean up",1],["jeyamohy","Invalid and Hijack clean up",1],
+    ["nsanih","Legacy Barcode Suppressions",1],["pushswet","Legacy Barcode Suppressions",1],["jnikdand","Legacy Barcode Suppressions",1],
+    ["kumrrib","Legacy Barcode Suppressions",1],["mathivaq","Legacy Barcode Suppressions",1],["battucm","Legacy Barcode Suppressions",1],["gauravon","Legacy Barcode Suppressions",1],
+    ["amitapm","Non BLMA Barcode Suppression",1],["nsanih","Non BLMA Barcode Suppression",1],["aishchan","Non BLMA Barcode Suppression",1],
+    ["kusshar","Non BLMA Barcode Suppression",1],["deepshm","Non BLMA Barcode Suppression",1],["syezahid","Non BLMA Barcode Suppression",1],
+    ["gogaditi","GTA Listing Error 8572 (MBO matching)",1],["nayajeev","GTA Listing Error 8572 (MBO matching)",1],["konapaks","GTA Listing Error 8572 (MBO matching)",1],["gauravon","GTA Listing Error 8572 (MBO matching)",1],
+    ["nayajeev","KPEX Ops",1],
+    ["mthuran","BLMA & GTIN Exemption",1],["sayantia","BLMA & GTIN Exemption",1],["chkeerth","BLMA & GTIN Exemption",1],["sprathep","BLMA & GTIN Exemption",1],
+    ["kundshiv","BLMA & GTIN Exemption",1],["sjashwa","BLMA & GTIN Exemption",1],["niranjas","BLMA & GTIN Exemption",1],
+    ["konapaks","UPCx Appeals",1],
+    ["kishorsq","Item Identity Anchoring",1],["jeyamohy","Item Identity Anchoring",1]
+  ],
+  // verifier mapping: [verifier, process]
+  verifiers: [
+    ["jnikdand","Invalid and Hijack clean up",0],["hriteshs","Invalid and Hijack clean up",0],
+    ["jeyamohy","Item Identity Anchoring",0],["kishorsq","Item Identity Anchoring",0],
+    ["nsanih","Legacy Barcode Suppressions",0],["jnikdand","Legacy Barcode Suppressions",0],
+    ["amitapm","Non BLMA Barcode Suppression",0],["nsanih","Non BLMA Barcode Suppression",0],
+    ["chkeerth","BLMA & GTIN Exemption",0],["kbkmth","BLMA & GTIN Exemption",0],["amitapm","BLMA & GTIN Exemption",0],
+    ["nsanih","KPEX Ops",0],
+    ["hriteshs","GTA Listing Error 8572 (MBO matching)",0],["sayantia","GTA Listing Error 8572 (MBO matching)",0],["nayajeev","GTA Listing Error 8572 (MBO matching)",0],
+    ["hriteshs","UPCx Appeals",0],["konapaks","UPCx Appeals",0]
+  ],
+  // sample fraction per process (from your formula sheet). default 20%.
+  sampleRate: {
+    "Invalid and Hijack clean up":0.565,"BLMA & GTIN Exemption":0.214,"GTA Listing Error 8572 (MBO matching)":0.22,
+    "Legacy Barcode Suppressions":0.135,"Non BLMA Barcode Suppression":0.35,
+    "KPEX Ops":0.35,"UPCx Appeals":0.176,"Item Identity Anchoring":0.135
+  },
+  // verification AHT (minutes) per process, one or more sub-types each — seeded from the
+  // seconds you gave (46s, 1919s, etc.), converted to minutes. "BLMA Verif" and
+  // "gtin maitainance" both looked like BLMA & GTIN Exemption so both sub-types are
+  // nested there; "CRB Verif" and "BAKS verif" didn't match any of the 8 processes so
+  // they're kept under _Unmapped pending confirmation — see chat.
+  verifAht: {
+    "LE Validation": { "V-BV": 0.77 },
+    "BLMA & GTIN Exemption": { "V-BLMA": 0.77, "V-Probate": 5.47 },
+    "GTA Listing Error 8572 (MBO matching)": { "Approval": 2.43, "RP": 0.35, "Count": 5.47 },
+    "Item Identity Anchoring": { "V-Anchor Appeal": 5.47 },
+    "Invalid and Hijack clean up": { "V-3p": 31.98 },
+    "Legacy Barcode Suppressions": { "V-Barcode": 5.47 },
+    "UPCx Appeals": { "V-UPCX": 3.0 },
+    "KPEX Ops": { "V-KPEX": 5.47 },
+    "Non BLMA Barcode Suppression": { "verif": 10.0 },
+    "_Unmapped": { "CRB Verif (V-CRB)": 0.77, "BAKS verif (V-Tasks)": 10.98, "BAKS verif (V - Multi-Pack)": 10.0 }
+  },
+  assignLE: true    // if false, leftover time is simply left unassigned instead of becoming LE Validation
+};
+
+/* Normalizes any raw task/process text — old SharePoint names, dump AssignedGroup
+   values, or the new updated names themselves — down to ONE canonical name (the
+   Updated SharePoint Task Name). Everything downstream (mapping, AHT, verifiers,
+   sampleRate, file naming) is keyed on these canonical names. */
+const GROUP_ALIAS = {
+  // -> Invalid and Hijack clean up
+  "3p clean-up":"Invalid and Hijack clean up","3P Clean-up":"Invalid and Hijack clean up","3p Clean up":"Invalid and Hijack clean up","Invalid And Hijack Clean Up":"Invalid and Hijack clean up","Invalid and Hijack Clean Up":"Invalid and Hijack clean up",
+  // -> BLMA & GTIN Exemption
+  "GTIN Maintenance":"BLMA & GTIN Exemption","BLMA and GTIN Exemption":"BLMA & GTIN Exemption","Blma & Gtin Exemption":"BLMA & GTIN Exemption",
+  // -> Item Identity Anchoring
+  "Anchor Appeals - GCO":"Item Identity Anchoring","Anchor Appeals":"Item Identity Anchoring","Anchor Appeal":"Item Identity Anchoring",
+  // -> Legacy Barcode Suppressions
+  "Barcode":"Legacy Barcode Suppressions","Barcode Suppression":"Legacy Barcode Suppressions","Barcode Unsuppression":"Legacy Barcode Suppressions",
+  // -> GTA Listing Error 8572 (MBO matching)
+  "MBO Matching":"GTA Listing Error 8572 (MBO matching)","MBO Matching team":"GTA Listing Error 8572 (MBO matching)","Mbo Matching":"GTA Listing Error 8572 (MBO matching)","GTA Listing Error 8572 (MBO Matching)":"GTA Listing Error 8572 (MBO matching)",
+  // -> UPCx Appeals
+  "UPCX Access":"UPCx Appeals","UPCX access":"UPCx Appeals","Upcx Access":"UPCx Appeals",
+  // -> Non BLMA Barcode Suppression
+  "Non-BLMA Suppressions":"Non BLMA Barcode Suppression","Non-BLMA Barcode suppressions":"Non BLMA Barcode Suppression","BTAP GTIN Update":"Non BLMA Barcode Suppression","Non-Blma Barcode Suppression":"Non BLMA Barcode Suppression"
+};
+const QUIP = "https://quip-amazon.com/a61zADvbDFTo/Capacity-Planner-2026";
+const WORK_MIN = 480;
+const LE_PROC = "LE Validation";     // default filler task for leftover minutes (1 min = 1 LE)
+
+/* -------- state -------- */
+let CFG = load();
+let dumpRows = null;         // parsed dump
+let verifSource = null;      // optional SharePoint CSV rows
+let leaves = {};             // name -> 'full'|'half'|'skip'  (set in Daily Planning)
+let allocCache = null;       // last computed allocation
+let ttOverrides = {};        // "assoc|process" -> number (Work Allocation edits)
+let verifCommittedMin = {};  // verifier -> minutes already claimed by verification (set by Generate Verification; reduces audit availability)
+
+function load(){
+  let cfg;
+  try{ const s=localStorage.getItem(LS_KEY); cfg = s?JSON.parse(s):null; }catch(e){ cfg=null; }
+  if(!cfg) cfg = JSON.parse(JSON.stringify(DEFAULTS));
+  // migrate verifiers to [verifier, process, count, priority(1-6)]
+  if(Array.isArray(cfg.verifiers)) cfg.verifiers = cfg.verifiers.map(v=> v.length>=4 ? v : [v[0], v[1], v[2]||0, 1]);
+  // migrate mapping to [auditor, process, hc, priority(1-6)]
+  if(Array.isArray(cfg.mapping)) cfg.mapping = cfg.mapping.map(m=> m.length>=4 ? m : [m[0], m[1], m[2], 1]);
+  // per-auditor available minutes (default 480, editable)
+  if(!cfg.availMin) cfg.availMin = {};
+  // sample rate per process (defensive fallback for very old cached schemas)
+  if(!cfg.sampleRate) cfg.sampleRate = JSON.parse(JSON.stringify(DEFAULTS.sampleRate));
+  // verification AHT per process/sub-type (seeded from DEFAULTS if missing entirely)
+  if(!cfg.verifAht) cfg.verifAht = JSON.parse(JSON.stringify(DEFAULTS.verifAht));
+  // whether leftover time becomes LE Validation filler (default on)
+  if(cfg.assignLE==null) cfg.assignLE = true;
+  // RENAME any old/stale process-name strings already saved in this browser (from
+  // earlier versions of this tool) to the current canonical names — without this,
+  // a saved config from before a process was renamed silently stops matching
+  // anywhere (Main table, Work Allocation, verifier eligibility, everything), even
+  // though the dump itself normalizes correctly via GROUP_ALIAS on every load.
+  cfg = migrateProcessNames(cfg);
+  ensureLE(cfg);
+  return cfg;
+}
+/* renames every process-name string stored in CFG to its current canonical form,
+   using the SAME alias table the dump uses (GROUP_ALIAS) — so a saved config never
+   drifts out of sync with what norm() would produce for a fresh dump upload. */
+function migrateProcessNames(cfg){
+  const canon = p => GROUP_ALIAS[(p||'').trim()] || p;
+  if(cfg.aht){
+    const merged={};
+    Object.keys(cfg.aht).forEach(p=>{ const np=canon(p); if(merged[np]==null) merged[np]=cfg.aht[p]; });
+    cfg.aht=merged;
+  }
+  if(cfg.sampleRate){
+    const merged={};
+    Object.keys(cfg.sampleRate).forEach(p=>{ const np=canon(p); if(merged[np]==null) merged[np]=cfg.sampleRate[p]; });
+    cfg.sampleRate=merged;
+  }
+  if(cfg.verifAht){
+    const merged={};
+    Object.keys(cfg.verifAht).forEach(p=>{
+      const np=canon(p);
+      merged[np]=Object.assign({}, merged[np]||{}, cfg.verifAht[p]);
+    });
+    cfg.verifAht=merged;
+  }
+  if(Array.isArray(cfg.mapping)) cfg.mapping.forEach(m=>{ m[1]=canon(m[1]); });
+  if(Array.isArray(cfg.verifiers)) cfg.verifiers.forEach(v=>{ v[1]=canon(v[1]); });
+  return cfg;
+}
+function ensureLE(cfg){ cfg=cfg||CFG; if(cfg.aht && cfg.aht[LE_PROC]==null) cfg.aht[LE_PROC]=1; }
+function save(){ localStorage.setItem(LS_KEY, JSON.stringify(CFG)); }
+function resetCfg(){ CFG = JSON.parse(JSON.stringify(DEFAULTS)); CFG.availMin={}; ensureLE(); save(); }
+
+/* -------- SESSION persistence: uploaded dump, generated allocation, leaves,
+   manual TT overrides, and verification results — all survive a page refresh or
+   closed tab, exactly like the config does, until Reset is clicked. Only the
+   underlying data is restored automatically; open a tab (Work Allocation /
+   Verification) or click Generate again to refresh that tab's detailed view —
+   it'll be instant since nothing needs re-uploading. -------- */
+function saveSession(){
+  try{
+    localStorage.setItem(SESSION_KEY, JSON.stringify({
+      dumpRows, dumpFileLabel: (dumpRows&&$('fname').textContent)||null,
+      workedRows, workedFileLabel: (workedRows&&$('wfname')&&$('wfname').textContent)||null,
+      allocCache, ttOverrides, leaves, verifFiles, verifCommittedMin
+    }));
+  }catch(e){ console.error('session save failed', e); }
+}
+function loadSession(){
+  try{
+    const s=localStorage.getItem(SESSION_KEY);
+    if(!s) return;
+    const sess=JSON.parse(s);
+    if(sess.dumpRows) dumpRows=sess.dumpRows;
+    if(sess.workedRows) workedRows=sess.workedRows;
+    if(sess.allocCache) allocCache=sess.allocCache;
+    if(sess.ttOverrides) ttOverrides=sess.ttOverrides;
+    if(sess.leaves) leaves=sess.leaves;
+    if(sess.verifFiles) verifFiles=sess.verifFiles;
+    if(sess.verifCommittedMin) verifCommittedMin=sess.verifCommittedMin;
+    if(dumpRows && dumpRows.length){
+      $('fname').style.display='block';
+      $('fname').textContent=sess.dumpFileLabel || ('✓ Restored from last session — '+dumpRows.length+' tickets');
+    }
+    if(workedRows && workedRows.length){
+      $('wfname').style.display='block';
+      $('wfname').textContent=sess.workedFileLabel || ('✓ Restored from last session — '+workedRows.length+' worked rows');
+      $('genVerif').disabled=false;
+    }
+    if(allocCache && allocCache.length){
+      $('dlAudit').style.display='inline-block';
+    }
+    if(verifFiles && verifFiles.length){
+      $('dlVerifZip').style.display='inline-block';
+      $('dlVerifIndiv').style.display='inline-block';
+    }
+  }catch(e){ console.error('session restore failed', e); }
+}
+function clearSession(){
+  localStorage.removeItem(SESSION_KEY);
+  dumpRows=null; workedRows=null; allocCache=null; ttOverrides={}; leaves={}; verifFiles=null; verifCommittedMin={};
+  $('fname').style.display='none'; $('fname').textContent='';
+  if($('wfname')){ $('wfname').style.display='none'; $('wfname').textContent=''; }
+  if($('genVerif')) $('genVerif').disabled=true;
+  if($('dlAudit')) $('dlAudit').style.display='none';
+  if($('dlVerifZip')) $('dlVerifZip').style.display='none';
+  if($('dlVerifIndiv')) $('dlVerifIndiv').style.display='none';
+  if($('mail2card')) $('mail2card').style.display='none';
+  if($('verifCard')) $('verifCard').style.display='none';
+}
+
+/* -------- derived helpers -------- */
+function processes(){ return Object.keys(CFG.aht); }
+function realProcesses(){ return processes().filter(p=>p!==LE_PROC); }   // excludes the auto LE Validation filler
+function auditors(){ return [...new Set(CFG.mapping.map(m=>m[0]))].sort(); }
+function verifierNames(){ return [...new Set(CFG.verifiers.map(v=>v[0]))].sort(); }
+function mapForProcess(p){ return CFG.mapping.filter(m=>m[1]===p); }
+function procsForAuditor(a){ return CFG.mapping.filter(m=>m[0]===a).map(m=>m[1]); }
+
+const norm = g => { g=(g||'').trim(); return GROUP_ALIAS[g]||g; };
+const bucketOf = a => { const n=parseFloat(a); return (isNaN(n)||n<5)?'<5':'Backlog'; };
+
+/* -------- rows-of-arrays -> array of {header: value} objects (shared by CSV + XLSX paths) -------- */
+function rowsToObjects(rows){
+  if(!rows.length) return [];
+  const hdr=rows.shift().map(h=>String(h==null?'':h).trim());
+  return rows.filter(r=>r.length>1).map(r=>{const o={};hdr.forEach((h,j)=>o[h]=(r[j]==null?'':String(r[j])).trim());return o;});
+}
+/* -------- generic upload reader: accepts .csv/.txt (text) OR .xlsx/.xls (SheetJS) -------- */
+function readTabularFile(file, onRows, onError){
+  const name=(file.name||'').toLowerCase();
+  const isExcel = /\.xlsx?$/.test(name);
+  const rd=new FileReader();
+  rd.onerror=()=>{ (onError||alert)('Could not read file: '+file.name); };
+  if(isExcel){
+    rd.onload=()=>{
+      try{
+        if(typeof XLSX==='undefined') throw new Error('Excel reader library failed to load (check your internet connection) — please upload a .csv instead.');
+        const wb=XLSX.read(new Uint8Array(rd.result), {type:'array'});
+        const ws=wb.Sheets[wb.SheetNames[0]];
+        const rows=XLSX.utils.sheet_to_json(ws, {header:1, raw:false, defval:''});
+        onRows(rowsToObjects(rows));
+      }catch(err){ (onError||alert)('Excel parse error: '+err.message); }
+    };
+    rd.readAsArrayBuffer(file);
+  } else {
+    rd.onload=()=>{
+      try{ onRows(parseCSV(rd.result)); }
+      catch(err){ (onError||alert)('Parse error: '+err.message); }
+    };
+    rd.readAsText(file);
+  }
+}
+
+/* -------- CSV parse -------- */
+function parseCSV(text){
+  const rows=[]; let i=0,f='',row=[],q=false;
+  while(i<text.length){
+    const c=text[i];
+    if(q){ if(c=='"'){ if(text[i+1]=='"'){f+='"';i++;} else q=false; } else f+=c; }
+    else { if(c=='"')q=true; else if(c==','){row.push(f);f='';} else if(c=='\n'){row.push(f);rows.push(row);row=[];f='';} else if(c=='\r'){} else f+=c; }
+    i++;
+  }
+  if(f.length||row.length){row.push(f);rows.push(row);}
+  return rowsToObjects(rows);
+}
+
+/* -------- ticket pool from dump -------- */
+function buildPool(){
+  const pool={};   // "proc|bucket" -> tickets sorted oldest-first
+  const counts={}; processes().forEach(p=>counts[p]={'<5':0,'Backlog':0});
+  (dumpRows||[]).forEach(r=>{
+    const g=norm(r.AssignedGroup); if(!(g in counts)) return; // ignore unknown groups
+    const b=bucketOf(r.Age), k=g+'|'+b;
+    (pool[k]=pool[k]||[]).push({id:r.ShortId, age:parseFloat(r.Age)||0});
+    counts[g][b]++;
+  });
+  Object.values(pool).forEach(a=>a.sort((x,y)=>y.age-x.age));
+  return {pool, counts};
+}
+
+/* -------- HC required: all open tickets * AHT / 480 -------- */
+function hcTable(counts){
+  const out=[]; let tot=0;
+  processes().forEach(p=>{
+    const lt=counts[p]['<5'], bk=counts[p]['Backlog'], open=lt+bk;
+    const aht=CFG.aht[p]||0, hc=(open*aht)/WORK_MIN;
+    tot+=hc; out.push({proc:p,total:open,lt,bk,aht,hc});
+  });
+  return {rows:out, total:tot};
+}
+
+/* -------- effective capacity for a process (minus leaves) -------- */
+function capsFor(p){
+  const caps={};
+  mapForProcess(p).forEach(([a,,hc])=>{
+    const lv=leaves[a]; if(lv==='full'||lv==='skip')return;
+    caps[a]=(caps[a]||0)+hc*(lv==='half'?0.5:1);
+  });
+  return caps;
+}
+
+/* -------- per-auditor available minutes today (shift default 480, editable).
+   Full leave AND skip both mean 0 minutes today — they're excluded from headcount
+   and from ticket allocation entirely. Half-leave halves their available time.
+   RAW = the configured daily capacity, ignoring anything already committed.
+   EFFECTIVE (auditorAvailMin) = RAW minus whatever verification work has already
+   claimed for that person — verification runs first in the workflow, so audit
+   allocation only ever sees what's left over. -------- */
+function auditorAvailMinRaw(a){
+  const lv=leaves[a];
+  if(lv==='full' || lv==='skip') return 0;
+  const base=(CFG.availMin && CFG.availMin[a]!=null) ? (+CFG.availMin[a]||0) : WORK_MIN;
+  return lv==='half' ? Math.floor(base/2) : base;
+}
+function auditorAvailMin(a){
+  return Math.max(0, auditorAvailMinRaw(a) - (verifCommittedMin[a]||0));
+}
+
+/* -------- an auditor's mapped processes, ordered by priority 1→6 (lowest number = checked first) -------- */
+function auditorPriorityList(a){
+  const best={};    // process -> lowest priority number seen
+  CFG.mapping.forEach(m=>{
+    if(m[0]!==a || m[1]===LE_PROC) return;
+    const pr=(m[3]!=null?+m[3]:1)||1;
+    if(best[m[1]]==null || pr<best[m[1]]) best[m[1]]=pr;
+  });
+  return Object.keys(best).sort((x,y)=>best[x]-best[y]);
+}
+/* everyone tagged to process p at a given priority level (their own priority for THIS process) */
+function auditorsAtPriority(p, level){
+  const seen={};
+  CFG.mapping.forEach(m=>{
+    if(m[1]!==p) return;
+    const pr=(m[3]!=null?+m[3]:1)||1;
+    if(pr!==level) return;
+    // if an auditor has duplicate rows for the same process, honor the lowest priority already handled elsewhere
+    seen[m[0]]=true;
+  });
+  return Object.keys(seen);
+}
+/* same idea for VERIFIERS: everyone tagged to verify process p at a given priority level */
+function verifiersAtPriority(p, level){
+  const seen={};
+  CFG.verifiers.forEach(v=>{
+    if(v[1]!==p) return;
+    const pr=(v[3]!=null?+v[3]:1)||1;
+    if(pr!==level) return;
+    seen[v[0]]=true;
+  });
+  return Object.keys(seen);
+}
+/* Verification AHT for a process: average across its sub-types (we don't have a
+   per-ticket sub-type field to pick the exact one, so this is the best estimate). */
+function verifAhtForProcess(p){
+  const subs=CFG.verifAht && CFG.verifAht[p]; if(!subs) return 0;
+  const vals=Object.values(subs); if(!vals.length) return 0;
+  return vals.reduce((s,v)=>s+v,0)/vals.length;
+}
+
+/* -------- integer max-min fair split of `demand` TICKETS (not minutes) across
+   `participants`, each capped by capMap[a] whole tickets. Works in exact integers
+   throughout, so the total ever handed out can never exceed the real ticket count
+   in the dump (no rounding drift). The unavoidable remainder from an uneven split
+   (e.g. 23 tickets / 2 people = 11 each + 1 left over) goes one-by-one to whoever
+   still has room — matching "equal first, then whoever has time gets the rest."
+   Mutates capMap. Returns {given:{a:tickets}, leftover}. -------- */
+function waterFillInt(demand, capMap, participants){
+  let active=participants.filter(a=>(capMap[a]||0)>0);
+  let remaining=demand;
+  const given={};
+  // Phase 1: repeatedly pull out anyone whose cap is below the current equal share
+  let changed=true;
+  while(changed && remaining>0 && active.length>0){
+    changed=false;
+    const share=Math.floor(remaining/active.length);
+    const next=[];
+    for(const a of active){
+      if(capMap[a] <= share){
+        given[a]=(given[a]||0)+capMap[a];
+        remaining-=capMap[a];
+        capMap[a]=0;
+        changed=true;
+      } else next.push(a);
+    }
+    active=next;
+  }
+  // Phase 2: everyone left gets the equal integer base, then the true remainder
+  // (always < active.length) is handed out one ticket at a time.
+  if(remaining>0 && active.length>0){
+    const base=Math.floor(remaining/active.length);
+    if(base>0){
+      for(const a of active){ given[a]=(given[a]||0)+base; capMap[a]-=base; }
+      remaining -= base*active.length;
+    }
+    for(const a of active){
+      if(remaining<=0) break;
+      if(capMap[a]>0){ given[a]=(given[a]||0)+1; capMap[a]--; remaining--; }
+    }
+  }
+  return {given, leftover:Math.max(0,remaining)};
+}
+
+/* ============ CORE ENGINE ============
+   For each priority level 1→6, and for each process, that process's remaining
+   ticket demand (backlog + <5 combined — age order is handled separately, at the
+   actual ID-draw stage below) is split EQUALLY (integer water-filling) among
+   every auditor who ranks that process at that level, capped by their remaining
+   whole-ticket capacity. Leftover from an uneven split goes to whoever still has
+   room; leftover demand a tier can't fully absorb carries to the next priority
+   level. Processing strictly level-by-level (not bucket-by-bucket) means an
+   auditor's priority-1 process is always fully worked before their priority-2
+   process is ever touched — e.g. if B is their priority 1 and A is priority 2,
+   they only get A once B's demand (or their own time) is exhausted.
+   Only once an auditor's whole priority list is exhausted does their remaining
+   time convert to LE Validation (1 min = 1 LE) — a genuine last resort.
+   Leave/skip auditors get 0 minutes and are excluded entirely. Nothing is ever
+   assigned beyond what's actually in the dump. -------- */
+function computeMinutePlan(pool){
+  const availMin={}; auditors().forEach(a=>availMin[a]=auditorAvailMin(a));
+  const demand={};   // process -> whole tickets still needing an owner
+  realProcesses().forEach(p=>{
+    demand[p]=((pool[p+'|Backlog']||[]).length)+((pool[p+'|<5']||[]).length);
+  });
+  const tickets={};  // "auditor|process" -> whole tickets assigned
+
+  for(let level=1; level<=6; level++){
+    realProcesses().forEach(p=>{
+      if(!(demand[p]>0)) return;
+      const aht=CFG.aht[p]||0; if(aht<=0) return;
+      const participants=auditorsAtPriority(p, level).filter(a=>Math.floor((availMin[a]||0)/aht)>0);
+      if(!participants.length) return;
+      const capMap={}; participants.forEach(a=>capMap[a]=Math.floor(availMin[a]/aht));
+      const {given, leftover}=waterFillInt(demand[p], capMap, participants);
+      Object.keys(given).forEach(a=>{
+        tickets[a+'|'+p]=(tickets[a+'|'+p]||0)+given[a];
+        availMin[a]-=given[a]*aht;    // deduct the EXACT minutes used — keeps every other process's math accurate
+      });
+      demand[p]=leftover;
+    });
+  }
+
+  // whatever time is left after an auditor's whole priority list is exhausted -> LE Validation
+  const leMinutes={};
+  auditors().forEach(a=>{ if(availMin[a]>1e-6) leMinutes[a]=Math.round(availMin[a]*100)/100; });
+  return {tickets, leMinutes, demandLeft:demand};
+}
+
+/* -------- default TT (ticket counts) per "auditor|process" — straight off the
+   integer plan above, so what's shown/edited always matches what's in the dump -------- */
+function defaultTTs(pool){
+  const {tickets, leMinutes}=computeMinutePlan(pool);
+  const res={};
+  auditors().forEach(a=>{
+    CFG.mapping.forEach(m=>{ if(m[0]===a && m[1]!==LE_PROC) res[a+'|'+m[1]]=0; });
+  });
+  Object.keys(tickets).forEach(key=>{ res[key]=tickets[key]; });
+  if(CFG.assignLE!==false){
+    Object.keys(leMinutes).forEach(a=>{
+      const leAht=CFG.aht[LE_PROC]||1;
+      const c=Math.round(leMinutes[a]/leAht);
+      if(c>0) res[a+'|'+LE_PROC]=c;
+    });
+  }
+  return res;
+}
+
+/* -------- allocate actual ShortIds using TT counts (defaults + overrides).
+   ROUND-ROBIN draw: each eligible auditor takes ONE ticket per turn (oldest-first,
+   Backlog before <5), cycling through everyone until their own TT count is met.
+   This is what actually makes backlog fair in practice — even though each
+   auditor's TT count is already an equal share, drawing them sequentially
+   (auditor #1 takes their whole count before #2 starts) would let whoever is
+   first in the list swallow the entire backlog queue. Round-robin interleaves
+   the real ticket IDs so backlog gets spread across everyone still in the round,
+   and whoever has a larger remaining count naturally keeps going once others
+   finish — the same "equal first, then based on availability" behaviour, but at
+   the level of actual ticket IDs, not just counts.
+   LE Validation: ONE aggregate row per auditor with a count — never exploded into
+   fake per-ticket IDs, to keep the export small and because LE has no age. -------- */
+function allocate(pool, tts){
+  const used=new Set(), alloc=[];
+  realProcesses().forEach(p=>{
+    const backlog=(pool[p+'|Backlog']||[]).slice().sort((x,y)=>y.age-x.age);
+    const lt5=(pool[p+'|<5']||[]).slice().sort((x,y)=>y.age-x.age);
+    const bucketPool=[...backlog, ...lt5];
+    const names=[...new Set(mapForProcess(p).map(m=>m[0]))].filter(a=>(tts[a+'|'+p]||0)>0);
+    if(!names.length) return;
+    const remaining={}; names.forEach(a=>remaining[a]=tts[a+'|'+p]||0);
+    let ptr=0, anyLeft=true;
+    while(anyLeft && ptr<bucketPool.length){
+      anyLeft=false;
+      for(const a of names){
+        if(remaining[a]<=0) continue;
+        if(ptr>=bucketPool.length) break;
+        const t=bucketPool[ptr++];
+        used.add(t.id); alloc.push({proc:p, id:t.id, who:a, age:t.age});
+        remaining[a]--;
+        if(remaining[a]>0) anyLeft=true;
+      }
+    }
+  });
+  auditors().forEach(a=>{
+    const c=tts[a+'|'+LE_PROC]||0;
+    if(c>0) alloc.push({proc:LE_PROC, who:a, count:c});     // one summary row, no fake IDs
+  });
+  // Full-leave / skipped people surfaced as LEAVE rows (shown with red block in renderer)
+  auditors().forEach(a=>{
+    if((leaves[a]==='full'||leaves[a]==='skip') && !alloc.some(r=>r.who===a)){
+      alloc.push({assoc:a, primary:leaves[a]==='skip'?"Adhoc":"__LEAVE__", primBucket:"", secondary:"", secBucket:"", note:""});
+    }
+  });
+  return alloc;
+}
+
+/* -------- verification sample + verifier assignment -------- */
+function buildVerification(alloc){
+  // source rows: SharePoint CSV if provided, else derive from today's audit allocation
+  let base=[];
+  if(verifSource && verifSource.length){
+    // Real SharePoint "Audit Work Allocation" columns:
+    // A=Task Name, C=Short ID, D=Auditor(name), E=Completion Status, X=Column5(login alias)
+    // Verify only RESOLVED (completed) work; auditor = login alias (Column5).
+    base = verifSource
+      .filter(r=>inSelectedRange(r["Date"]||r["Date0"]||r["Created"]))   // single day or range
+      .map(r=>({
+        proc: norm(r["Task Name"]||r["Task"]||r["AssignedGroup"]||""),
+        id:   r["Short ID"]||r["ShortId"]||r["Short Id"]||"",
+        auditor: (r["Column5"]||r["Auditor"]||r["ResolvedByIdentity"]||"").trim(),
+        status: (r["Completion Status"]||r["Status"]||"").trim()
+      })).filter(x=>x.id && /resolved/i.test(x.status||"resolved"));
+  } else {
+    base = alloc.map(a=>({proc:a.proc, id:a.id, auditor:a.who}));
+  }
+  // sample per process
+  const byProc={}; base.forEach(b=>{(byProc[b.proc]=byProc[b.proc]||[]).push(b);});
+  const out=[];
+  Object.keys(byProc).sort().forEach(p=>{
+    const items=byProc[p];
+    const rate=(CFG.sampleRate[p]!=null?CFG.sampleRate[p]:0.2);
+    const step=rate>=1?1:Math.max(1,Math.round(1/rate));
+    const verifiers=CFG.verifiers.filter(v=>v[1]===p).map(v=>v[0]);
+    let vi=0;
+    items.forEach((it,i)=>{
+      if(i%step!==0) return;
+      let v='—';
+      if(verifiers.length){
+        // pick a verifier who is not the auditor
+        let tries=0, cand;
+        do{ cand=verifiers[vi%verifiers.length]; vi++; tries++; }
+        while(cand===it.auditor && tries<=verifiers.length);
+        v=cand;
+      }
+      out.push({proc:p, id:it.id, auditor:it.auditor||'—', verifier:v});
+    });
+  });
+  return out;
+}
+
+/* -------- Daily Planning helpers (4 tables) -------- */
+function threeBucket(){
+  const res={}; realProcesses().forEach(p=>res[p]={lt5:0,mid:0,gt9:0,total:0});
+  (dumpRows||[]).forEach(r=>{
+    const g=norm(r.AssignedGroup); if(!(g in res)) return;
+    const a=parseFloat(r.Age); res[g].total++;
+    if(isNaN(a)||a<5) res[g].lt5++;
+    else if(a>9) res[g].gt9++;
+    else res[g].mid++;
+  });
+  return res;
+}
+function table1(){
+  const tb=threeBucket(); const rows=[]; let totHC=0;
+  realProcesses().forEach(p=>{
+    const b=tb[p]; const open=b.total; const toAssign=b.mid+b.gt9;
+    const aht=CFG.aht[p]||0; const hc=(open*aht)/WORK_MIN; totHC+=hc;
+    rows.push({proc:p,total:open,lt5:b.lt5,mid:b.mid,gt9:b.gt9,toAssign:toAssign,aht:aht,hc:hc});
+  });
+  return {rows,totHC};
+}
+function hcForAuditorProcess(a,p){
+  // consolidate duplicate mappings: take the MAX non-zero HC for this pair
+  let hc=0;
+  CFG.mapping.forEach(m=>{ if(m[0]===a && m[1]===p){ const v=+m[2]||0; if(v>hc) hc=v; } });
+  return hc;
+}
+function isVerifier(a){ return CFG.verifiers.some(v=>v[0]===a); }
+function effHC(a,hc){ const lv=leaves[a]; if(lv==='full'||lv==='skip') return 0; return hc*(lv==='half'?0.5:1); }
+/* Verification headcount for a verifier. If "Generate Verification" has already been
+   run today, uses the ACTUAL committed minutes from that real plan (accurate — real
+   verification AHT, real sampled tickets, real availability-capped split). Otherwise
+   falls back to a rough estimate (sample-rate × volume × audit AHT, since real
+   verification AHT needs the worked dump to know per-ticket sub-types). */
+function verifierHC(a){
+  if(verifCommittedMin && verifCommittedMin[a]!=null){
+    return effHC(a, verifCommittedMin[a]/WORK_MIN);
+  }
+  if(!dumpRows) return 0;
+  const {counts}=buildPool();
+  let hc=0;
+  CFG.verifiers.filter(v=>v[0]===a).forEach(v=>{
+    const p=v[1];
+    const nVerifiers=CFG.verifiers.filter(x=>x[1]===p).length||1;
+    const c=counts[p]||{'<5':0,'Backlog':0};
+    const vol=(c['<5']||0)+(c['Backlog']||0);
+    const sampledCount=Math.round(vol*verifSampleRate(p));
+    const aht=verifAhtForProcess(p)||CFG.aht[p]||0;
+    hc += (sampledCount*aht)/WORK_MIN/nVerifiers;
+  });
+  return effHC(a,hc);
+}
+function table3(){
+  const byAud={};
+  CFG.mapping.forEach(([a,p,hc])=>{(byAud[a]=byAud[a]||[]).push([p,hc]);});
+  const rows=[];
+  auditors().forEach(a=>{
+    const lv=leaves[a]||"";
+    if(lv==='skip'){
+      // Skip -> show this auditor on Adhoc for the day
+      rows.push({user:a, primary:"Adhoc", primHC:"", secondary:"", secHC:"", leave:"skip"});
+      return;
+    }
+    const m=byAud[a]||[]; const prim=m[0]||["",0], sec=m[1]||null;
+    let secName = sec?sec[0]:""; let secHCv = sec?effHC(a,sec[1]):"";
+    if(!secName){
+      // no secondary -> verifiers get Reports/Verification (with a real estimated HC), others Hijack Curation
+      if(isVerifier(a)){ secName="Reports/Verification"; secHCv=verifierHC(a); }
+      else { secName="Hijack Curation"; secHCv=""; }
+    }
+    rows.push({user:a, primary:prim[0], primHC:effHC(a,prim[1]),
+      secondary:secName, secHC:secHCv, leave:lv});
+  });
+  return rows;
+}
+function table2(){
+  const EXCLUDE=["Hijack Curation","Adhoc"];
+  const t3=table3(); const totals={}; realProcesses().forEach(p=>totals[p]=0);
+  t3.forEach(r=>{
+    if(r.primary && r.primary!=="Adhoc") totals[r.primary]=(totals[r.primary]||0)+(+r.primHC||0);
+    if(r.secondary) totals[r.secondary]=(totals[r.secondary]||0)+(+r.secHC||0);
+  });
+  const rows=Object.keys(totals).filter(t=>EXCLUDE.indexOf(t)<0).map(t=>({task:t,hc:totals[t]}));
+  // Leave row: count of people on full leave (headcount lost)
+  const leaveCount=auditors().filter(a=>leaves[a]==='full').length;
+  if(leaveCount>0) rows.push({task:"Leave", hc:leaveCount, isLeave:true});
+  const total=rows.filter(r=>!r.isLeave).reduce((s,r)=>s+r.hc,0);
+  return {rows, total};
+}
+function table4(){
+  // Capacity-aware allocation:
+  //  - each ticket of a task needs ~AHT minutes; a person's capacity (in tickets)
+  //    for a task = (effHC on that task * 480) / AHT
+  //  - allocate primary task first; if a task still has unassigned tickets (high
+  //    volume), spill to people whose SECONDARY task is that task AND whose own
+  //    primary is already fully covered (spare capacity).
+  const tb=threeBucket();
+  const demand={};                 // task -> open tickets
+  realProcesses().forEach(p=>{ const b=tb[p]; demand[p]=b?b.total:0; });
+
+  // build roster with primary/secondary
+  const byAud={};
+  CFG.mapping.forEach(([a,p,hc])=>{(byAud[a]=byAud[a]||[]).push([p,hc]);});
+
+  // capacity in tickets for (auditor, task)
+  const capTickets=(a,task,hc)=>{
+    const aht=CFG.aht[task]||0; if(aht<=0) return 0;
+    return (effHC(a,hc)*WORK_MIN)/aht;
+  };
+
+  // Pass 1: assign each person's PRIMARY capacity against its task demand
+  const remaining=Object.assign({},demand);   // tickets still needing an owner
+  const alloc=[];                              // {assoc, primary, primBucket, secondary, secBucket, note}
+  const people=auditors().filter(a=>leaves[a]!=='full');  // skip handled below (shown as Adhoc)
+
+  const bucketFor=p=>{ const b=tb[p]; if(!b) return "<5"; return (b.mid+b.gt9)>0?"Backlog":"<5"; };
+
+  people.forEach(a=>{
+    if(leaves[a]==='skip'){
+      // Skipped -> on Adhoc, no ticket allocation, no capacity consumed
+      alloc.push({assoc:a, primary:"Adhoc", primBucket:"", secondary:"", secBucket:"", note:""});
+      return;
+    }
+    const m=byAud[a]||[]; const prim=m[0], sec=m[1];
+    if(prim){
+      const cap=capTickets(a,prim[0],prim[1]);
+      remaining[prim[0]]=Math.max(0,(remaining[prim[0]]||0)-cap);
+    }
+    alloc.push({
+      assoc:a,
+      primary: prim?prim[0]:"", primBucket: prim?bucketFor(prim[0]):"",
+      secondary: sec?sec[0]:"", secBucket: sec?bucketFor(sec[0]):"",
+      note:""
+    });
+  });
+
+  // Pass 2: overflow — for any task still with remaining>0, find helpers whose
+  // SECONDARY = that task and whose PRIMARY task is already cleared (remaining ~0)
+  const VERIF_TASKS = ["Reports/Verification","Reports / Verification","Verification","Reports"];
+  Object.keys(remaining).forEach(task=>{
+    if(remaining[task] <= 0) return;
+    if(VERIF_TASKS.indexOf(task)>=0) return;   // never allocate names to verification duty
+    alloc.forEach(row=>{
+      if(remaining[task] <= 0) return;
+      if(VERIF_TASKS.indexOf(row.secondary)>=0) return;  // this person's secondary is verification -> leave it
+      if(row.secondary===task){
+        const primCleared = !row.primary || (remaining[row.primary]||0) <= 0;
+        if(primCleared){
+          // overflow handled silently (no note)
+          // estimate this helper's secondary capacity and reduce remaining
+          const m=byAud[row.assoc]||[]; const sec=m[1];
+          if(sec){ remaining[task]=Math.max(0,remaining[task]-capTickets(row.assoc,sec[0],sec[1])); }
+        }
+      }
+    });
+  });
+
+  return alloc;
+}
+
+
+/* -------- auto-suggest HC per auditor-process: read straight off the same
+   priority-tier, equal-share engine used for real ticket allocation (assigned
+   tickets × AHT ÷ 480 = headcount). Keeps "HC" in Main perfectly consistent with
+   what Work Allocation will actually assign. -------- */
+function suggestHCForAll(){
+  if(!dumpRows) return false;
+  const {pool}=buildPool();
+  const {tickets}=computeMinutePlan(pool);
+  CFG.mapping.forEach(m=>{ if(m[1]!==LE_PROC) m[2]=0; });
+  Object.keys(tickets).forEach(key=>{
+    const [a,p]=key.split('|');
+    const aht=CFG.aht[p]||0;
+    const row=CFG.mapping.find(m=>m[0]===a && m[1]===p);
+    if(row) row[2]=Math.round((tickets[key]*aht/WORK_MIN)*100)/100;
+  });
+  save();
+  return true;
+}
+
+
+
+/* ---- minimal store-only ZIP (no deps) ---- */
+const _crcTable=(()=>{const t=[];for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=(c&1)?(0xEDB88320^(c>>>1)):(c>>>1);t[n]=c>>>0;}return t;})();
+function crc32(bytes){let c=0xFFFFFFFF;for(let i=0;i<bytes.length;i++)c=_crcTable[(c^bytes[i])&0xFF]^(c>>>8);return (c^0xFFFFFFFF)>>>0;}
+function strBytes(s){return new TextEncoder().encode(s);}
+/* -------- proper, standards-compliant DEFLATE-compressed zip (via JSZip) --------
+   The old hand-rolled zip used STORE (no compression) with minimal headers — a
+   pattern some antivirus / Windows SmartScreen heuristics distrust, since real
+   archive tools always compress and bare-minimum store-only zips are a technique
+   sometimes used to dodge content scanning. A standard compressed zip from a
+   well-known library is far less likely to trip a false "potentially harmful" flag. */
+async function downloadZip(filename, files){
+  if(typeof JSZip==='undefined'){
+    alert('Zip library failed to load (check your internet connection). Try "Download files individually" instead.');
+    return false;
+  }
+  const zip=new JSZip();
+  files.forEach(f=>zip.file(f.name, f.content));
+  const blob=await zip.generateAsync({type:'blob', compression:'DEFLATE', compressionOptions:{level:6}});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob); a.download=filename; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1500);
+  return true;
+}
+/* -------- fallback: download every file individually (no zip wrapper at all) —
+   useful if a security policy still blocks the zip itself. -------- */
+function downloadFilesIndividually(files){
+  files.forEach((f,i)=>{
+    setTimeout(()=>{
+      const blob=new Blob([f.content],{type:'text/csv;charset=utf-8'});
+      const a=document.createElement('a');
+      a.href=URL.createObjectURL(blob); a.download=f.name; a.click();
+      setTimeout(()=>URL.revokeObjectURL(a.href),1500);
+    }, i*120);   // stagger slightly so the browser doesn't block a burst of downloads
+  });
+}
+
+/* ================= VERIFICATION ================= */
+// Task_Name (canonical, post-normalize) -> filename prefix — copied EXACTLY from
+// your Get_Task_File_Prefix macro (Select Case block) so verification filenames
+// match the macro's output character-for-character. KPEX Ops has no case in the
+// macro (it isn't in the 7-row Updated Task Name table), so it keeps its previous
+// prefix — flag this if KPEX should map to something specific.
+const VERIF_FILEMAP = {
+  "Invalid and Hijack clean up":"Invalid_Hijack_clean_up_Appeals",
+  "Legacy Barcode Suppressions":"Legacy_Barcode_Supp_Unsupp_Appeals",
+  "Non BLMA Barcode Suppression":"GTIN_Update",
+  "BLMA & GTIN Exemption":"BLMA_and_GTIN_Exemptions",
+  "GTA Listing Error 8572 (MBO matching)":"GTA_Listing_Error_8572_Appeals",
+  "Item Identity Anchoring":"Item_Identity_Anchoring_Appeals",
+  "UPCx Appeals":"UPCx_Appeals",
+  "KPEX Ops":"KPEX_Appeals"
+};
+// per-process sample % (from Verf Details). Editable via CFG.sampleRate in Main.
+const VERIF_SAMPLE_DEFAULT = {
+  "Invalid and Hijack clean up":0.565,"BLMA & GTIN Exemption":0.214,"Legacy Barcode Suppressions":0.135,
+  "GTA Listing Error 8572 (MBO matching)":0.22,"UPCx Appeals":0.176,"KPEX Ops":0.35,"Item Identity Anchoring":0.135,
+  "Non BLMA Barcode Suppression":0.35
+};
+function verifSampleRate(task){
+  if(CFG.sampleRate && CFG.sampleRate[task]!=null) return CFG.sampleRate[task];
+  return VERIF_SAMPLE_DEFAULT[task]!=null?VERIF_SAMPLE_DEFAULT[task]:0.2;
+}
+function verifiersForProc(task){
+  return [...new Set(CFG.verifiers.filter(v=>norm(v[1])===norm(task)).map(v=>v[0]))];
+}
+
+/* ============ VERIFICATION ALLOCATION ENGINE ============
+   Mirrors the audit Work Allocation engine exactly: for each priority level 1→6,
+   a process's sampled-ticket demand is split equally (integer water-filling) among
+   every verifier who ranks that process at that level, capped by their remaining
+   whole-ticket capacity (using the process's verification AHT). Leftover from an
+   uneven split goes to whoever still has room; unmet demand carries to the next
+   priority level. Returns a per-verifier|process TICKET BUDGET plus how many
+   minutes each verifier ends up committing — that committed time is later
+   subtracted from their availability for audit allocation (verification runs
+   first in the workflow, audit gets what's left). -------- */
+function computeVerifPlan(sampled){
+  const avail={}; verifierNames().forEach(v=>avail[v]=auditorAvailMinRaw(v));
+  const demand={};   // process -> sampled ticket count
+  sampled.forEach(s=>{ demand[s.task]=(demand[s.task]||0)+1; });
+  const budget={};   // "verifier|process" -> ticket count
+
+  for(let level=1; level<=6; level++){
+    Object.keys(demand).forEach(p=>{
+      if(!(demand[p]>0)) return;
+      const aht=verifAhtForProcess(p); if(aht<=0) return;
+      const participants=verifiersAtPriority(p, level).filter(v=>Math.floor((avail[v]||0)/aht)>0);
+      if(!participants.length) return;
+      const capMap={}; participants.forEach(v=>capMap[v]=Math.floor(avail[v]/aht));
+      const {given, leftover}=waterFillInt(demand[p], capMap, participants);
+      Object.keys(given).forEach(v=>{
+        budget[v+'|'+p]=(budget[v+'|'+p]||0)+given[v];
+        avail[v]-=given[v]*aht;
+      });
+      demand[p]=leftover;
+    });
+  }
+  return {budget, demandLeft:demand};
+}
+
+// worked dump rows: {task, date, id, auditor}
+function generateVerification(workedRows){
+  // 1) group by (task, auditor)
+  const byTA={};
+  workedRows.forEach(r=>{
+    const t=norm(r.task); const k=t+'||'+r.auditor;
+    (byTA[k]=byTA[k]||{task:t,auditor:r.auditor,rows:[]}).rows.push(r);
+  });
+  // 2) sample each auditor's rows per process %
+  const sampled=[];  // {task, date, id, auditor}
+  Object.values(byTA).forEach(g=>{
+    const rate=verifSampleRate(g.task);
+    const n=Math.max( g.rows.length>0?1:0, Math.round(g.rows.length*rate) ); // at least 1 if any
+    // oldest/first n (stable)
+    g.rows.slice(0,n).forEach(x=>sampled.push({task:g.task,date:x.date,id:x.id,auditor:g.auditor}));
+  });
+  // 3) compute a fair, availability-capped ticket BUDGET per verifier+process (same
+  //    equal-share engine as Work Allocation), then walk the sampled tickets and hand
+  //    them out against that budget — rotating within each process, skipping anyone
+  //    whose budget for that process is used up or who worked the ticket themselves.
+  //    If NO eligible verifier exists for a ticket (e.g. the only configured verifier
+  //    for that process is the same person who worked it, or nobody has budget left),
+  //    it is NOT dropped — it goes into a "needs manual verifier" file so nothing
+  //    silently vanishes.
+  const {budget}=computeVerifPlan(sampled);
+  const remaining={...budget};
+  const perVerifierProc={};  // "verifier||task" -> [rows]
+  const CONFLICT="__NEEDS_VERIFIER__";
+  const byProc={}; sampled.forEach(s=>{ (byProc[s.task]=byProc[s.task]||[]).push(s); });
+  Object.keys(byProc).forEach(task=>{
+    const verifiers=verifiersForProc(task);
+    let ptr=0;
+    byProc[task].forEach(s=>{
+      let assigned=null;
+      for(let tries=0; tries<verifiers.length; tries++){
+        const cand=verifiers[(ptr+tries)%verifiers.length];
+        if(cand===s.auditor) continue;
+        const key=cand+'|'+task;
+        if((remaining[key]||0) > 0){ assigned=cand; remaining[key]--; ptr=(ptr+tries+1)%verifiers.length; break; }
+      }
+      const key = assigned ? (assigned+'||'+task) : (CONFLICT+'||'+task);
+      (perVerifierProc[key]=perVerifierProc[key]||[]).push(s);
+    });
+  });
+  // committed minutes per verifier, from what was ACTUALLY assigned (not just the nominal
+  // budget) — this is what reduces their availability for audit allocation.
+  verifCommittedMin={};
+  Object.keys(perVerifierProc).forEach(key=>{
+    const [v,task]=key.split('||'); if(v===CONFLICT) return;
+    const aht=verifAhtForProcess(task);
+    verifCommittedMin[v]=(verifCommittedMin[v]||0)+perVerifierProc[key].length*aht;
+  });
+  // 4) one file per verifier+process, capped at 15 rows each (matches your macro's
+  //    per-combination file, plus a row cap on our side). Overflow rows spill into
+  //    additional files with the verifier name suffixed 2, 3, ... (e.g. "amitapm2").
+  const MAX_ROWS_PER_FILE = 15;
+  const files=[];  // {verifier, task, rows, conflict}
+  Object.keys(perVerifierProc).forEach(key=>{
+    const [v,task]=key.split('||');
+    const rows=perVerifierProc[key];
+    const conflict = v===CONFLICT;
+    const baseVerifier = conflict?"NEEDS_MANUAL_VERIFIER":v;
+    for(let i=0; i<rows.length; i+=MAX_ROWS_PER_FILE){
+      const chunk=rows.slice(i, i+MAX_ROWS_PER_FILE);
+      const part=Math.floor(i/MAX_ROWS_PER_FILE)+1;         // 1, 2, 3...
+      const verifierName = part===1 ? baseVerifier : (baseVerifier+part);   // "amitapm", "amitapm2", ...
+      files.push({verifier:verifierName, task, rows:chunk, conflict});
+    }
+  });
+  return files;
+}
+
+/* -------- date helpers -------- */
+// Selected date window from the UI (single day or range). Returns {from,to} as Date (00:00).
+function selectedRange(){
+  // Verification pull window ONLY (allocation is always the single top-bar date).
+  const modeEl = document.getElementById('dmode');
+  const mode = modeEl ? modeEl.value : 'single';
+  const fEl = document.getElementById('vfrom');
+  const d1v = fEl ? fEl.value : '';
+  const from = d1v ? new Date(d1v+'T00:00:00') : null;
+  let to = from;
+  if(mode==='range'){
+    const tEl = document.getElementById('vto');
+    const d2v = tEl ? tEl.value : '';
+    to = d2v ? new Date(d2v+'T00:00:00') : from;
+  }
+  if(from && to && to<from){ const t=from; return {from:to,to:t}; }
+  return {from, to};
+}
+// Parse a value from the SharePoint "Date" column: Excel serial number OR yyyy-MM-dd(/ time).
+function parseRowDate(v){
+  if(v==null||v==='') return null;
+  const s=(''+v).trim();
+  if(/^\d+(\.\d+)?$/.test(s)){ // Excel serial
+    const n=parseFloat(s);
+    const ms=Math.round((n-25569)*86400*1000); // days since 1970-01-01 (1899-12-30 epoch)
+    const d=new Date(ms); d.setHours(0,0,0,0); return isNaN(d)?null:d;
+  }
+  const d=new Date(s.replace(' ','T')); if(isNaN(d)) return null; d.setHours(0,0,0,0); return d;
+}
+function inSelectedRange(rowDateVal){
+  const {from,to}=selectedRange();
+  if(!from) return true;                 // no date chosen -> keep all
+  const d=parseRowDate(rowDateVal);
+  if(!d) return true;                    // unparseable -> keep (don't silently drop)
+  return d>=from && d<=to;
+}
+const pad=n=>String(n).padStart(2,'0');
+const fmtDate=d=>pad(d.getMonth()+1)+'/'+pad(d.getDate())+'/'+d.getFullYear();
+// Matches Excel's WEEKNUM(date, 1): Sunday-start weeks, week 1 always contains Jan 1
+// (NOT ISO week numbering) — must match WorksheetFunction.weekNum(date, 1) in the macro.
+function weekNo(d){
+  const jan1=new Date(d.getFullYear(),0,1);
+  const startDay=jan1.getDay();               // 0=Sunday
+  const dayOfYear=Math.floor((new Date(d.getFullYear(),d.getMonth(),d.getDate())-jan1)/86400000);
+  return Math.floor((dayOfYear+startDay)/7)+1;
+}
+
+/* -------- copy rich HTML to clipboard -------- */
+function inlineStylesForOutlook(html){
+  // Outlook/Word's rendering engine largely ignores CSS background-color on paste and
+  // is picky about spacing — so every color AND every spacing rule below is set via
+  // legacy HTML attributes (bgcolor/align) in addition to inline style, and mso-
+  // properties are added to kill the extra cell padding Word injects by default.
+  // Tables are NOT forced to width:100% — that's what was stretching every table to
+  // fill the whole email regardless of how little content it had. table-layout:auto
+  // with no explicit width lets each table size itself to its own content instead.
+  const wrap = document.createElement('div');
+  wrap.innerHTML = html;
+  wrap.querySelectorAll('table').forEach(t=>{
+    t.setAttribute('border','1');
+    t.setAttribute('cellspacing','0');
+    t.setAttribute('cellpadding','5');
+    t.style.cssText='border-collapse:collapse;width:auto;max-width:100%;font-family:Calibri,Arial,sans-serif;font-size:10.5pt;margin:6px 0 14px 0;mso-table-lspace:0pt;mso-table-rspace:0pt;table-layout:auto;';
+  });
+  wrap.querySelectorAll('thead').forEach(th=>{ th.style.display='table-header-group'; });
+  wrap.querySelectorAll('tr').forEach((tr,i)=>{
+    const isHeaderRow = tr.parentElement && tr.parentElement.tagName==='THEAD';
+    if(!isHeaderRow){
+      const zebra = i%2===0 ? '#FFFFFF' : '#F4F7FA';
+      tr.setAttribute('bgcolor', zebra);
+    }
+  });
+  wrap.querySelectorAll('th').forEach(th=>{
+    th.setAttribute('bgcolor','#D9F2E1');
+    th.setAttribute('align','left');
+    th.style.cssText='border:1px solid #9CCDAE;background:#D9F2E1;padding:5px 9px;text-align:left;font-weight:bold;color:#000000;font-family:Calibri,Arial,sans-serif;font-size:10.5pt;white-space:nowrap;mso-line-height-rule:exactly;';
+  });
+  wrap.querySelectorAll('td').forEach(td=>{
+    td.style.cssText='border:1px solid #c7cdd6;padding:5px 9px;font-family:Calibri,Arial,sans-serif;font-size:10.5pt;mso-line-height-rule:exactly;';
+  });
+  // section titles
+  wrap.querySelectorAll('.tsec').forEach(s=>{
+    s.style.fontWeight='bold';
+    s.style.fontSize='12pt';
+    s.style.margin='14px 0 4px 0';
+    s.style.fontFamily='Calibri, Arial, sans-serif';
+  });
+  wrap.querySelectorAll('.greet, .note, .quip').forEach(n=>{
+    n.style.fontFamily='Calibri, Arial, sans-serif';
+    n.style.fontSize='11pt';
+    n.style.margin='2px 0';
+  });
+  // badges -> plain colored text so they survive
+  wrap.querySelectorAll('.bdg-l').forEach(b=>{ b.style.color='#c00'; b.style.fontWeight='bold'; });
+  wrap.querySelectorAll('.bdg-h').forEach(b=>{ b.style.color='#b26b00'; b.style.fontWeight='bold'; });
+  wrap.querySelectorAll('.bdg-s').forEach(b=>{ b.style.color='#555'; b.style.fontWeight='bold'; });
+  return wrap.innerHTML;
+}
+
+async function copyRich(el){
+  const inner = inlineStylesForOutlook(el.innerHTML);
+  const html = `<html><head><meta charset="utf-8"></head><body style="margin:0;font-family:Calibri,Arial,sans-serif;">${inner}</body></html>`;
+  const txt = el.innerText;
+  try{
+    await navigator.clipboard.write([new ClipboardItem({
+      'text/html': new Blob([html], {type:'text/html'}),
+      'text/plain': new Blob([txt], {type:'text/plain'})
+    })]);
+    return true;
+  }catch(e){
+    // fallback: build a temp element with the inline HTML and select it
+    const tmp=document.createElement('div');
+    tmp.style.position='fixed'; tmp.style.left='-9999px';
+    tmp.innerHTML=inner; document.body.appendChild(tmp);
+    const r=document.createRange(); r.selectNode(tmp);
+    const s=getSelection(); s.removeAllRanges(); s.addRange(r);
+    let ok=false; try{ ok=document.execCommand('copy'); }catch(_){}
+    s.removeAllRanges(); document.body.removeChild(tmp);
+    return ok;
+  }
+}
+
+/* -------- tiny CSV export (Audit.xlsx-style, as .csv openable by Excel) -------- */
+function downloadCSV(filename, header, rows){
+  const esc=v=>{v=String(v==null?'':v); return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;};
+  const lines=[header.map(esc).join(',')].concat(rows.map(r=>r.map(esc).join(',')));
+  const blob=new Blob([lines.join('\n')],{type:'text/csv;charset=utf-8;'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=filename; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+
+</script>
+<script>
+/* ============================================================
+   UI wiring for the 4-block dashboard
+   ============================================================ */
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?'':s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1600);}
+
+/* ---- date default (allocation is always this single day) ---- */
+$('rdate').value=new Date().toISOString().slice(0,10);
+
+
+/* ---- nav ---- */
+document.querySelector('.nav').addEventListener('click',e=>{
+  const b=e.target.closest('.navb'); if(!b)return;
+  document.querySelectorAll('.navb').forEach(x=>x.classList.toggle('on',x===b));
+  const p=b.dataset.p;
+  document.querySelectorAll('.panel').forEach(x=>x.classList.remove('on'));
+  $('p-'+p).classList.add('on');
+  if(p==='work') renderWork();
+  if(p==='verif'){ /* verifiers managed in Main */ }
+  if(p==='planning') renderLeaves();
+  if(p==='main') renderVerMain();
+});
+
+/* ---- upload ---- */
+const drop=$('drop'),file=$('file');
+drop.addEventListener('click',()=>file.click());
+drop.addEventListener('dragover',e=>{e.preventDefault();drop.classList.add('hot');});
+drop.addEventListener('dragleave',()=>drop.classList.remove('hot'));
+drop.addEventListener('drop',e=>{e.preventDefault();drop.classList.remove('hot');if(e.dataTransfer.files[0])loadDump(e.dataTransfer.files[0]);});
+file.addEventListener('change',e=>{if(e.target.files[0])loadDump(e.target.files[0]);});
+function loadDump(f){
+  readTabularFile(f, (rows)=>{
+    dumpRows=rows;
+    $('fname').style.display='block';$('fname').textContent='✓ '+f.name+' — '+dumpRows.length+' tickets';
+    ttOverrides={}; allocCache=null; renderProcTable(); saveSession(); toast('Dump loaded: '+dumpRows.length+' tickets');
+  });
+}
+
+/* ============ BLOCK 1: MAIN ============ */
+function renderProcTable(){
+  const {counts}=dumpRows?buildPool():{counts:Object.fromEntries(processes().map(p=>[p,{'<5':0,'Backlog':0}]))};
+  const {rows,total}=hcTable(counts);
+  let h='<table><thead><tr><th>Process</th><th>Total Volume</th><th>&lt;5</th><th>Backlog</th><th>AHT (min)</th><th>HC Needed</th><th></th></tr></thead><tbody>';
+  rows.filter(r=>r.proc!==LE_PROC).forEach(r=>{
+    h+=`<tr><td>${esc(r.proc)}</td><td>${r.total}</td><td>${r.lt}</td><td>${r.bk}</td>
+      <td><input class="num" data-aht="${esc(r.proc)}" value="${r.aht}"></td>
+      <td><b>${r.hc.toFixed(2)}</b></td>
+      <td><button class="btn danger" data-delproc="${esc(r.proc)}">✕</button></td></tr>`;
+  });
+  h+=`<tr style="font-weight:700;background:var(--surface3)"><td>Total</td><td></td><td></td><td></td><td></td><td>${total.toFixed(2)}</td><td></td></tr>`;
+  h+='</tbody></table>';
+  $('procTable').innerHTML=h;
+  fillProcSelect('newAudProc'); renderMapTable(); renderAvailTable();
+}
+$('procTable').addEventListener('input',e=>{
+  if(e.target.dataset.aht){CFG.aht[e.target.dataset.aht]=parseFloat(e.target.value)||0;save();renderProcTable();}
+});
+$('procTable').addEventListener('click',e=>{
+  const p=e.target.dataset.delproc; if(!p)return;
+  if(confirm('Delete process "'+p+'" and its mappings?')){
+    delete CFG.aht[p]; CFG.mapping=CFG.mapping.filter(m=>m[1]!==p); CFG.verifiers=CFG.verifiers.filter(v=>v[1]!==p);
+    save(); renderProcTable();
+try{renderVerMain();}catch(e){}
+  }
+});
+$('addProc').addEventListener('click',()=>{
+  const n=$('newProc').value.trim(), a=parseFloat($('newAht').value)||0;
+  if(!n)return; CFG.aht[n]=a; save(); $('newProc').value='';$('newAht').value=''; renderProcTable();
+});
+
+function fillProcSelect(id){ $(id).innerHTML=realProcesses().map(p=>`<option>${esc(p)}</option>`).join(''); }
+const PR_OPTS=[1,2,3,4,5,6];
+
+function renderMapTable(){
+  $('audCount').textContent=auditors().length+' auditors · '+CFG.mapping.length+' mappings';
+  let h='<table><thead><tr><th>Auditor</th><th>Process</th><th>HC</th><th title="1 = worked first; if that process has 0 tickets, the next priority is tried">Priority</th><th></th></tr></thead><tbody>';
+  CFG.mapping.forEach((m,i)=>{
+    const pr=m[3]!=null?+m[3]:1;
+    h+=`<tr>
+      <td><input class="txt" data-mi="${i}" data-f="0" value="${esc(m[0])}"></td>
+      <td><select class="txt" data-mi="${i}" data-f="1">${realProcesses().map(p=>`<option ${p===m[1]?'selected':''}>${esc(p)}</option>`).join('')}</select></td>
+      <td><input class="num" data-mi="${i}" data-f="2" value="${m[2]}"></td>
+      <td><select class="txt" data-mi="${i}" data-f="3">${PR_OPTS.map(n=>`<option value="${n}" ${n===pr?'selected':''}>${n}</option>`).join('')}</select></td>
+      <td><button class="btn danger" data-delmap="${i}">✕</button></td></tr>`;
+  });
+  h+='</tbody></table>'; $('mapTable').innerHTML=h;
+}
+$('mapTable').addEventListener('input',e=>{
+  const i=e.target.dataset.mi, f=e.target.dataset.f; if(i==null)return;
+  let v=e.target.value; if(f==='2')v=parseFloat(v)||0; if(f==='3')v=parseInt(v)||1;
+  CFG.mapping[+i][+f]=v; save();
+  if(f==='0') renderAvailTable();     // auditor login changed -> refresh availability list
+});
+$('mapTable').addEventListener('click',e=>{
+  const i=e.target.dataset.delmap; if(i==null)return;
+  CFG.mapping.splice(+i,1); save(); renderMapTable(); renderAvailTable();
+});
+
+/* -------- Auditor Availability (Block 2): minutes available today, default 480, editable -------- */
+function renderAvailTable(){
+  const box=$('availTable'); if(!box) return;
+  let h='<table><thead><tr><th>Auditor</th><th>Available Time (min)</th></tr></thead><tbody>';
+  auditors().forEach(a=>{
+    const v=(CFG.availMin && CFG.availMin[a]!=null) ? CFG.availMin[a] : WORK_MIN;
+    h+=`<tr><td>${esc(a)}</td><td><input class="num" data-avail="${esc(a)}" value="${v}"></td></tr>`;
+  });
+  h+='</tbody></table>';
+  box.innerHTML=h;
+}
+document.addEventListener('input',e=>{
+  const a=e.target.dataset.avail; if(!a)return;
+  CFG.availMin=CFG.availMin||{};
+  CFG.availMin[a]=Math.max(0,parseInt(e.target.value)||0);
+  save();
+});
+/* ===== Main: Verifiers block ===== */
+function fillProcSelectMain(id){ document.getElementById(id).innerHTML=realProcesses().map(p=>`<option>${esc(p)}</option>`).join(''); }
+function renderVerMain(){
+  document.getElementById('verCountMain').textContent=verifierNames().length+' verifiers · '+CFG.verifiers.length+' mappings';
+  let h='<table><thead><tr><th>Verifier</th><th>Process</th><th>Count</th><th title="1 = verifies this process first; if that process has 0 sampled tickets left, the next priority is tried">Priority</th><th></th></tr></thead><tbody>';
+  CFG.verifiers.forEach((v,i)=>{
+    const pr=v[3]!=null?+v[3]:1;
+    h+=`<tr>
+      <td><input class="txt" data-vmi="${i}" data-f="0" value="${esc(v[0])}"></td>
+      <td><select class="txt" data-vmi="${i}" data-f="1">${realProcesses().map(p=>`<option ${p===v[1]?'selected':''}>${esc(p)}</option>`).join('')}</select></td>
+      <td><input class="num" data-vmi="${i}" data-f="2" value="${v[2]!=null?v[2]:0}"></td>
+      <td><select class="txt" data-vmi="${i}" data-f="3">${PR_OPTS.map(n=>`<option value="${n}" ${n===pr?'selected':''}>${n}</option>`).join('')}</select></td>
+      <td><button class="btn danger" data-delverm="${i}">✕</button></td></tr>`;
+  });
+  h+='</tbody></table>';
+  // sample rate per process
+  h+='<div style="font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin:14px 0 6px;font-weight:700">Verification Sample Rate per Process</div>';
+  h+='<table><thead><tr><th>Process</th><th>Sample %</th></tr></thead><tbody>';
+  realProcesses().forEach(p=>{ const r=(CFG.sampleRate[p]!=null?CFG.sampleRate[p]:0.2); h+=`<tr><td>${esc(p)}</td><td><input class="num" data-srm="${esc(p)}" value="${Math.round(r*100)}"> %</td></tr>`; });
+  h+='</tbody></table>';
+  document.getElementById('verTableMain').innerHTML=h;
+  fillProcSelectMain('newVerProcMain');
+  renderVerifAhtTable();
+}
+document.getElementById('verTableMain').addEventListener('input',e=>{
+  if(e.target.dataset.srm){ CFG.sampleRate[e.target.dataset.srm]=(parseFloat(e.target.value)||0)/100; save(); return; }
+  const i=e.target.dataset.vmi, f=e.target.dataset.f; if(i==null)return;
+  let val=e.target.value; if(f==='2') val=parseInt(val)||0; if(f==='3') val=parseInt(val)||1;
+  CFG.verifiers[+i][+f]=val; save();
+});
+document.getElementById('verTableMain').addEventListener('click',e=>{
+  const i=e.target.dataset.delverm; if(i==null)return;
+  CFG.verifiers.splice(+i,1); save(); renderVerMain();
+});
+document.getElementById('addVerMain').addEventListener('click',()=>{
+  const v=document.getElementById('newVerMain').value.trim();
+  const p=document.getElementById('newVerProcMain').value;
+  const c=parseInt(document.getElementById('newVerCount').value)||0;
+  if(!v)return; CFG.verifiers.push([v,p,c,1]); save(); document.getElementById('newVerMain').value=''; renderVerMain();
+});
+
+/* -------- Verification AHT table: process -> {subtype: minutes}. Edited in
+   SECONDS (matches how the source data was given); stored internally in minutes,
+   consistent with every other AHT value in the tool. -------- */
+function renderVerifAhtTable(){
+  const box=document.getElementById('verifAhtTable'); if(!box) return;
+  let h='<table><thead><tr><th>Process</th><th>Sub-type</th><th>AHT (sec)</th><th>AHT (min)</th><th></th></tr></thead><tbody>';
+  Object.keys(CFG.verifAht).forEach(p=>{
+    const subs=CFG.verifAht[p]||{};
+    const isUnmapped = p==='_Unmapped';
+    Object.keys(subs).forEach(sub=>{
+      const min=subs[sub];
+      h+=`<tr${isUnmapped?' style="background:#fff2f1"':''}>
+        <td>${isUnmapped?'<span style="color:#e5453b;font-weight:700">⚠ Unmapped</span>':esc(p)}</td>
+        <td>${esc(sub)}</td>
+        <td><input class="num" data-vaht-p="${esc(p)}" data-vaht-s="${esc(sub)}" value="${Math.round(min*60*100)/100}"></td>
+        <td style="color:var(--text2)">${min.toFixed(2)}</td>
+        <td><button class="btn danger" data-delvaht-p="${esc(p)}" data-delvaht-s="${esc(sub)}">✕</button></td></tr>`;
+    });
+  });
+  h+='</tbody></table>';
+  box.innerHTML=h;
+}
+document.getElementById('verifAhtTable').addEventListener('input',e=>{
+  const p=e.target.dataset.vahtP, s=e.target.dataset.vahtS; if(p==null||s==null)return;
+  const sec=parseFloat(e.target.value)||0;
+  CFG.verifAht[p][s]=Math.round((sec/60)*1000)/1000;
+  save(); renderVerifAhtTable();
+});
+document.getElementById('verifAhtTable').addEventListener('click',e=>{
+  const p=e.target.dataset.delvahtP, s=e.target.dataset.delvahtS; if(p==null||s==null)return;
+  delete CFG.verifAht[p][s];
+  if(Object.keys(CFG.verifAht[p]).length===0) delete CFG.verifAht[p];
+  save(); renderVerifAhtTable();
+});
+
+$('suggestHc').addEventListener('click',()=>{
+  if(suggestHCForAll()){ renderMapTable(); renderProcTable(); toast('HC auto-suggested from requirement — edit any value to override'); }
+  else { alert('Upload the dump first so requirements can be calculated.'); }
+});
+$('addMap').addEventListener('click',()=>{
+  const a=$('newAud').value.trim(), p=$('newAudProc').value, hc=parseFloat($('newAudHc').value)||1;
+  const pr=parseInt($('newAudPr').value)||1;
+  if(!a)return; CFG.mapping.push([a,p,hc,pr]); save(); $('newAud').value=''; renderMapTable(); renderAvailTable();
+});
+
+/* ============ BLOCK 2: DAILY PLANNING ============ */
+function renderLeaves(filter=''){
+  const list=auditors().filter(a=>a.includes(filter.toLowerCase()));
+  $('leaveGrid').innerHTML=list.map(a=>{
+    const lv=leaves[a]||'';
+    const mins=(CFG.availMin && CFG.availMin[a]!=null) ? CFG.availMin[a] : WORK_MIN;
+    return `<div class="lrow"><span>${esc(a)}</span>
+      <span class="seg">
+        <button data-a="${esc(a)}" data-v="full" class="${lv==='full'?'full':''}">Full</button>
+        <button data-a="${esc(a)}" data-v="half" class="${lv==='half'?'half':''}">Half</button>
+        <button data-a="${esc(a)}" data-v="skip" class="${lv==='skip'?'skip':''}">Skip</button>
+      </span>
+      <span style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text2)">
+        <input class="num" data-avail="${esc(a)}" value="${mins}" style="width:56px" ${lv==='full'||lv==='skip'?'disabled':''}> min
+      </span></div>`;
+  }).join('');
+}
+$('leaveGrid').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b)return;
+  const a=b.dataset.a,v=b.dataset.v;
+  leaves[a]=leaves[a]===v?undefined:v; if(!leaves[a])delete leaves[a];
+  ttOverrides={};   // leaves changed -> recompute allocation from fresh capacity
+  renderLeaves($('lsearch').value);
+  saveSession();
+});
+$('leaveGrid').addEventListener('input',e=>{
+  const a=e.target.dataset.avail; if(!a) return;
+  CFG.availMin=CFG.availMin||{};
+  CFG.availMin[a]=Math.max(0,parseInt(e.target.value)||0);
+  ttOverrides={}; save();
+});
+$('leaveGrid').addEventListener('change',()=>saveSession());
+$('lsearch').addEventListener('input',e=>renderLeaves(e.target.value));
+
+$('genMail1').addEventListener('click',()=>{
+  if(!dumpRows){alert('Upload the dump first.');return;}
+  const t1=table1(); const t2=table2(); const t3=table3(); const t4=table4();
+  const wk=weekNo(new Date($('rdate').value+'T00:00:00'));
+  const dstr=fmtDate(new Date($('rdate').value+'T00:00:00'));
+
+  let h=`<div class="greet">Hi Team,</div>
+    <div class="note">Kindly follow tracking timestamp for all audit and verification process without fail until there is a request to pause.</div>
+    <div class="note" style="margin-top:6px">Please find below today's <b>task allocation</b>. Kindly ensure to:</div>
+    <div class="note">• Complete all assigned tickets in the given order</div>
+    <div class="note">• Do NOT skip any assigned tasks</div>
+    <div class="note">• Do NOT work on unassigned tasks under any circumstances (keep the allocator informed if required)</div>
+    <div class="quip">QUIP: ${QUIP}</div>`;
+
+  // ---- TABLE 1: Task / Age / Count / To be Assigned / AHT / HC ----
+  h+=`<div class="tsec">Daily Task & Headcount Allocation — ${dstr} — Week ${wk}</div>`;
+  h+=`<table><thead><tr><th>Task</th><th>Total</th><th>Age</th><th>Count of IssueId</th><th>To be Assigned &gt;5</th><th>AHT</th><th>HC Required</th></tr></thead><tbody>`;
+  t1.rows.forEach(r=>{
+    // three age rows per task; Task/Total/AHT/HC on first row only
+    h+=`<tr><td rowspan="3">${esc(r.proc)}</td><td rowspan="3">${r.total}</td><td>&lt;5</td><td>${r.lt5}</td><td></td><td rowspan="3">${r.aht}</td><td rowspan="3">${r.hc.toFixed(2)}</td></tr>`;
+    h+=`<tr><td>&gt;=5 - &lt;9</td><td>${r.mid}</td><td>${r.mid}</td></tr>`;
+    h+=`<tr><td>&gt;=9</td><td>${r.gt9}</td><td>${r.gt9}</td></tr>`;
+  });
+  h+=`<tr style="font-weight:700;background:#fff2dd"><td>Total</td><td></td><td></td><td></td><td></td><td></td><td>${t1.totHC.toFixed(2)}</td></tr></tbody></table>`;
+
+  // ---- TABLE 2: Task-level Headcount Allocation ----
+  h+=`<div class="tsec">Task Level Headcount Allocation</div>`;
+  h+=`<table><thead><tr><th>Task</th><th>Headcount</th></tr></thead><tbody>`;
+  t2.rows.forEach(r=>{
+    if(r.isLeave){ h+=`<tr><td>Leave</td><td>${r.hc}</td></tr>`; return; }
+    h+=`<tr><td>${esc(r.task)}</td><td>${(+r.hc).toFixed(2).replace(/\.00$/,'')}</td></tr>`;
+  });
+  h+=`<tr style="font-weight:700;background:#fff2dd"><td>Total</td><td>${t2.total.toFixed(2).replace(/\.00$/,'')}</td></tr></tbody></table>`;
+
+  // ---- TABLE 3: Headcount incl. Verification (roster) ----
+  h+=`<div class="tsec">Headcount Required Including Verification</div>`;
+  h+=`<table><thead><tr><th>User ID</th><th>Primary Task</th><th>Headcount</th><th>Secondary Task</th><th>Headcount</th></tr></thead><tbody>`;
+  t3.forEach(r=>{
+    // Full leave -> red row, task "Leave". Skip -> shown on "Adhoc". Half -> subtle amber.
+    if(r.leave==='full'){
+      h+=`<tr><td>${esc(r.user)}</td><td style="background:#e5453b;color:#fff;font-weight:bold;text-align:center">LEAVE</td><td></td><td></td><td></td></tr>`;
+      return;
+    }
+    h+=`<tr><td>${esc(r.user)}</td><td>${esc(r.primary)}</td><td>${r.primHC===''?'':(+r.primHC).toFixed(2).replace(/\.00$/,'')}</td><td>${esc(r.secondary)}</td><td>${r.secHC===''?'':(+r.secHC).toFixed(2).replace(/\.00$/,'')}</td></tr>`;
+  });
+  h+=`</tbody></table>`;
+
+  // ---- TABLE 4: Age-Based Ticket Allocation ----
+  h+=`<div class="tsec">Age-Based Ticket Allocation</div>`;
+  h+=`<table><thead><tr><th>Associate</th><th>Primary Task</th><th>Bucket</th><th>Sec Task</th><th>Bucket</th></tr></thead><tbody>`;
+  t4.forEach(r=>{
+    if(r.primary==='__LEAVE__'){
+      h+=`<tr><td>${esc(r.assoc)}</td><td style="background:#e5453b;color:#fff;font-weight:bold;text-align:center">LEAVE</td><td></td><td></td><td></td></tr>`;
+      return;
+    }
+    h+=`<tr><td>${esc(r.assoc)}</td><td>${esc(r.primary)}</td><td>${esc(r.primBucket)}</td><td>${esc(r.secondary)}</td><td>${esc(r.secBucket)}</td></tr>`;
+  });
+  h+=`</tbody></table>`;
+
+  h+=`<div class="note" style="margin-top:12px">Regards,<br>Rakesh</div>`;
+  $('render1').innerHTML=h; $('mail1card').style.display='block';
+  toast('All 4 Daily Planning tables generated');
+});
+$('copy1').addEventListener('click',async()=>{toast(await copyRich($('render1'))?'✓ Copied!':'Press Ctrl+C');});
+$('copy2').addEventListener('click',async()=>{toast(await copyRich($('workSummary'))?'✓ Copied!':'Press Ctrl+C');});
+$('copy3').addEventListener('click',async()=>{toast(await copyRich($('verifSummary'))?'✓ Copied!':'Press Ctrl+C');});
+
+/* ============ BLOCK 3: WORK ALLOCATION ============ */
+function renderLeToggle(){
+  const on = CFG.assignLE!==false;
+  document.querySelectorAll('#leToggle button').forEach(b=>b.classList.toggle('on', (b.dataset.v==='yes')===on));
+}
+document.getElementById('leToggle').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  CFG.assignLE = (b.dataset.v==='yes');
+  save(); renderLeToggle();
+  if(dumpRows) renderWork();   // re-run so counts reflect the new setting immediately
+});
+function renderWork(){
+  renderLeToggle();
+  if(!dumpRows){$('workTable').innerHTML='<div class="empty"><div class="ico">📥</div>Upload the dump first.</div>';return;}
+  const {pool,counts}=buildPool();
+  const defs=defaultTTs(pool);
+  const onLeave=Object.keys(leaves);
+  // banner
+  if(onLeave.length){$('leaveBanner').style.display='block';$('leaveBannerT').textContent=onLeave.map(a=>a+(leaves[a]==='half'?' (½)':'')).join(', ');}
+  else $('leaveBanner').style.display='none';
+  const verifNote=document.getElementById('verifReserveNote');
+  if(verifNote){
+    const reserved=Object.keys(verifCommittedMin).filter(a=>verifCommittedMin[a]>0);
+    if(reserved.length){
+      verifNote.style.display='block';
+      verifNote.innerHTML='🧪 <b>'+reserved.length+' verifier(s)</b> already have time reserved from Generate Verification — their "Avail (min)" below already reflects it.';
+    } else verifNote.style.display='none';
+  }
+  // kpis
+  $('workKpis').style.display='grid';
+  const totalT=Object.values(pool).reduce((s,a)=>s+a.length,0);
+  $('wk1').textContent=totalT; $('wk3').textContent=onLeave.filter(a=>leaves[a]==='full').length;
+  // table grouped by process — real processes first (priority order per auditor), LE Validation filler last
+  let h='<table><thead><tr><th>Process</th><th>Auditor</th><th>Priority</th><th>Avail (min)</th><th>Default Assigned</th><th>Assign TT</th></tr></thead><tbody>';
+  let toAlloc=0, leTotal=0, activeSet=new Set();
+  processes().forEach(p=>{
+    const isLE=p===LE_PROC;
+    const names = isLE ? auditors() : [...new Set(mapForProcess(p).map(m=>m[0]))];
+    names.forEach(a=>{
+      const key=a+'|'+p, def=defs[key]||0;
+      const val=(ttOverrides[key]!=null?ttOverrides[key]:def);
+      if(isLE && val===0 && ttOverrides[key]==null) return;   // hide zero-value LE rows for uncluttered view
+      if(isLE) leTotal+=val; else toAlloc+=val;
+      if(val>0)activeSet.add(a);
+      const lv=leaves[a];
+      const badge = lv==='full'?' <span style="color:#e5453b;font-weight:700">(leave)</span>':lv==='half'?' <span style="color:#b26b00;font-weight:700">(½)</span>':lv==='skip'?' <span style="color:#888">(adhoc)</span>':'';
+      const pr = isLE ? '—' : (CFG.mapping.find(m=>m[0]===a&&m[1]===p)||[])[3]||1;
+      const avail=auditorAvailMin(a);
+      const rowStyle = isLE ? ' style="color:var(--text2)"' : '';
+      h+=`<tr${rowStyle}><td>${esc(p)}${isLE?' <span class="pill" style="font-size:9px">filler</span>':''}</td><td>${esc(a)}${badge}</td><td>${pr}</td><td>${avail}</td><td>${def}</td>
+        <td><input class="num" data-tt="${esc(key)}" value="${val}"></td></tr>`;
+    });
+  });
+  h+='</tbody></table>'; $('workTable').innerHTML=h;
+  $('wk2').textContent=toAlloc; $('wk5').textContent=leTotal; $('wk4').textContent=activeSet.size;
+}
+$('workTable').addEventListener('input',e=>{
+  const k=e.target.dataset.tt; if(!k)return;
+  ttOverrides[k]=parseInt(e.target.value)||0;
+  // live kpi update
+  const {pool}=buildPool(); const defs=defaultTTs(pool);
+  let toAlloc=0, leTotal=0; const act=new Set();
+  const allKeys=new Set([...Object.keys(defs), ...Object.keys(ttOverrides)]);
+  allKeys.forEach(key=>{
+    const v=(ttOverrides[key]!=null?ttOverrides[key]:defs[key]||0);
+    if(key.endsWith('|'+LE_PROC)) leTotal+=v; else toAlloc+=v;
+    if(v>0)act.add(key.split('|')[0]);
+  });
+  $('wk2').textContent=toAlloc;$('wk5').textContent=leTotal;$('wk4').textContent=act.size;
+});
+$('workTable').addEventListener('change',()=>saveSession());   // persist once the value is committed, not every keystroke
+$('resetTT').addEventListener('click',()=>{ ttOverrides={}; renderWork(); saveSession(); toast('TT counts reset to capacity-based defaults'); });
+$('genMail2').addEventListener('click',()=>{
+  if(!dumpRows){alert('Upload the dump first.');return;}
+  const {pool}=buildPool(); const defs=defaultTTs(pool);
+  // use every default key (auditor|process), applying overrides
+  const tts={}; Object.keys(defs).forEach(key=>{ tts[key]=(ttOverrides[key]!=null?ttOverrides[key]:defs[key]||0); });
+  allocCache=allocate(pool,tts);
+  const realRows=allocCache.filter(r=>r.id && r.proc!==LE_PROC).sort((a,b)=>a.proc.localeCompare(b.proc)||a.who.localeCompare(b.who));
+  const leRows=allocCache.filter(r=>r.proc===LE_PROC && r.count);   // aggregate rows: {proc, who, count}
+  // AGE-WISE per-auditor counts: Backlog (>=5) vs <5 (real tickets only; LE has no age)
+  const byWho={};   // who -> {task, backlog, lt5}
+  realRows.forEach(r=>{
+    const k=r.who+'||'+r.proc;
+    if(!byWho[k]) byWho[k]={who:r.who, task:r.proc, backlog:0, lt5:0};
+    if((r.age||0)>=5) byWho[k].backlog++; else byWho[k].lt5++;
+  });
+  const list=Object.values(byWho).sort((a,b)=>(b.backlog+b.lt5)-(a.backlog+a.lt5));
+  let sh='<table><thead><tr><th>Auditor</th><th>Task</th><th>Backlog (&ge;5)</th><th>&lt;5</th><th>Total</th></tr></thead><tbody>';
+  let tB=0,t5=0;
+  list.forEach(x=>{ tB+=x.backlog; t5+=x.lt5; sh+=`<tr><td>${esc(x.who)}</td><td>${esc(x.task)}</td><td>${x.backlog}</td><td>${x.lt5}</td><td><b>${x.backlog+x.lt5}</b></td></tr>`; });
+  leRows.sort((a,b)=>a.who.localeCompare(b.who)).forEach(r=>{ sh+=`<tr style="color:var(--text2)"><td>${esc(r.who)}</td><td>${esc(LE_PROC)} <span class="pill" style="font-size:9px">filler</span></td><td>0</td><td>${r.count}</td><td><b>${r.count}</b></td></tr>`; });
+  const leTotal=leRows.reduce((s,r)=>s+r.count,0);
+  sh+=`<tr style="font-weight:700;background:#fff2dd"><td>Total</td><td></td><td>${tB}</td><td>${t5}</td><td>${tB+t5}</td></tr></tbody></table>`;
+  const totalDump=Object.values(pool).reduce((s,arr)=>s+arr.length,0);
+  $('workSummary').innerHTML='<div style="font-size:13px;color:var(--text2);margin-bottom:8px"><b>'+realRows.length+'</b> tickets allocated (of '+totalDump+' in the dump — assignment is capped by auditor availability, not by clearing the whole dump) · <b>'+leTotal+'</b> LE Validation filler for leftover time. Full ticket-level data in the Excel download.</div>'+sh;
+  $('mail2card').style.display='block'; $('dlAudit').style.display='inline-block';
+  saveSession();
+  toast(realRows.length+' tickets + '+leTotal+' LE allocated');
+});
+$('dlAudit').addEventListener('click',()=>{
+  const d=fmtDate(new Date($('rdate').value+'T00:00:00'));
+  const realRows=allocCache.filter(r=>r.id)
+    .sort((a,b)=>a.proc.localeCompare(b.proc)||a.who.localeCompare(b.who))
+    .map(r=>[d, r.proc, r.id, r.who, r.age!=null?r.age:'']);
+  const leRows=allocCache.filter(r=>r.proc===LE_PROC && r.count)
+    .sort((a,b)=>a.who.localeCompare(b.who))
+    .map(r=>[d, LE_PROC, r.count, r.who, '']);   // count goes in the Short ID column instead of a fake ID
+  downloadCSV((d.replace(/\//g,'-'))+'-Audit.csv',['Date','Task','Short ID','Auditor','Age'],[...realRows,...leRows]);
+});
+
+/* ============ BLOCK 5: TICKET LOOKUP ============
+   Checks pasted Short IDs against the most recently generated allocation
+   (allocCache from "Generate Allocation" in Work Allocation). Read-only — never
+   assigns or changes anything, just reports what it finds. */
+function parseLookupIds(text){
+  return [...new Set(
+    (text||'').split(/[\s,]+/).map(s=>s.trim()).filter(Boolean)
+  )];
+}
+$('lookupBtn').addEventListener('click',()=>{
+  const ids=parseLookupIds($('lookupInput').value);
+  const box=$('lookupResults');
+  if(!ids.length){ box.innerHTML='<div class="empty"><div class="ico">📋</div>Paste at least one ticket ID above.</div>'; return; }
+  if(!allocCache || !allocCache.length){
+    box.innerHTML='<div class="empty"><div class="ico">🎯</div>No allocation generated yet — go to Work Allocation and click "Generate Allocation" first.</div>';
+    return;
+  }
+  const byId={};
+  allocCache.forEach(r=>{ if(r.id) byId[r.id]=r; });
+  let found=0;
+  let h='<table><thead><tr><th>Ticket ID</th><th>Status</th><th>Process</th><th>Auditor</th><th>Age</th></tr></thead><tbody>';
+  ids.forEach(id=>{
+    const r=byId[id];
+    if(r){
+      found++;
+      h+=`<tr><td>${esc(id)}</td><td style="color:var(--success);font-weight:700">✓ In allocation</td><td>${esc(r.proc)}</td><td>${esc(r.who)}</td><td>${r.age!=null?r.age:''}</td></tr>`;
+    } else {
+      h+=`<tr style="background:#fff2f1"><td>${esc(id)}</td><td style="color:#e5453b;font-weight:700">✕ Not in allocation</td><td colspan="3"></td></tr>`;
+    }
+  });
+  h+='</tbody></table>';
+  const summary=`<div style="font-size:13px;color:var(--text2);margin-bottom:8px"><b>${found}</b> of <b>${ids.length}</b> ticket(s) found in the current allocation.</div>`;
+  box.innerHTML=summary+h;
+});
+$('lookupClear').addEventListener('click',()=>{
+  $('lookupInput').value='';
+  $('lookupResults').innerHTML='';
+});
+
+/* ============ BLOCK 4: VERIFICATION (worked dump -> verifier CSVs) ============ */
+let workedRows=null, verifFiles=null;
+const wdrop=$('wdrop'), wfile=$('wfile');
+wdrop.addEventListener('click',()=>wfile.click());
+wdrop.addEventListener('dragover',e=>{e.preventDefault();wdrop.classList.add('hot');});
+wdrop.addEventListener('dragleave',()=>wdrop.classList.remove('hot'));
+wdrop.addEventListener('drop',e=>{e.preventDefault();wdrop.classList.remove('hot');if(e.dataTransfer.files[0])loadWorked(e.dataTransfer.files[0]);});
+wfile.addEventListener('change',e=>{if(e.target.files[0])loadWorked(e.target.files[0]);});
+function loadWorked(f){
+  readTabularFile(f, (raw)=>{
+    workedRows=raw.map(r=>({
+      task: norm((r["Task Name"]||r["Task_Name"]||r["Task"]||r["AssignedGroup"]||"").trim()),
+      date: (r["Date"]||"").trim(),
+      id:   (r["Short ID"]||r["SIM_ID"]||r["ShortId"]||r["Short Id"]||"").trim(),
+      // login alias (Column5) is the original auditor; col D "Auditor" is the display name
+      auditor: (r["Column5"]||r["Auditor"]||r["ResolvedByIdentity"]||"").trim(),
+      status: (r["Completion Status"]||r["Status"]||"").trim()
+    })).filter(x=>x.id && x.auditor);   // take ALL data (Resolved AND WIP)
+    $('wfname').style.display='block'; $('wfname').textContent='✓ '+f.name+' — '+workedRows.length+' worked rows';
+    $('genVerif').disabled=false; saveSession(); toast('Worked dump loaded: '+workedRows.length+' rows');
+  });
+}
+$('genVerif').addEventListener('click',()=>{
+  if(!workedRows){alert('Upload the worked dump first.');return;}
+  verifFiles=generateVerification(workedRows);
+  if(!verifFiles.length){alert('No files generated — check that verifiers are set in Main for these processes.');return;}
+  // summary table: verifier | process | tickets | status
+  const byV={};
+  verifFiles.forEach(f=>{ byV[f.verifier]=(byV[f.verifier]||0)+f.rows.length; });
+  const conflicts=verifFiles.filter(f=>f.conflict).reduce((s,f)=>s+f.rows.length,0);
+  let sh='<div style="font-size:13px;color:var(--text2);margin-bottom:8px"><b>'+verifFiles.length+'</b> files for <b>'+Object.keys(byV).length+'</b> verifiers'
+    + (conflicts>0?` · <span style="color:#e5453b;font-weight:700">${conflicts} ticket(s) need a manually-assigned verifier</span> (no eligible verifier — the only configured verifier is the same person who worked it)`:'')
+    + '. Download the ZIP below.</div>';
+  sh+='<table><thead><tr><th>Verifier</th><th>Process</th><th>Tickets</th><th>Status</th></tr></thead><tbody>';
+  verifFiles.slice().sort((a,b)=>(a.conflict-b.conflict)||a.verifier.localeCompare(b.verifier)||a.task.localeCompare(b.task)).forEach(f=>{
+    const status=f.conflict?'<span style="color:#e5453b;font-weight:700">⚠ Needs manual verifier</span>':'✓ Assigned';
+    const rowStyle=f.conflict?' style="background:#fff2f1"':'';
+    sh+=`<tr${rowStyle}><td>${esc(f.verifier)}</td><td>${esc(f.task)}</td><td>${f.rows.length}</td><td>${status}</td></tr>`;
+  });
+  sh+='</tbody></table>';
+  // capacity summary: how much of each verifier's day just got claimed by verification,
+  // and what's left over for audit work in Work Allocation
+  const vNames=[...new Set(verifFiles.filter(f=>!f.conflict).map(f=>f.verifier.replace(/\d+$/,'')))].sort();
+  sh+='<div style="font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin:14px 0 6px;font-weight:700">Verification Capacity — Time Reserved Before Audit Allocation</div>';
+  sh+='<table><thead><tr><th>Verifier</th><th>Day (min)</th><th>Verification (min)</th><th>Left for audit (min)</th></tr></thead><tbody>';
+  vNames.forEach(v=>{
+    const raw=auditorAvailMinRaw(v), committed=Math.round((verifCommittedMin[v]||0)*10)/10, left=Math.max(0,Math.round((raw-committed)*10)/10);
+    sh+=`<tr><td>${esc(v)}</td><td>${raw}</td><td>${committed}</td><td><b>${left}</b></td></tr>`;
+  });
+  sh+='</tbody></table>';
+  sh+='<div class="hint" style="margin-top:8px">This reserved time is now subtracted automatically wherever availability is used in Work Allocation — no separate step needed.</div>';
+  $('verifSummary').innerHTML=sh; $('verifCard').style.display='block'; $('dlVerifZip').style.display='inline-block'; $('dlVerifIndiv').style.display='inline-block';
+  saveSession();
+  toast(verifFiles.length+' verification files generated'+(conflicts>0?' ('+conflicts+' flagged)':''));
+});
+function buildVerifFiles(){
+  const d=new Date($('rdate').value+'T00:00:00');
+  // macro's naming convention: filename date is the NEXT calendar day after the process date
+  const dNext=new Date(d.getFullYear(),d.getMonth(),d.getDate()+1);
+  const dstr=pad(dNext.getDate())+'.'+pad(dNext.getMonth()+1);
+  const wk=weekNo(d);   // week number is based on the process date itself, per the macro
+  const files=verifFiles.map(f=>{
+    const prefix=VERIF_FILEMAP[f.task]||f.task.replace(/[^A-Za-z0-9]+/g,'_');
+    // EXACT macro order: {Prefix}_Wk_{weeknum}_{verifier}_{dd.mm}.csv
+    const name=`${prefix}_Wk_${wk}_${f.verifier}_${dstr}.csv`;
+    const header='Task_Name,Date,SIM_ID,Auditor,root_cause,marketplaceId';
+    const lines=f.rows.map(r=>[r.task,r.date,r.id,r.auditor,'NA','1'].map(v=>{v=String(v==null?'':v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;}).join(','));
+    return {name, content:[header].concat(lines).join('\n')};
+  });
+  return {files, dstr, wk};
+}
+$('dlVerifZip').addEventListener('click',async()=>{
+  if(!verifFiles) return;
+  const {files, dstr, wk}=buildVerifFiles();
+  const ok=await downloadZip('Verification_'+dstr+'_Wk_'+wk+'.zip', files);
+  if(ok) toast('ZIP downloaded: '+files.length+' files');
+});
+$('dlVerifIndiv').addEventListener('click',()=>{
+  if(!verifFiles) return;
+  const {files}=buildVerifFiles();
+  downloadFilesIndividually(files);
+  toast(files.length+' files downloading individually');
+});
+
+/* ---- reset ---- */
+$('resetBtn').addEventListener('click',()=>{if(confirm('Reset all processes, auditors, mappings & verifiers to defaults — this also clears any uploaded dump, allocation, and verification results. Continue?')){resetCfg();clearSession();renderProcTable();renderVerMain();renderLeaves();renderWork();toast('Everything reset');}});
+
+/* ---- init ---- */
+loadSession();
+renderProcTable();
+renderVerMain();
+renderLeaves();
+
+</script>
+
+
+</body></html>
