@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en"><head><style id="qw-theme">:root {
+<html lang="en"><head>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+<style id="qw-theme">:root {
   --color-bg: #faf9fc;
   --color-text: #131920;
   --color-navbar-bg: #f9f9fb;
@@ -458,7 +460,6 @@ a { color: var(--color-link, var(--color-primary)); }</style>
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
 </head>
 <body>
 <div class="wrap">
@@ -534,9 +535,24 @@ a { color: var(--color-link, var(--color-primary)); }</style>
       </div>
     </div>
     <div class="card">
+      <h2><span class="l">📊 Verification Sample Rate per Process</span></h2>
+      <div class="hint">What share of each auditor's completed work gets sampled for verification. Edit any %, or add a new process below.</div>
+      <div id="verifSampleTable" class="scrollwell" style="max-height:300px;overflow:auto"></div>
+      <div class="row" style="margin-top:10px">
+        <input class="txt" id="newSampleProc" placeholder="Process name" style="width:220px">
+        <input class="num" id="newSamplePct" placeholder="Sample %" value="20" style="width:100px">
+        <button class="btn sm" id="addSampleProc">+ Add process</button>
+      </div>
+    </div>
+    <div class="card">
       <h2><span class="l">🧪 Verification AHT</span><span class="pill">seconds → auto-converted to minutes</span></h2>
-      <div class="hint">AHT for verifying a ticket, per process (some processes have more than one verification sub-type, e.g. MBO's Approval/RP/Count). Edit the seconds column — minutes updates automatically. This will drive verifier ticket-count allocation.</div>
+      <div class="hint">One AHT per process — sub-task breakdowns aren't used, since we don't know which sub-type a ticket is until it's actually verified. Edit the seconds column, or add a new process below.</div>
       <div id="verifAhtTable" class="scrollwell" style="max-height:360px;overflow:auto"></div>
+      <div class="row" style="margin-top:10px">
+        <input class="txt" id="newVahtProc" placeholder="Process name" style="width:220px">
+        <input class="num" id="newVahtSec" placeholder="AHT (sec)" value="0" style="width:110px">
+        <button class="btn sm" id="addVahtProc">+ Add process</button>
+      </div>
     </div>
   </div>
 
@@ -599,6 +615,11 @@ a { color: var(--color-link, var(--color-primary)); }</style>
       <div class="drop" id="wdrop"><span class="ico">📥</span> &nbsp; <b>Drop worked dump</b> (CSV or Excel) or click <div class="fname" id="wfname"></div></div>
       <input type="file" id="wfile" accept=".csv,.xlsx,.xls" hidden="">
     </div>
+    <div class="card" id="sampleCard" style="display:none;margin-top:16px">
+      <h2><span class="l">🧪 Verification Sample Preview</span><span class="pill" id="sampleCountPill"></span></h2>
+      <div class="hint">Per Task Name + Auditor: how many they worked, the verification sample %, and how many get pulled for verification. Edit the Sample count or delete a row, then click Generate Verification below.</div>
+      <div id="sampleTable" class="scrollwell" style="max-height:360px;overflow:auto"></div>
+    </div>
     <div class="row">
       <button class="btn g" id="genVerif" disabled="">✨ Generate Verification Files</button>
       <button class="btn ghost" id="dlVerifZip" style="display:none">⬇️ Download all as ZIP</button>
@@ -606,6 +627,7 @@ a { color: var(--color-link, var(--color-primary)); }</style>
     </div>
     <div class="card" id="verifCard" style="display:none;margin-top:16px">
       <div class="mailbar"><b>Verification Allocation — files per verifier</b><button class="copy" id="copy3">📋 Copy table</button></div>
+      <div class="hint">This is the final verifier assignment, computed from the Sample Preview counts above. To change what gets assigned, edit or delete rows in the Sample Preview table and click Generate again.</div>
       <div id="verifSummary"></div>
     </div>
   </div>
@@ -674,22 +696,24 @@ const DEFAULTS = {
     "Legacy Barcode Suppressions":0.135,"Non BLMA Barcode Suppression":0.35,
     "KPEX Ops":0.35,"UPCx Appeals":0.176,"Item Identity Anchoring":0.135
   },
-  // verification AHT (minutes) per process, one or more sub-types each — seeded from the
-  // seconds you gave (46s, 1919s, etc.), converted to minutes. "BLMA Verif" and
-  // "gtin maitainance" both looked like BLMA & GTIN Exemption so both sub-types are
-  // nested there; "CRB Verif" and "BAKS verif" didn't match any of the 8 processes so
-  // they're kept under _Unmapped pending confirmation — see chat.
+  // verification AHT (minutes) — ONE value per process. Sub-task AHT breakdowns
+  // (e.g. MBO's Approval/RP/Count) aren't usable in practice since we don't know
+  // which sub-type a ticket is until it's actually verified, so multi-type entries
+  // were averaged into a single number. "BLMA & GTIN Exemption" uses the more
+  // confident of its two original readings (V-Probate); "CRB Verif" and "BAKS
+  // verif" didn't match any of the 8 named processes, kept as their own rows.
   verifAht: {
-    "LE Validation": { "V-BV": 0.77 },
-    "BLMA & GTIN Exemption": { "V-BLMA": 0.77, "V-Probate": 5.47 },
-    "GTA Listing Error 8572 (MBO matching)": { "Approval": 2.43, "RP": 0.35, "Count": 5.47 },
-    "Item Identity Anchoring": { "V-Anchor Appeal": 5.47 },
-    "Invalid and Hijack clean up": { "V-3p": 31.98 },
-    "Legacy Barcode Suppressions": { "V-Barcode": 5.47 },
-    "UPCx Appeals": { "V-UPCX": 3.0 },
-    "KPEX Ops": { "V-KPEX": 5.47 },
-    "Non BLMA Barcode Suppression": { "verif": 10.0 },
-    "_Unmapped": { "CRB Verif (V-CRB)": 0.77, "BAKS verif (V-Tasks)": 10.98, "BAKS verif (V - Multi-Pack)": 10.0 }
+    "LE Validation": 0.77,
+    "BLMA & GTIN Exemption": 5.47,
+    "GTA Listing Error 8572 (MBO matching)": 2.75,
+    "Item Identity Anchoring": 5.47,
+    "Invalid and Hijack clean up": 31.98,
+    "Legacy Barcode Suppressions": 5.47,
+    "UPCx Appeals": 3.0,
+    "KPEX Ops": 5.47,
+    "Non BLMA Barcode Suppression": 10.0,
+    "CRB Verif": 0.77,
+    "BAKS verif": 10.49
   },
   assignLE: true    // if false, leftover time is simply left unassigned instead of becoming LE Validation
 };
@@ -770,8 +794,18 @@ function migrateProcessNames(cfg){
   if(cfg.verifAht){
     const merged={};
     Object.keys(cfg.verifAht).forEach(p=>{
+      if(p==='_Unmapped') return;   // legacy wrapper for several unresolved items — dropped; re-add manually if needed
+      const raw=cfg.verifAht[p];
+      let val;
+      if(raw && typeof raw==='object'){
+        // legacy nested sub-type structure (e.g. {"Approval":2.43,"RP":0.35}) -> flatten to one average
+        const vals=Object.values(raw).filter(x=>typeof x==='number');
+        val = vals.length ? vals.reduce((s,x)=>s+x,0)/vals.length : 0;
+      } else {
+        val = +raw||0;
+      }
       const np=canon(p);
-      merged[np]=Object.assign({}, merged[np]||{}, cfg.verifAht[p]);
+      if(merged[np]==null) merged[np]=val;
     });
     cfg.verifAht=merged;
   }
@@ -794,6 +828,7 @@ function saveSession(){
     localStorage.setItem(SESSION_KEY, JSON.stringify({
       dumpRows, dumpFileLabel: (dumpRows&&$('fname').textContent)||null,
       workedRows, workedFileLabel: (workedRows&&$('wfname')&&$('wfname').textContent)||null,
+      sampleRows,
       allocCache, ttOverrides, leaves, verifFiles, verifCommittedMin
     }));
   }catch(e){ console.error('session save failed', e); }
@@ -805,6 +840,7 @@ function loadSession(){
     const sess=JSON.parse(s);
     if(sess.dumpRows) dumpRows=sess.dumpRows;
     if(sess.workedRows) workedRows=sess.workedRows;
+    if(sess.sampleRows) sampleRows=sess.sampleRows;
     if(sess.allocCache) allocCache=sess.allocCache;
     if(sess.ttOverrides) ttOverrides=sess.ttOverrides;
     if(sess.leaves) leaves=sess.leaves;
@@ -819,6 +855,7 @@ function loadSession(){
       $('wfname').textContent=sess.workedFileLabel || ('✓ Restored from last session — '+workedRows.length+' worked rows');
       $('genVerif').disabled=false;
     }
+    if(sampleRows && sampleRows.length){ renderSampleTable(); }
     if(allocCache && allocCache.length){
       $('dlAudit').style.display='inline-block';
     }
@@ -830,9 +867,10 @@ function loadSession(){
 }
 function clearSession(){
   localStorage.removeItem(SESSION_KEY);
-  dumpRows=null; workedRows=null; allocCache=null; ttOverrides={}; leaves={}; verifFiles=null; verifCommittedMin={};
+  dumpRows=null; workedRows=null; allocCache=null; ttOverrides={}; leaves={}; verifFiles=null; verifCommittedMin={}; sampleRows=null;
   $('fname').style.display='none'; $('fname').textContent='';
   if($('wfname')){ $('wfname').style.display='none'; $('wfname').textContent=''; }
+  if($('sampleCard')) $('sampleCard').style.display='none';
   if($('genVerif')) $('genVerif').disabled=true;
   if($('dlAudit')) $('dlAudit').style.display='none';
   if($('dlVerifZip')) $('dlVerifZip').style.display='none';
@@ -982,12 +1020,11 @@ function verifiersAtPriority(p, level){
   });
   return Object.keys(seen);
 }
-/* Verification AHT for a process: average across its sub-types (we don't have a
-   per-ticket sub-type field to pick the exact one, so this is the best estimate). */
+/* Verification AHT for a process: one flat value (no sub-type breakdown — we don't
+   know which sub-type a ticket is until it's actually verified, so a single
+   per-process AHT is what's actually usable). */
 function verifAhtForProcess(p){
-  const subs=CFG.verifAht && CFG.verifAht[p]; if(!subs) return 0;
-  const vals=Object.values(subs); if(!vals.length) return 0;
-  return vals.reduce((s,v)=>s+v,0)/vals.length;
+  return (CFG.verifAht && +CFG.verifAht[p]) || 0;
 }
 
 /* -------- integer max-min fair split of `demand` TICKETS (not minutes) across
@@ -1471,23 +1508,27 @@ function computeVerifPlan(sampled){
   return {budget, demandLeft:demand};
 }
 
-// worked dump rows: {task, date, id, auditor}
-function generateVerification(workedRows){
-  // 1) group by (task, auditor)
+/* -------- Step 1+2 (group worked rows by task+auditor, compute the default sample
+   count per group): pulled out of generateVerification() so the counts can be shown
+   in an editable preview table before assignment. Nothing about the assignment logic
+   below (generateVerification) changed — it still just consumes a `sampled` list. -------- */
+function buildSampleRows(){
   const byTA={};
-  workedRows.forEach(r=>{
+  (workedRows||[]).forEach(r=>{
     const t=norm(r.task); const k=t+'||'+r.auditor;
     (byTA[k]=byTA[k]||{task:t,auditor:r.auditor,rows:[]}).rows.push(r);
   });
-  // 2) sample each auditor's rows per process %
-  const sampled=[];  // {task, date, id, auditor}
-  Object.values(byTA).forEach(g=>{
+  sampleRows=Object.values(byTA).map(g=>{
     const rate=verifSampleRate(g.task);
     const n=Math.max( g.rows.length>0?1:0, Math.round(g.rows.length*rate) ); // at least 1 if any
-    // oldest/first n (stable)
-    g.rows.slice(0,n).forEach(x=>sampled.push({task:g.task,date:x.date,id:x.id,auditor:g.auditor}));
-  });
-  // 3) compute a fair, availability-capped ticket BUDGET per verifier+process (same
+    return {task:g.task, auditor:g.auditor, rows:g.rows, auditCount:g.rows.length, verfPct:rate, sample:Math.min(n,g.rows.length)};
+  }).sort((a,b)=>a.task.localeCompare(b.task)||a.auditor.localeCompare(b.auditor));
+}
+
+// sampled: [{task, date, id, auditor}] — already-selected sample tickets, built from
+// the (possibly user-edited) Sample Preview table via sampleRows.
+function generateVerification(sampled){
+  // compute a fair, availability-capped ticket BUDGET per verifier+process (same
   //    equal-share engine as Work Allocation), then walk the sampled tickets and hand
   //    them out against that budget — rotating within each process, skipping anyone
   //    whose budget for that process is used up or who worked the ticket themselves.
@@ -1502,15 +1543,25 @@ function generateVerification(workedRows){
   const byProc={}; sampled.forEach(s=>{ (byProc[s.task]=byProc[s.task]||[]).push(s); });
   Object.keys(byProc).forEach(task=>{
     const verifiers=verifiersForProc(task);
-    let ptr=0;
+    let ptr=0, fbPtr=0;
     byProc[task].forEach(s=>{
       let assigned=null;
+      // Pass 1: prefer a verifier who still has fair-share budget left (never self)
       for(let tries=0; tries<verifiers.length; tries++){
         const cand=verifiers[(ptr+tries)%verifiers.length];
         if(cand===s.auditor) continue;
         const key=cand+'|'+task;
         if((remaining[key]||0) > 0){ assigned=cand; remaining[key]--; ptr=(ptr+tries+1)%verifiers.length; break; }
       }
+      // Pass 2: nobody had budget left, but at least one OTHER verifier exists for
+      // this process — assign anyway. Priority/budget doesn't matter here, we just
+      // need someone who isn't the ticket's own auditor.
+      if(!assigned){
+        const others=verifiers.filter(v=>v!==s.auditor);
+        if(others.length){ assigned=others[fbPtr%others.length]; fbPtr++; }
+      }
+      // Only truly unsolvable (the ONLY configured verifier for this process is the
+      // same person who worked the ticket) falls to manual entry.
       const key = assigned ? (assigned+'||'+task) : (CONFLICT+'||'+task);
       (perVerifierProc[key]=perVerifierProc[key]||[]).push(s);
     });
@@ -1523,22 +1574,14 @@ function generateVerification(workedRows){
     const aht=verifAhtForProcess(task);
     verifCommittedMin[v]=(verifCommittedMin[v]||0)+perVerifierProc[key].length*aht;
   });
-  // 4) one file per verifier+process, capped at 15 rows each (matches your macro's
-  //    per-combination file, plus a row cap on our side). Overflow rows spill into
-  //    additional files with the verifier name suffixed 2, 3, ... (e.g. "amitapm2").
-  const MAX_ROWS_PER_FILE = 15;
+  // 4) one single file per verifier+process — no row cap, no splitting.
   const files=[];  // {verifier, task, rows, conflict}
   Object.keys(perVerifierProc).forEach(key=>{
     const [v,task]=key.split('||');
     const rows=perVerifierProc[key];
     const conflict = v===CONFLICT;
-    const baseVerifier = conflict?"NEEDS_MANUAL_VERIFIER":v;
-    for(let i=0; i<rows.length; i+=MAX_ROWS_PER_FILE){
-      const chunk=rows.slice(i, i+MAX_ROWS_PER_FILE);
-      const part=Math.floor(i/MAX_ROWS_PER_FILE)+1;         // 1, 2, 3...
-      const verifierName = part===1 ? baseVerifier : (baseVerifier+part);   // "amitapm", "amitapm2", ...
-      files.push({verifier:verifierName, task, rows:chunk, conflict});
-    }
+    const verifier = conflict?"NEEDS_MANUAL_VERIFIER":v;
+    files.push({verifier, task, rows, conflict});
   });
   return files;
 }
@@ -1807,17 +1850,12 @@ function renderVerMain(){
       <td><button class="btn danger" data-delverm="${i}">✕</button></td></tr>`;
   });
   h+='</tbody></table>';
-  // sample rate per process
-  h+='<div style="font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin:14px 0 6px;font-weight:700">Verification Sample Rate per Process</div>';
-  h+='<table><thead><tr><th>Process</th><th>Sample %</th></tr></thead><tbody>';
-  realProcesses().forEach(p=>{ const r=(CFG.sampleRate[p]!=null?CFG.sampleRate[p]:0.2); h+=`<tr><td>${esc(p)}</td><td><input class="num" data-srm="${esc(p)}" value="${Math.round(r*100)}"> %</td></tr>`; });
-  h+='</tbody></table>';
   document.getElementById('verTableMain').innerHTML=h;
   fillProcSelectMain('newVerProcMain');
+  renderVerifSampleTable();
   renderVerifAhtTable();
 }
 document.getElementById('verTableMain').addEventListener('input',e=>{
-  if(e.target.dataset.srm){ CFG.sampleRate[e.target.dataset.srm]=(parseFloat(e.target.value)||0)/100; save(); return; }
   const i=e.target.dataset.vmi, f=e.target.dataset.f; if(i==null)return;
   let val=e.target.value; if(f==='2') val=parseInt(val)||0; if(f==='3') val=parseInt(val)||1;
   CFG.verifiers[+i][+f]=val; save();
@@ -1833,39 +1871,70 @@ document.getElementById('addVerMain').addEventListener('click',()=>{
   if(!v)return; CFG.verifiers.push([v,p,c,1]); save(); document.getElementById('newVerMain').value=''; renderVerMain();
 });
 
-/* -------- Verification AHT table: process -> {subtype: minutes}. Edited in
+/* -------- Verification Sample Rate table (separate card from Verifiers) -------- */
+function renderVerifSampleTable(){
+  const box=document.getElementById('verifSampleTable'); if(!box) return;
+  let h='<table><thead><tr><th>Process</th><th>Sample %</th><th></th></tr></thead><tbody>';
+  Object.keys(CFG.sampleRate).forEach(p=>{
+    const r=CFG.sampleRate[p]!=null?CFG.sampleRate[p]:0.2;
+    h+=`<tr><td>${esc(p)}</td><td><input class="num" data-srm="${esc(p)}" value="${Math.round(r*100)}"> %</td><td><button class="btn danger" data-delsrm="${esc(p)}">✕</button></td></tr>`;
+  });
+  h+='</tbody></table>';
+  box.innerHTML=h;
+}
+document.getElementById('verifSampleTable').addEventListener('input',e=>{
+  const p=e.target.dataset.srm; if(!p) return;
+  CFG.sampleRate[p]=(parseFloat(e.target.value)||0)/100; save();
+});
+document.getElementById('verifSampleTable').addEventListener('click',e=>{
+  const p=e.target.dataset.delsrm; if(!p) return;
+  delete CFG.sampleRate[p]; save(); renderVerifSampleTable();
+});
+document.getElementById('addSampleProc').addEventListener('click',()=>{
+  const p=document.getElementById('newSampleProc').value.trim();
+  const pct=parseFloat(document.getElementById('newSamplePct').value)||0;
+  if(!p) return;
+  CFG.sampleRate[p]=pct/100; save();
+  document.getElementById('newSampleProc').value='';
+  renderVerifSampleTable();
+});
+
+/* -------- Verification AHT table: process -> ONE aht value (minutes). Edited in
    SECONDS (matches how the source data was given); stored internally in minutes,
    consistent with every other AHT value in the tool. -------- */
 function renderVerifAhtTable(){
   const box=document.getElementById('verifAhtTable'); if(!box) return;
-  let h='<table><thead><tr><th>Process</th><th>Sub-type</th><th>AHT (sec)</th><th>AHT (min)</th><th></th></tr></thead><tbody>';
+  let h='<table><thead><tr><th>Process</th><th>AHT (sec)</th><th>AHT (min)</th><th></th></tr></thead><tbody>';
   Object.keys(CFG.verifAht).forEach(p=>{
-    const subs=CFG.verifAht[p]||{};
-    const isUnmapped = p==='_Unmapped';
-    Object.keys(subs).forEach(sub=>{
-      const min=subs[sub];
-      h+=`<tr${isUnmapped?' style="background:#fff2f1"':''}>
-        <td>${isUnmapped?'<span style="color:#e5453b;font-weight:700">⚠ Unmapped</span>':esc(p)}</td>
-        <td>${esc(sub)}</td>
-        <td><input class="num" data-vaht-p="${esc(p)}" data-vaht-s="${esc(sub)}" value="${Math.round(min*60*100)/100}"></td>
-        <td style="color:var(--text2)">${min.toFixed(2)}</td>
-        <td><button class="btn danger" data-delvaht-p="${esc(p)}" data-delvaht-s="${esc(sub)}">✕</button></td></tr>`;
-    });
+    const min=+CFG.verifAht[p]||0;
+    h+=`<tr>
+      <td>${esc(p)}</td>
+      <td><input class="num" data-vaht-p="${esc(p)}" value="${Math.round(min*60*100)/100}"></td>
+      <td style="color:var(--text2)">${min.toFixed(2)}</td>
+      <td><button class="btn danger" data-delvaht-p="${esc(p)}">✕</button></td></tr>`;
   });
   h+='</tbody></table>';
   box.innerHTML=h;
 }
 document.getElementById('verifAhtTable').addEventListener('input',e=>{
-  const p=e.target.dataset.vahtP, s=e.target.dataset.vahtS; if(p==null||s==null)return;
+  const p=e.target.dataset.vahtP; if(p==null)return;
   const sec=parseFloat(e.target.value)||0;
-  CFG.verifAht[p][s]=Math.round((sec/60)*1000)/1000;
+  CFG.verifAht[p]=Math.round((sec/60)*1000)/1000;
   save(); renderVerifAhtTable();
 });
 document.getElementById('verifAhtTable').addEventListener('click',e=>{
-  const p=e.target.dataset.delvahtP, s=e.target.dataset.delvahtS; if(p==null||s==null)return;
-  delete CFG.verifAht[p][s];
-  if(Object.keys(CFG.verifAht[p]).length===0) delete CFG.verifAht[p];
+  const p=e.target.dataset.delvahtP; if(p==null)return;
+  delete CFG.verifAht[p];
   save(); renderVerifAhtTable();
+});
+document.getElementById('addVahtProc').addEventListener('click',()=>{
+  const p=document.getElementById('newVahtProc').value.trim();
+  const sec=parseFloat(document.getElementById('newVahtSec').value)||0;
+  if(!p) return;
+  CFG.verifAht[p]=Math.round((sec/60)*1000)/1000;
+  save();
+  document.getElementById('newVahtProc').value='';
+  renderVerifAhtTable();
 });
 
 $('suggestHc').addEventListener('click',()=>{
@@ -2130,7 +2199,7 @@ $('lookupClear').addEventListener('click',()=>{
 });
 
 /* ============ BLOCK 4: VERIFICATION (worked dump -> verifier CSVs) ============ */
-let workedRows=null, verifFiles=null;
+let workedRows=null, verifFiles=null, sampleRows=null;
 const wdrop=$('wdrop'), wfile=$('wfile');
 wdrop.addEventListener('click',()=>wfile.click());
 wdrop.addEventListener('dragover',e=>{e.preventDefault();wdrop.classList.add('hot');});
@@ -2148,13 +2217,46 @@ function loadWorked(f){
       status: (r["Completion Status"]||r["Status"]||"").trim()
     })).filter(x=>x.id && x.auditor);   // take ALL data (Resolved AND WIP)
     $('wfname').style.display='block'; $('wfname').textContent='✓ '+f.name+' — '+workedRows.length+' worked rows';
+    buildSampleRows(); renderSampleTable();
     $('genVerif').disabled=false; saveSession(); toast('Worked dump loaded: '+workedRows.length+' rows');
   });
 }
-$('genVerif').addEventListener('click',()=>{
-  if(!workedRows){alert('Upload the worked dump first.');return;}
-  verifFiles=generateVerification(workedRows);
-  if(!verifFiles.length){alert('No files generated — check that verifiers are set in Main for these processes.');return;}
+/* -------- Sample Preview table: Task Name | Auditor | Audit Count | Verf Percentage |
+   Sample (editable) | delete. Shown right after the worked dump loads, before
+   Generate Verification is clicked, so counts can be adjusted first. -------- */
+function renderSampleTable(){
+  if(!sampleRows || !sampleRows.length){ $('sampleCard').style.display='none'; return; }
+  $('sampleCard').style.display='block';
+  $('sampleCountPill').textContent=sampleRows.length+' auditor rows';
+  let h='<table><thead><tr><th>Task Name</th><th>Auditor</th><th>Audit Count</th><th>Verf Percentage</th><th>Sample</th><th></th></tr></thead><tbody>';
+  sampleRows.forEach((r,i)=>{
+    h+=`<tr>
+      <td>${esc(r.task)}</td>
+      <td>${esc(r.auditor)}</td>
+      <td>${r.auditCount}</td>
+      <td>${r.verfPct}</td>
+      <td><input class="num" data-smpi="${i}" value="${r.sample}" min="0" max="${r.auditCount}" style="width:70px"></td>
+      <td><button class="btn danger" data-delsmp="${i}">✕</button></td>
+    </tr>`;
+  });
+  h+='</tbody></table>';
+  $('sampleTable').innerHTML=h;
+}
+$('sampleTable').addEventListener('input',e=>{
+  const i=e.target.dataset.smpi; if(i==null) return;
+  const row=sampleRows&&sampleRows[+i]; if(!row) return;
+  let v=parseInt(e.target.value); if(isNaN(v)||v<0) v=0; if(v>row.auditCount) v=row.auditCount;
+  row.sample=v; e.target.value=v; saveSession();
+});
+$('sampleTable').addEventListener('click',e=>{
+  const i=e.target.dataset.delsmp; if(i==null) return;
+  sampleRows.splice(+i,1); saveSession(); renderSampleTable();
+});
+/* -------- assembles the assignment summary + capacity tables from the current
+   verifFiles state, and renders them. Read-only display — the place to change
+   counts is the Sample Preview table BEFORE clicking Generate. -------- */
+function renderVerifSummary(){
+  if(!verifFiles) return;
   // summary table: verifier | process | tickets | status
   const byV={};
   verifFiles.forEach(f=>{ byV[f.verifier]=(byV[f.verifier]||0)+f.rows.length; });
@@ -2171,7 +2273,7 @@ $('genVerif').addEventListener('click',()=>{
   sh+='</tbody></table>';
   // capacity summary: how much of each verifier's day just got claimed by verification,
   // and what's left over for audit work in Work Allocation
-  const vNames=[...new Set(verifFiles.filter(f=>!f.conflict).map(f=>f.verifier.replace(/\d+$/,'')))].sort();
+  const vNames=[...new Set(verifFiles.filter(f=>!f.conflict).map(f=>f.verifier))].sort();
   sh+='<div style="font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin:14px 0 6px;font-weight:700">Verification Capacity — Time Reserved Before Audit Allocation</div>';
   sh+='<table><thead><tr><th>Verifier</th><th>Day (min)</th><th>Verification (min)</th><th>Left for audit (min)</th></tr></thead><tbody>';
   vNames.forEach(v=>{
@@ -2182,6 +2284,20 @@ $('genVerif').addEventListener('click',()=>{
   sh+='<div class="hint" style="margin-top:8px">This reserved time is now subtracted automatically wherever availability is used in Work Allocation — no separate step needed.</div>';
   $('verifSummary').innerHTML=sh; $('verifCard').style.display='block'; $('dlVerifZip').style.display='inline-block'; $('dlVerifIndiv').style.display='inline-block';
   saveSession();
+}
+$('genVerif').addEventListener('click',()=>{
+  if(!workedRows){alert('Upload the worked dump first.');return;}
+  if(!sampleRows || !sampleRows.length){alert('No sample rows to generate from — check the Sample Preview table.');return;}
+  const sampled=[];
+  sampleRows.forEach(g=>{
+    if(!(g.sample>0)) return;
+    g.rows.slice(0,g.sample).forEach(x=>sampled.push({task:g.task,date:x.date,id:x.id,auditor:g.auditor}));
+  });
+  if(!sampled.length){alert('All Sample counts are 0 — nothing to verify.');return;}
+  verifFiles=generateVerification(sampled);
+  if(!verifFiles.length){alert('No files generated — check that verifiers are set in Main for these processes.');return;}
+  renderVerifSummary();
+  const conflicts=verifFiles.filter(f=>f.conflict).reduce((s,f)=>s+f.rows.length,0);
   toast(verifFiles.length+' verification files generated'+(conflicts>0?' ('+conflicts+' flagged)':''));
 });
 function buildVerifFiles(){
