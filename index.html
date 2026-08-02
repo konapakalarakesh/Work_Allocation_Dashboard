@@ -457,6 +457,17 @@ a { color: var(--color-link, var(--color-primary)); }</style>
   .copy:hover{filter:brightness(1.05);transform:translateY(-1px)}
   .btn.sm:hover{transform:translateY(-1px)}
   h1{background:linear-gradient(90deg,#232F3E,#FF9900);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+
+  /* ---- Main block lock ---- */
+  #lockMainBtn.locked-active{background:var(--danger,#e5453b);color:#fff;border-color:transparent}
+  #p-main.locked{position:relative}
+  #p-main.locked .card{opacity:.6;filter:grayscale(.15)}
+  #p-main.locked input,#p-main.locked select,#p-main.locked button{cursor:not-allowed !important}
+  #p-main.locked::before{
+    content:"🔒 Main block is locked — click \"Unlock Main\" above to edit or to let Reset config touch it";
+    display:block;font-size:12px;font-weight:700;color:#fff;background:var(--danger,#e5453b);
+    border-radius:8px;padding:8px 12px;margin-bottom:14px;
+  }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
@@ -467,6 +478,7 @@ a { color: var(--color-link, var(--color-primary)); }</style>
     <div class="logo">⚡</div>
     <div><h1>Work Allocation Dashboard</h1><div class="sub">Main · Daily Planning · Work Allocation · Verification</div></div>
     <div class="spacer"></div>
+    <button class="btn ghost sm" id="lockMainBtn">🔓 Lock Main</button>
     <button class="btn ghost sm" id="resetBtn">↺ Reset config</button>
   </header>
 
@@ -479,6 +491,12 @@ a { color: var(--color-link, var(--color-primary)); }</style>
       </div>
       <div style="width:180px"><label style="font-size:11px;color:var(--text2)">Report date</label>
         <input type="date" id="rdate" class="txt" style="margin-top:4px"></div>
+    </div>
+    <div class="row" id="dayBackupRow" style="margin-top:10px;display:none">
+      <label style="font-size:11px;color:var(--text2)">Restore a stored day</label>
+      <select class="txt" id="dayBackupSelect" style="width:180px"></select>
+      <button class="btn sm ghost" id="restoreDayBtn">⤵ Restore this day</button>
+      <span style="font-size:11px;color:var(--text2)">Only the last 2 days you generated/uploaded data for are kept.</span>
     </div>
   </div>
 
@@ -563,7 +581,7 @@ a { color: var(--color-link, var(--color-primary)); }</style>
       <input class="lsearch" id="lsearch" placeholder="🔍 Search auditor…">
       <div class="leave-grid" id="leaveGrid"></div>
     </div>
-    <div class="row"><button class="btn g" id="genMail1">✨ Generate All 4 Tables</button></div>
+    <div class="row"><button class="btn g" id="genMail1">✨ Generate All 4 Tables</button><button class="btn ghost" id="resetMail1">↺ Reset Daily Planning</button></div>
     <div class="card" id="mail1card" style="display:none;margin-top:16px">
       <div class="mailbar"><b>Daily Planning — 4 Tables</b><button class="copy" id="copy1">📋 Copy all 4 tables</button></div>
       <div class="render scrollwell" id="render1"></div>
@@ -598,7 +616,7 @@ a { color: var(--color-link, var(--color-primary)); }</style>
     </div>
     <div class="row">
       <button class="btn g" id="genMail2">✨ Generate Allocation</button>
-      <button class="btn ghost" id="resetTT">↺ Reset TT to defaults</button>
+      <button class="btn ghost" id="resetTT">↺ Reset Work Allocation</button>
       <button class="btn ghost" id="dlAudit" style="display:none">⬇️ Download Allocation (Excel)</button>
     </div>
     <div class="card" id="mail2card" style="display:none;margin-top:16px">
@@ -622,6 +640,7 @@ a { color: var(--color-link, var(--color-primary)); }</style>
     </div>
     <div class="row">
       <button class="btn g" id="genVerif" disabled="">✨ Generate Verification Files</button>
+      <button class="btn ghost" id="resetVerif">↺ Reset Verification</button>
       <button class="btn ghost" id="dlVerifZip" style="display:none">⬇️ Download all as ZIP</button>
       <button class="btn ghost" id="dlVerifIndiv" style="display:none">⬇️ Download files individually (no ZIP)</button>
     </div>
@@ -715,7 +734,7 @@ const DEFAULTS = {
     "CRB Verif": 0.77,
     "BAKS verif": 10.49
   },
-  assignLE: true    // if false, leftover time is simply left unassigned instead of becoming LE Validation
+  assignLE: false    // if false, leftover time is simply left unassigned instead of becoming LE Validation. Default is No.
 };
 
 /* Normalizes any raw task/process text — old SharePoint names, dump AssignedGroup
@@ -766,7 +785,7 @@ function load(){
   // verification AHT per process/sub-type (seeded from DEFAULTS if missing entirely)
   if(!cfg.verifAht) cfg.verifAht = JSON.parse(JSON.stringify(DEFAULTS.verifAht));
   // whether leftover time becomes LE Validation filler (default on)
-  if(cfg.assignLE==null) cfg.assignLE = true;
+  if(cfg.assignLE==null) cfg.assignLE = false;
   // RENAME any old/stale process-name strings already saved in this browser (from
   // earlier versions of this tool) to the current canonical names — without this,
   // a saved config from before a process was renamed silently stops matching
@@ -815,7 +834,29 @@ function migrateProcessNames(cfg){
 }
 function ensureLE(cfg){ cfg=cfg||CFG; if(cfg.aht && cfg.aht[LE_PROC]==null) cfg.aht[LE_PROC]=1; }
 function save(){ localStorage.setItem(LS_KEY, JSON.stringify(CFG)); }
-function resetCfg(){ CFG = JSON.parse(JSON.stringify(DEFAULTS)); CFG.availMin={}; ensureLE(); save(); }
+/* -------- Main block lock: when locked, Reset config leaves everything the
+   Main block controls (processes/AHT, mapping, availability, verifiers, sample
+   rates, verification AHT, LE toggle) untouched; only session data (dump,
+   allocation, leaves, verification results) still gets cleared. When unlocked,
+   Reset config behaves exactly as before and wipes Main back to DEFAULTS. -------- */
+const LOCK_KEY = "wad_main_locked_v1";
+let mainLocked = localStorage.getItem(LOCK_KEY)==='1';
+function resetCfg(){
+  const preserved = mainLocked ? {
+    aht: JSON.parse(JSON.stringify(CFG.aht)),
+    mapping: JSON.parse(JSON.stringify(CFG.mapping)),
+    verifiers: JSON.parse(JSON.stringify(CFG.verifiers)),
+    sampleRate: JSON.parse(JSON.stringify(CFG.sampleRate)),
+    verifAht: JSON.parse(JSON.stringify(CFG.verifAht)),
+    availMin: JSON.parse(JSON.stringify(CFG.availMin||{})),
+    assignLE: CFG.assignLE
+  } : null;
+  CFG = JSON.parse(JSON.stringify(DEFAULTS));
+  CFG.availMin={};
+  ensureLE();
+  if(preserved){ Object.assign(CFG, preserved); }
+  save();
+}
 
 /* -------- SESSION persistence: uploaded dump, generated allocation, leaves,
    manual TT overrides, and verification results — all survive a page refresh or
@@ -832,6 +873,73 @@ function saveSession(){
       allocCache, ttOverrides, leaves, verifFiles, verifCommittedMin
     }));
   }catch(e){ console.error('session save failed', e); }
+  saveDayBackup();
+}
+
+/* -------- optional 2-day restore point: keeps a snapshot of the session (dump,
+   allocation, leaves, verification) per Report date, capped at the 2 most
+   recently touched dates, so an earlier day's data can be brought back if
+   needed. Purely additive — doesn't change any existing save/load behavior. -------- */
+const DAY_BACKUP_KEY = "wad_daybackup_v1";
+function dayBackupStore(){
+  try{ const s=localStorage.getItem(DAY_BACKUP_KEY); return s?JSON.parse(s):{order:[],days:{}}; }catch(e){ return {order:[],days:{}}; }
+}
+function saveDayBackup(){
+  try{
+    const dateVal = $('rdate') && $('rdate').value; if(!dateVal) return;
+    if(!(dumpRows&&dumpRows.length) && !(workedRows&&workedRows.length)) return;   // nothing worth keeping yet
+    const store=dayBackupStore();
+    store.days[dateVal]={
+      dumpRows, dumpFileLabel:(dumpRows&&$('fname')&&$('fname').textContent)||null,
+      workedRows, workedFileLabel:(workedRows&&$('wfname')&&$('wfname').textContent)||null,
+      sampleRows, allocCache, ttOverrides, leaves, verifFiles, verifCommittedMin
+    };
+    store.order=store.order.filter(d=>d!==dateVal);
+    store.order.push(dateVal);
+    while(store.order.length>2){ const old=store.order.shift(); delete store.days[old]; }
+    localStorage.setItem(DAY_BACKUP_KEY, JSON.stringify(store));
+  }catch(e){ console.error('day backup save failed', e); }
+  if(typeof renderDayBackupSelect==='function') renderDayBackupSelect();
+}
+function restoreDayBackup(dateVal){
+  const store=dayBackupStore();
+  const snap=store.days[dateVal]; if(!snap) return false;
+  dumpRows=snap.dumpRows||null; workedRows=snap.workedRows||null; sampleRows=snap.sampleRows||null;
+  allocCache=snap.allocCache||null; ttOverrides=snap.ttOverrides||{}; leaves=snap.leaves||{};
+  verifFiles=snap.verifFiles||null; verifCommittedMin=snap.verifCommittedMin||{};
+  $('rdate').value=dateVal;
+  $('fname').style.display=(dumpRows&&dumpRows.length)?'block':'none';
+  $('fname').textContent=snap.dumpFileLabel||(dumpRows&&dumpRows.length?('✓ Restored — '+dumpRows.length+' tickets'):'');
+  if($('wfname')){
+    $('wfname').style.display=(workedRows&&workedRows.length)?'block':'none';
+    $('wfname').textContent=snap.workedFileLabel||(workedRows&&workedRows.length?('✓ Restored — '+workedRows.length+' worked rows'):'');
+  }
+  if($('genVerif')) $('genVerif').disabled=!(workedRows&&workedRows.length);
+  if($('mail1card')) $('mail1card').style.display='none';
+  if($('render1')) $('render1').innerHTML='';
+  if($('mail2card')) $('mail2card').style.display='none';
+  if($('workSummary')) $('workSummary').innerHTML='';
+  if($('dlAudit')) $('dlAudit').style.display=(allocCache&&allocCache.length)?'inline-block':'none';
+  if($('verifCard')) $('verifCard').style.display='none';
+  if($('verifSummary')) $('verifSummary').innerHTML='';
+  if($('dlVerifZip')) $('dlVerifZip').style.display=(verifFiles&&verifFiles.length)?'inline-block':'none';
+  if($('dlVerifIndiv')) $('dlVerifIndiv').style.display=(verifFiles&&verifFiles.length)?'inline-block':'none';
+  if(sampleRows && sampleRows.length){ if(typeof renderSampleTable==='function') renderSampleTable(); }
+  else if($('sampleCard')) $('sampleCard').style.display='none';
+  if(typeof renderLeaves==='function') renderLeaves();
+  if(typeof renderWork==='function') renderWork();
+  saveSession();
+  return true;
+}
+function renderDayBackupSelect(){
+  const store=dayBackupStore();
+  const sel=$('dayBackupSelect'), row=$('dayBackupRow');
+  if(!sel||!row) return;
+  if(!store.order.length){ row.style.display='none'; return; }
+  row.style.display='flex';
+  const cur=sel.value;
+  sel.innerHTML=store.order.slice().reverse().map(d=>`<option value="${d}">${d}</option>`).join('');
+  if(store.order.includes(cur)) sel.value=cur;
 }
 function loadSession(){
   try{
@@ -877,6 +985,14 @@ function clearSession(){
   if($('dlVerifIndiv')) $('dlVerifIndiv').style.display='none';
   if($('mail2card')) $('mail2card').style.display='none';
   if($('verifCard')) $('verifCard').style.display='none';
+  // Daily Planning's generated tables and Work Allocation's summary are plain
+  // innerHTML snapshots — not re-derived from dumpRows/leaves automatically —
+  // so a full reset has to clear them explicitly or they'd linger with stale data.
+  if($('mail1card')) $('mail1card').style.display='none';
+  if($('render1')) $('render1').innerHTML='';
+  if($('workSummary')) $('workSummary').innerHTML='';
+  if($('verifSummary')) $('verifSummary').innerHTML='';
+  if($('sampleTable')) $('sampleTable').innerHTML='';
 }
 
 /* -------- derived helpers -------- */
@@ -1666,6 +1782,14 @@ function inlineStylesForOutlook(html){
   wrap.querySelectorAll('td').forEach(td=>{
     td.style.cssText='border:1px solid #c7cdd6;padding:5px 9px;font-family:Calibri,Arial,sans-serif;font-size:10.5pt;mso-line-height-rule:exactly;';
   });
+  // LEAVE cells: re-apply the red fill AFTER the generic td pass above (which just
+  // wiped every td's inline style) and set legacy bgcolor/align attributes too,
+  // since Outlook's paste engine frequently ignores CSS background-color alone.
+  wrap.querySelectorAll('td.leaveCell').forEach(td=>{
+    td.setAttribute('bgcolor','#E5453B');
+    td.setAttribute('align','center');
+    td.style.cssText='border:1px solid #c7cdd6;padding:5px 9px;font-family:Calibri,Arial,sans-serif;font-size:10.5pt;mso-line-height-rule:exactly;background:#E5453B;color:#FFFFFF;font-weight:bold;text-align:center;';
+  });
   // section titles
   wrap.querySelectorAll('.tsec').forEach(s=>{
     s.style.fontWeight='bold';
@@ -1726,6 +1850,40 @@ const $=id=>document.getElementById(id);
 const esc=s=>String(s==null?'':s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1600);}
 
+/* ---- Main block lock UI ---- */
+function applyMainLockUI(){
+  const panel=$('p-main');
+  if(panel) panel.classList.toggle('locked', mainLocked);
+  const btn=$('lockMainBtn');
+  if(btn){
+    btn.textContent = mainLocked ? '🔒 Unlock Main' : '🔓 Lock Main';
+    btn.classList.toggle('locked-active', mainLocked);
+  }
+}
+$('lockMainBtn').addEventListener('click',()=>{
+  mainLocked=!mainLocked;
+  localStorage.setItem(LOCK_KEY, mainLocked?'1':'0');
+  applyMainLockUI();
+  toast(mainLocked?'🔒 Main block locked — its values will survive Reset config':'🔓 Main block unlocked');
+});
+// capture-phase guard: while locked, swallow clicks/edits inside the Main panel
+// before they reach any of Main's own add/edit/delete handlers.
+$('p-main').addEventListener('click',e=>{
+  if(mainLocked){ e.stopPropagation(); e.preventDefault(); toast('🔒 Unlock Main to make changes'); }
+}, true);
+$('p-main').addEventListener('input',e=>{
+  if(mainLocked){ e.stopPropagation(); e.preventDefault(); }
+}, true);
+applyMainLockUI();
+
+/* ---- 2-day restore point UI ---- */
+$('restoreDayBtn').addEventListener('click',()=>{
+  const d=$('dayBackupSelect').value; if(!d) return;
+  if(!confirm('Restore stored data for '+d+'? This replaces the dump, allocation, leaves, and verification results currently loaded on screen (your saved Main config is unaffected). Continue?')) return;
+  if(restoreDayBackup(d)) toast('Restored data for '+d);
+});
+renderDayBackupSelect();
+
 /* ---- date default (allocation is always this single day) ---- */
 $('rdate').value=new Date().toISOString().slice(0,10);
 
@@ -1740,7 +1898,7 @@ document.querySelector('.nav').addEventListener('click',e=>{
   if(p==='work') renderWork();
   if(p==='verif'){ /* verifiers managed in Main */ }
   if(p==='planning') renderLeaves();
-  if(p==='main') renderVerMain();
+  if(p==='main'){ renderVerMain(); renderAvailTable(); }
 });
 
 /* ---- upload ---- */
@@ -1993,7 +2151,7 @@ $('genMail1').addEventListener('click',()=>{
     <div class="note">• Complete all assigned tickets in the given order</div>
     <div class="note">• Do NOT skip any assigned tasks</div>
     <div class="note">• Do NOT work on unassigned tasks under any circumstances (keep the allocator informed if required)</div>
-    <div class="quip">QUIP: ${QUIP}</div>`;
+    <div class="quip">QUIP: <a href="${QUIP}" style="color:#1155cc;text-decoration:underline">${QUIP}</a></div>`;
 
   // ---- TABLE 1: Task / Age / Count / To be Assigned / AHT / HC ----
   h+=`<div class="tsec">Daily Task & Headcount Allocation — ${dstr} — Week ${wk}</div>`;
@@ -2021,7 +2179,7 @@ $('genMail1').addEventListener('click',()=>{
   t3.forEach(r=>{
     // Full leave -> red row, task "Leave". Skip -> shown on "Adhoc". Half -> subtle amber.
     if(r.leave==='full'){
-      h+=`<tr><td>${esc(r.user)}</td><td style="background:#e5453b;color:#fff;font-weight:bold;text-align:center">LEAVE</td><td></td><td></td><td></td></tr>`;
+      h+=`<tr><td>${esc(r.user)}</td><td class="leaveCell" style="background:#e5453b;color:#fff;font-weight:bold;text-align:center">LEAVE</td><td></td><td></td><td></td></tr>`;
       return;
     }
     h+=`<tr><td>${esc(r.user)}</td><td>${esc(r.primary)}</td><td>${r.primHC===''?'':(+r.primHC).toFixed(2).replace(/\.00$/,'')}</td><td>${esc(r.secondary)}</td><td>${r.secHC===''?'':(+r.secHC).toFixed(2).replace(/\.00$/,'')}</td></tr>`;
@@ -2033,7 +2191,7 @@ $('genMail1').addEventListener('click',()=>{
   h+=`<table><thead><tr><th>Associate</th><th>Primary Task</th><th>Bucket</th><th>Sec Task</th><th>Bucket</th></tr></thead><tbody>`;
   t4.forEach(r=>{
     if(r.primary==='__LEAVE__'){
-      h+=`<tr><td>${esc(r.assoc)}</td><td style="background:#e5453b;color:#fff;font-weight:bold;text-align:center">LEAVE</td><td></td><td></td><td></td></tr>`;
+      h+=`<tr><td>${esc(r.assoc)}</td><td class="leaveCell" style="background:#e5453b;color:#fff;font-weight:bold;text-align:center">LEAVE</td><td></td><td></td><td></td></tr>`;
       return;
     }
     h+=`<tr><td>${esc(r.assoc)}</td><td>${esc(r.primary)}</td><td>${esc(r.primBucket)}</td><td>${esc(r.secondary)}</td><td>${esc(r.secBucket)}</td></tr>`;
@@ -2043,6 +2201,13 @@ $('genMail1').addEventListener('click',()=>{
   h+=`<div class="note" style="margin-top:12px">Regards,<br>Rakesh</div>`;
   $('render1').innerHTML=h; $('mail1card').style.display='block';
   toast('All 4 Daily Planning tables generated');
+});
+$('resetMail1').addEventListener('click',()=>{
+  // Clears only the generated Daily Planning output so leaves/availability can be
+  // adjusted and "Generate All 4 Tables" run again. Does not touch other blocks.
+  $('render1').innerHTML=''; $('mail1card').style.display='none';
+  saveSession();
+  toast('Daily Planning output cleared — adjust and regenerate');
 });
 $('copy1').addEventListener('click',async()=>{toast(await copyRich($('render1'))?'✓ Copied!':'Press Ctrl+C');});
 $('copy2').addEventListener('click',async()=>{toast(await copyRich($('workSummary'))?'✓ Copied!':'Press Ctrl+C');});
@@ -2061,7 +2226,14 @@ document.getElementById('leToggle').addEventListener('click',e=>{
 });
 function renderWork(){
   renderLeToggle();
-  if(!dumpRows){$('workTable').innerHTML='<div class="empty"><div class="ico">📥</div>Upload the dump first.</div>';return;}
+  if(!dumpRows){
+    $('workTable').innerHTML='<div class="empty"><div class="ico">📥</div>Upload the dump first.</div>';
+    $('workKpis').style.display='none';
+    $('wk1').textContent='0';$('wk2').textContent='0';$('wk3').textContent='0';$('wk4').textContent='0';$('wk5').textContent='0';
+    if($('leaveBanner')) $('leaveBanner').style.display='none';
+    if($('verifReserveNote')) $('verifReserveNote').style.display='none';
+    return;
+  }
   const {pool,counts}=buildPool();
   const defs=defaultTTs(pool);
   const onLeave=Object.keys(leaves);
@@ -2119,7 +2291,16 @@ $('workTable').addEventListener('input',e=>{
   $('wk2').textContent=toAlloc;$('wk5').textContent=leTotal;$('wk4').textContent=act.size;
 });
 $('workTable').addEventListener('change',()=>saveSession());   // persist once the value is committed, not every keystroke
-$('resetTT').addEventListener('click',()=>{ ttOverrides={}; renderWork(); saveSession(); toast('TT counts reset to capacity-based defaults'); });
+$('resetTT').addEventListener('click',()=>{
+  // Resets only Work Allocation: TT counts back to capacity-based defaults and
+  // clears the last generated allocation/summary, so it can be changed and
+  // "Generate Allocation" run again. Daily Planning / Verification are untouched.
+  ttOverrides={}; allocCache=null;
+  $('mail2card').style.display='none'; $('workSummary').innerHTML='';
+  $('dlAudit').style.display='none';
+  renderWork(); saveSession();
+  toast('Work Allocation reset — adjust and regenerate');
+});
 $('genMail2').addEventListener('click',()=>{
   if(!dumpRows){alert('Upload the dump first.');return;}
   const {pool}=buildPool(); const defs=defaultTTs(pool);
@@ -2300,11 +2481,22 @@ $('genVerif').addEventListener('click',()=>{
   const conflicts=verifFiles.filter(f=>f.conflict).reduce((s,f)=>s+f.rows.length,0);
   toast(verifFiles.length+' verification files generated'+(conflicts>0?' ('+conflicts+' flagged)':''));
 });
+$('resetVerif').addEventListener('click',()=>{
+  // Resets only Verification: re-derives the Sample Preview from the worked dump
+  // (undoing any manual sample-count edits/deletions) and clears the generated
+  // verifier files, including the capacity reserved from Work Allocation, so the
+  // sample can be adjusted and "Generate Verification Files" run again.
+  verifFiles=null; verifCommittedMin={};
+  $('verifCard').style.display='none'; $('verifSummary').innerHTML='';
+  $('dlVerifZip').style.display='none'; $('dlVerifIndiv').style.display='none';
+  if(workedRows && workedRows.length){ buildSampleRows(); renderSampleTable(); }
+  saveSession();
+  toast('Verification reset — adjust sample and regenerate');
+});
 function buildVerifFiles(){
   const d=new Date($('rdate').value+'T00:00:00');
-  // macro's naming convention: filename date is the NEXT calendar day after the process date
-  const dNext=new Date(d.getFullYear(),d.getMonth(),d.getDate()+1);
-  const dstr=pad(dNext.getDate())+'.'+pad(dNext.getMonth()+1);
+  // filename date matches the Report date (same day the report/allocation was created)
+  const dstr=pad(d.getDate())+'.'+pad(d.getMonth()+1);
   const wk=weekNo(d);   // week number is based on the process date itself, per the macro
   const files=verifFiles.map(f=>{
     const prefix=VERIF_FILEMAP[f.task]||f.task.replace(/[^A-Za-z0-9]+/g,'_');
@@ -2330,7 +2522,12 @@ $('dlVerifIndiv').addEventListener('click',()=>{
 });
 
 /* ---- reset ---- */
-$('resetBtn').addEventListener('click',()=>{if(confirm('Reset all processes, auditors, mappings & verifiers to defaults — this also clears any uploaded dump, allocation, and verification results. Continue?')){resetCfg();clearSession();renderProcTable();renderVerMain();renderLeaves();renderWork();toast('Everything reset');}});
+$('resetBtn').addEventListener('click',()=>{
+  const msg = mainLocked
+    ? 'Reset config — Main is locked, so processes/auditors/mappings/verifiers stay as-is. This still clears any uploaded dump, allocation, and verification results. Continue?'
+    : 'Reset all processes, auditors, mappings & verifiers to defaults — this also clears any uploaded dump, allocation, and verification results. Continue?';
+  if(confirm(msg)){resetCfg();clearSession();renderProcTable();renderVerMain();renderLeaves();renderWork();toast(mainLocked?'Reset done — Main block preserved (locked)':'Everything reset');}
+});
 
 /* ---- init ---- */
 loadSession();
