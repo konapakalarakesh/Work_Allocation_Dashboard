@@ -474,6 +474,18 @@ a { color: var(--color-link, var(--color-primary)); }</style>
     display:block;font-size:12px;font-weight:700;color:#fff;background:var(--danger,#e5453b);
     border-radius:8px;padding:8px 12px;margin-bottom:14px;
   }
+
+  /* ---- Capacity popup (shown whenever a TT count is edited) ---- */
+  #capacityPopup{
+    position:fixed; top:80px; right:22px; width:340px; max-height:75vh; overflow:auto;
+    background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+    box-shadow:var(--shadow-md); z-index:500; padding:14px 16px;
+  }
+  #capacityPopup .cp-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;gap:8px}
+  #capacityPopup .cp-head b{font-size:13px}
+  #capacityPopup table{font-size:11.5px}
+  #capacityPopup th,#capacityPopup td{padding:5px 8px}
+  @media(max-width:900px){ #capacityPopup{position:static;width:100%;margin-bottom:14px;top:auto;right:auto} }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
@@ -596,6 +608,10 @@ a { color: var(--color-link, var(--color-primary)); }</style>
 
   <!-- ============ BLOCK 3: WORK ALLOCATION ============ -->
   <div class="panel" id="p-work">
+    <div id="capacityPopup" style="display:none">
+      <div class="cp-head"><b id="cpTitle"></b><button class="btn ghost sm" id="cpClose" type="button">✕</button></div>
+      <div id="cpBody"></div>
+    </div>
     <div class="card" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
       <div>
         <h2 style="margin:0"><span class="l">🧪 Assign LE Validation filler?</span></h2>
@@ -625,10 +641,12 @@ a { color: var(--color-link, var(--color-primary)); }</style>
       <button class="btn g" id="genMail2">✨ Generate Allocation</button>
       <button class="btn ghost" id="resetTT">↺ Reset Work Allocation</button>
       <button class="btn ghost" id="dlAudit" style="display:none">⬇️ Download Allocation (Excel)</button>
+      <button class="btn ghost" id="dlExtra" style="display:none">➕ Download Extra Tickets (Excel)</button>
     </div>
     <div class="card" id="mail2card" style="display:none;margin-top:16px">
       <div class="mailbar"><b>Allocation Summary — who got how many</b><button class="copy" id="copy2">📋 Copy table</button></div>
       <div id="workSummary"></div>
+      <div id="extraTicketsNote" style="display:none;margin-top:10px"></div>
     </div>
   </div>
 
@@ -662,8 +680,8 @@ a { color: var(--color-link, var(--color-primary)); }</style>
   <div class="panel" id="p-lookup">
     <div class="card">
       <h2><span class="l">🔎 Ticket Lookup</span><span class="pill">Checks the last generated Work Allocation</span></h2>
-      <div class="hint">Paste one or more Short IDs (any mix of new-lines, commas, or spaces) — e.g. tickets a manager already assigned to someone. This checks them against the most recent allocation you generated in Work Allocation, so it doesn't re-assign anything.</div>
-      <textarea id="lookupInput" placeholder="Paste ticket IDs here, one per line or comma-separated…" style="width:100%;min-height:120px;border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-family:inherit;font-size:13px;box-sizing:border-box;resize:vertical"></textarea>
+      <div class="hint">Paste one or more Short IDs (any mix of new-lines, commas, or spaces) — e.g. tickets a manager already assigned to someone. You can also paste full ticket links (e.g. https://t.corp.amazon.com/D209619666) and the ticket ID will be pulled out automatically. This checks them against the most recent allocation you generated in Work Allocation, so it doesn't re-assign anything.</div>
+      <textarea id="lookupInput" placeholder="Paste ticket IDs or links here, one per line or comma-separated…" style="width:100%;min-height:120px;border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-family:inherit;font-size:13px;box-sizing:border-box;resize:vertical"></textarea>
       <div class="row" style="margin-top:10px">
         <button class="btn g" id="lookupBtn">🔎 Check</button>
         <button class="btn ghost" id="lookupClear">✕ Clear</button>
@@ -774,6 +792,7 @@ let dumpRows = null;         // parsed dump
 let verifSource = null;      // optional SharePoint CSV rows
 let leaves = {};             // name -> 'full'|'half'|'skip'  (set in Daily Planning)
 let allocCache = null;       // last computed allocation
+let leftoverCache = {};      // process -> [{id,age}] tickets from the pool that nobody's TT count picked up (set by allocate())
 let ttOverrides = {};        // "assoc|process" -> number (Work Allocation edits)
 let ttAgeRange = {};         // "assoc|process" -> {min,max} (optional age-band restriction for that auditor/process; unset = oldest-first, no cap)
 let verifCommittedMin = {};  // verifier -> minutes already claimed by verification (set by Generate Verification; reduces audit availability)
@@ -878,7 +897,7 @@ function saveSession(){
       dumpRows, dumpFileLabel: (dumpRows&&$('fname').textContent)||null,
       workedRows, workedFileLabel: (workedRows&&$('wfname')&&$('wfname').textContent)||null,
       sampleRows,
-      allocCache, ttOverrides, ttAgeRange, leaves, verifFiles, verifCommittedMin,
+      allocCache, leftoverCache, ttOverrides, ttAgeRange, leaves, verifFiles, verifCommittedMin,
       mail1Shown   // whether Daily Planning's "Generate All 4 Tables" output should stay visible after a refresh
     }));
   }catch(e){ console.error('session save failed', e); }
@@ -901,7 +920,7 @@ function saveDayBackup(){
     store.days[dateVal]={
       dumpRows, dumpFileLabel:(dumpRows&&$('fname')&&$('fname').textContent)||null,
       workedRows, workedFileLabel:(workedRows&&$('wfname')&&$('wfname').textContent)||null,
-      sampleRows, allocCache, ttOverrides, ttAgeRange, leaves, verifFiles, verifCommittedMin, mail1Shown
+      sampleRows, allocCache, leftoverCache, ttOverrides, ttAgeRange, leaves, verifFiles, verifCommittedMin, mail1Shown
     };
     store.order=store.order.filter(d=>d!==dateVal);
     store.order.push(dateVal);
@@ -914,7 +933,7 @@ function restoreDayBackup(dateVal){
   const store=dayBackupStore();
   const snap=store.days[dateVal]; if(!snap) return false;
   dumpRows=snap.dumpRows||null; workedRows=snap.workedRows||null; sampleRows=snap.sampleRows||null;
-  allocCache=snap.allocCache||null; ttOverrides=snap.ttOverrides||{}; ttAgeRange=snap.ttAgeRange||{}; leaves=snap.leaves||{};
+  allocCache=snap.allocCache||null; leftoverCache=snap.leftoverCache||{}; ttOverrides=snap.ttOverrides||{}; ttAgeRange=snap.ttAgeRange||{}; leaves=snap.leaves||{};
   verifFiles=snap.verifFiles||null; verifCommittedMin=snap.verifCommittedMin||{}; mail1Shown=!!snap.mail1Shown;
   $('rdate').value=dateVal;
   $('fname').style.display=(dumpRows&&dumpRows.length)?'block':'none';
@@ -959,6 +978,7 @@ function loadSession(){
     if(sess.workedRows) workedRows=sess.workedRows;
     if(sess.sampleRows) sampleRows=sess.sampleRows;
     if(sess.allocCache) allocCache=sess.allocCache;
+    if(sess.leftoverCache) leftoverCache=sess.leftoverCache;
     if(sess.ttOverrides) ttOverrides=sess.ttOverrides;
     if(sess.ttAgeRange) ttAgeRange=sess.ttAgeRange;
     if(sess.leaves) leaves=sess.leaves;
@@ -992,7 +1012,7 @@ function loadSession(){
 }
 function clearSession(){
   localStorage.removeItem(SESSION_KEY);
-  dumpRows=null; workedRows=null; allocCache=null; ttOverrides={}; ttAgeRange={}; leaves={}; verifFiles=null; verifCommittedMin={}; sampleRows=null; mail1Shown=false;
+  dumpRows=null; workedRows=null; allocCache=null; leftoverCache={}; ttOverrides={}; ttAgeRange={}; leaves={}; verifFiles=null; verifCommittedMin={}; sampleRows=null; mail1Shown=false;
   $('fname').style.display='none'; $('fname').textContent='';
   if($('wfname')){ $('wfname').style.display='none'; $('wfname').textContent=''; }
   if($('sampleCard')) $('sampleCard').style.display='none';
@@ -1283,6 +1303,7 @@ function defaultTTs(pool){
 function allocate(pool, tts, ageRanges){
   ageRanges = ageRanges || {};
   const used=new Set(), alloc=[];
+  leftoverCache={};   // reset — repopulated per process below, used by "Download Extra Tickets"
   realProcesses().forEach(p=>{
     const backlog=(pool[p+'|Backlog']||[]).slice().sort((x,y)=>y.age-x.age);
     const lt5=(pool[p+'|<5']||[]).slice().sort((x,y)=>y.age-x.age);
@@ -1291,7 +1312,7 @@ function allocate(pool, tts, ageRanges){
     // double-assigned and the highest-age ticket still available is always taken first.
     let avail=[...backlog, ...lt5];
     const names=[...new Set(mapForProcess(p).map(m=>m[0]))].filter(a=>(tts[a+'|'+p]||0)>0);
-    if(!names.length) return;
+    if(!names.length){ leftoverCache[p]=avail; return; }
     const remaining={}; names.forEach(a=>remaining[a]=tts[a+'|'+p]||0);
 
     // Pass 1 — auditors with an explicit age-range preference (set in "TT Counts per
@@ -1327,6 +1348,8 @@ function allocate(pool, tts, ageRanges){
         if(remaining[a]>0) anyLeft=true;
       }
     }
+    // whatever pass 2 never reached is genuinely unassigned for this process
+    leftoverCache[p]=avail.slice(ptr);
   });
   auditors().forEach(a=>{
     const c=tts[a+'|'+LE_PROC]||0;
@@ -1595,7 +1618,8 @@ async function downloadZip(filename, files){
 function downloadFilesIndividually(files){
   files.forEach((f,i)=>{
     setTimeout(()=>{
-      const blob=new Blob([f.content],{type:'text/csv;charset=utf-8'});
+      const type = f.binary ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' : 'text/csv;charset=utf-8';
+      const blob=new Blob([f.content],{type});
       const a=document.createElement('a');
       a.href=URL.createObjectURL(blob); a.download=f.name; a.click();
       setTimeout(()=>URL.revokeObjectURL(a.href),1500);
@@ -1875,7 +1899,8 @@ async function copyRich(el){
   }
 }
 
-/* -------- tiny CSV export (Audit.xlsx-style, as .csv openable by Excel) -------- */
+/* -------- tiny CSV export (kept only as an internal fallback if the Excel
+   library fails to load) -------- */
 function downloadCSV(filename, header, rows){
   const esc=v=>{v=String(v==null?'':v); return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;};
   const lines=[header.map(esc).join(',')].concat(rows.map(r=>r.map(esc).join(',')));
@@ -1883,6 +1908,35 @@ function downloadCSV(filename, header, rows){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=filename; a.click();
   setTimeout(()=>URL.revokeObjectURL(a.href),1000);
 }
+/* ============ REAL EXCEL (.xlsx) EXPORT HELPERS ============
+   Every "download" in the app used to write a .csv (renamed .xlsx in one case,
+   which Excel would still open but flag as "format doesn't match extension").
+   These build genuine binary .xlsx workbooks via the SheetJS library that is
+   already loaded on this page (see <script src=".../xlsx...">). -------- */
+function aoaToXlsxArrayBuffer(header, rows, sheetName){
+  const ws=XLSX.utils.aoa_to_sheet([header, ...rows]);
+  // sensible column widths so the download doesn't open all-squeezed
+  ws['!cols']=header.map((h,i)=>{
+    let w=String(h||'').length;
+    rows.forEach(r=>{ const v=r[i]; if(v!=null) w=Math.max(w, String(v).length); });
+    return {wch:Math.min(40, Math.max(8, w+2))};
+  });
+  const wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, (sheetName||'Sheet1').slice(0,31));
+  return XLSX.write(wb, {bookType:'xlsx', type:'array'});
+}
+function downloadXLSX(filename, header, rows, sheetName){
+  if(typeof XLSX==='undefined'){
+    alert('Excel library failed to load (check your internet connection) — downloading as CSV instead.');
+    downloadCSV(filename.replace(/\.xlsx$/i,'.csv'), header, rows);
+    return;
+  }
+  const buf=aoaToXlsxArrayBuffer(header, rows, sheetName);
+  const blob=new Blob([buf],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=filename; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+function sanitizeFilePart(s){ return String(s==null?'':s).replace(/[^A-Za-z0-9]+/g,'_').replace(/^_+|_+$/g,''); }
 
 </script>
 <script>
@@ -2340,6 +2394,67 @@ function renderWork(){
   h+='</tbody></table>'; $('workTable').innerHTML=h;
   $('wk2').textContent=toAlloc; $('wk5').textContent=leTotal; $('wk4').textContent=activeSet.size;
 }
+/* ============ CAPACITY POPUP ============
+   Whenever a "Assign TT" cell is edited, shows: how many tickets that process
+   still has (its full pool), how many are currently assigned across everyone
+   mapped to it (with the just-edited value), how many are therefore left over
+   or over-committed, and — if any are left over — which other auditors on that
+   process still have spare capacity today and how many they could each take.
+   This is what makes "if I lower/raise someone's count, who do I compensate
+   with" a quick glance instead of a manual recheck. -------- */
+function computeProcessCapacitySnapshot(p, editedAuditor){
+  const {pool}=buildPool();
+  const totalDemand=((pool[p+'|Backlog']||[]).length)+((pool[p+'|<5']||[]).length);
+  const defs=defaultTTs(pool);
+  const names=[...new Set(mapForProcess(p).map(m=>m[0]))];
+  let assigned=0;
+  const rows=names.map(a=>{
+    const key=a+'|'+p;
+    const def=defs[key]||0;
+    const val=(ttOverrides[key]!=null?ttOverrides[key]:def);
+    assigned+=val;
+    const aht=CFG.aht[p]||0;
+    const avail=auditorAvailMin(a);
+    const usedMin=val*aht;
+    const spareMin=Math.max(0, avail-usedMin);
+    const headroom=aht>0?Math.floor(spareMin/aht):0;
+    return {auditor:a, current:val, headroom};
+  });
+  return {totalDemand, assigned, leftover:totalDemand-assigned, rows};
+}
+function renderCapacityPopup(key){
+  const [a,p]=key.split('|');
+  if(p===LE_PROC){ hideCapacityPopup(); return; }   // LE filler has no fixed ticket pool
+  const snap=computeProcessCapacitySnapshot(p, a);
+  $('cpTitle').textContent='📊 '+p;
+  let body=`<div style="font-size:12px;line-height:1.7;margin-bottom:8px">
+      <div>Tickets in this process: <b>${snap.totalDemand}</b></div>
+      <div>Currently assigned (all auditors): <b>${snap.assigned}</b></div>
+    </div>`;
+  if(snap.leftover>0){
+    body+=`<div style="font-size:12.5px;font-weight:700;color:var(--danger);margin-bottom:8px">⚠ ${snap.leftover} ticket(s) still unassigned in this process</div>`;
+    const candidates=snap.rows.filter(r=>r.auditor!==a && r.headroom>0).sort((x,y)=>y.headroom-x.headroom);
+    if(candidates.length){
+      body+='<div style="font-size:10.5px;text-transform:uppercase;letter-spacing:.4px;color:var(--text2);font-weight:700;margin-bottom:4px">Who can take the rest</div>';
+      body+='<table style="width:100%"><thead><tr><th>Auditor</th><th>Can take up to</th></tr></thead><tbody>';
+      candidates.forEach(c=>{
+        body+=`<tr><td>${esc(c.auditor)}</td><td><b>${Math.min(c.headroom, snap.leftover)}</b></td></tr>`;
+      });
+      body+='</tbody></table>';
+    } else {
+      body+='<div class="hint" style="margin:6px 0 0">No one else mapped to this process has spare capacity today — bump someone\'s available minutes, add a mapping, or let the rest roll to tomorrow.</div>';
+    }
+  } else if(snap.leftover<0){
+    body+=`<div style="font-size:12.5px;font-weight:700;color:#b26b00">⚠ Over-assigned by ${-snap.leftover} — that's more than exist in this process's pool. The allocator will simply run out of tickets for whoever's last in line.</div>`;
+  } else {
+    body+='<div style="font-size:12.5px;font-weight:700;color:var(--success)">✓ Fully assigned — every ticket in this process has an owner.</div>';
+  }
+  $('cpBody').innerHTML=body;
+  $('capacityPopup').style.display='block';
+}
+function hideCapacityPopup(){ const el=$('capacityPopup'); if(el) el.style.display='none'; }
+if($('cpClose')) $('cpClose').addEventListener('click', hideCapacityPopup);
+
 $('workTable').addEventListener('input',e=>{
   const k=e.target.dataset.tt;
   if(k){
@@ -2354,6 +2469,7 @@ $('workTable').addEventListener('input',e=>{
       if(v>0)act.add(key.split('|')[0]);
     });
     $('wk2').textContent=toAlloc;$('wk5').textContent=leTotal;$('wk4').textContent=act.size;
+    renderCapacityPopup(k);   // show live "who's left / who can take it" for the touched process
     return;
   }
   const kmin=e.target.dataset.agemin, kmax=e.target.dataset.agemax;
@@ -2384,9 +2500,10 @@ $('resetTT').addEventListener('click',()=>{
   // Resets only Work Allocation: TT counts back to capacity-based defaults and
   // clears the last generated allocation/summary, so it can be changed and
   // "Generate Allocation" run again. Daily Planning / Verification are untouched.
-  ttOverrides={}; ttAgeRange={}; allocCache=null;
+  ttOverrides={}; ttAgeRange={}; allocCache=null; leftoverCache={};
   $('mail2card').style.display='none'; $('workSummary').innerHTML='';
-  $('dlAudit').style.display='none';
+  $('dlAudit').style.display='none'; $('dlExtra').style.display='none';
+  hideCapacityPopup();
   renderWork(); saveSession();
   toast('Work Allocation reset — adjust and regenerate');
 });
@@ -2425,7 +2542,20 @@ function renderMail2Summary(alloc, pool, showToast){
   const totalDumpN = pool ? Object.values(pool).reduce((s,arr)=>s+arr.length,0) : realRows.length;
   $('workSummary').innerHTML='<div style="font-size:13px;color:var(--text2);margin-bottom:8px"><b>'+realRows.length+'</b> tickets allocated (of '+totalDumpN+' in the dump — assignment is capped by auditor availability, not by clearing the whole dump) · <b>'+leTotal+'</b> LE Validation filler for leftover time. Full ticket-level data in the Excel download.</div>'+sh;
   $('mail2card').style.display='block'; $('dlAudit').style.display='inline-block';
-  if(showToast) toast(realRows.length+' tickets + '+leTotal+' LE allocated');
+  // extra/leftover tickets — nobody's TT count picked these up. Surface the count
+  // and enable the "Download Extra Tickets" button so end-of-day requests from
+  // auditors asking for more work can be handed a ready-made file.
+  const extraTotal=Object.values(leftoverCache||{}).reduce((s,arr)=>s+(arr?arr.length:0),0);
+  const extraNote=$('extraTicketsNote');
+  if(extraTotal>0){
+    extraNote.style.display='block';
+    extraNote.innerHTML='<div class="hint" style="border-left-color:var(--warn)">➕ <b>'+extraTotal+'</b> extra ticket(s) left over after today\'s allocation (not enough capacity to assign them). Use "Download Extra Tickets" to hand these out when auditors ask for more — files are split per auditor for any age band you specifically carved out for them, plus one catch-all file per process for the rest.</div>';
+    $('dlExtra').style.display='inline-block';
+  } else {
+    extraNote.style.display='none';
+    $('dlExtra').style.display='none';
+  }
+  if(showToast) toast(realRows.length+' tickets + '+leTotal+' LE allocated'+(extraTotal>0?' · '+extraTotal+' extra left over':''));
 }
 $('dlAudit').addEventListener('click',()=>{
   const d=fmtDate(new Date($('rdate').value+'T00:00:00'));
@@ -2435,22 +2565,100 @@ $('dlAudit').addEventListener('click',()=>{
   const leRows=allocCache.filter(r=>r.proc===LE_PROC && r.count)
     .sort((a,b)=>a.who.localeCompare(b.who))
     .map(r=>[d, LE_PROC, r.count, r.who, '']);   // count goes in the Short ID column instead of a fake ID
-  downloadCSV((d.replace(/\//g,'-'))+'-Audit.csv',['Date','Task','Short ID','Auditor','Age'],[...realRows,...leRows]);
+  downloadXLSX((d.replace(/\//g,'-'))+'-Audit.xlsx',['Date','Task','Short ID','Auditor','Age'],[...realRows,...leRows],'Allocation');
+});
+
+/* ============ EXTRA / LEFTOVER TICKETS ============
+   After Generate Allocation, leftoverCache[process] holds every ticket that
+   nobody's TT count claimed. When auditors come back mid-day asking for more
+   work, this builds one Excel file per auditor who had an explicit Age Range
+   set for that process (named for that auditor + their exact age band, since
+   that's the slice of leftovers most relevant to them), plus one catch-all
+   file per process for whatever's left outside any auditor's age band. -------- */
+function buildExtraTicketFiles(){
+  const d=new Date($('rdate').value+'T00:00:00');
+  const dLabel=fmtDate(d);
+  const dTag=(dLabel.replace(/\//g,'-'));
+  const files=[];
+  realProcesses().forEach(p=>{
+    let extra=(leftoverCache[p]||[]).slice().sort((x,y)=>y.age-x.age);
+    if(!extra.length) return;
+    // auditors who had an explicit Min/Max age band set for this process
+    const rangedAuditors=auditors().filter(a=>{
+      const r=ttAgeRange[a+'|'+p]; return r && (r.min!=null || r.max!=null);
+    });
+    rangedAuditors.forEach(a=>{
+      const r=ttAgeRange[a+'|'+p];
+      const lo=r.min!=null?+r.min:-Infinity, hi=r.max!=null?+r.max:Infinity;
+      const matched=extra.filter(t=>t.age>=lo && t.age<=hi);
+      if(!matched.length) return;
+      const label=(r.min!=null?r.min:'0')+'-'+(r.max!=null?r.max:'plus');
+      const header=['Date','Task','Short ID','Auditor','Age'];
+      const rows=matched.map(t=>[dLabel, p, t.id, a, t.age]);
+      const content=aoaToXlsxArrayBuffer(header, rows, 'Extra');
+      files.push({name:`Extra_${sanitizeFilePart(p)}_${sanitizeFilePart(a)}_Age${sanitizeFilePart(label)}_${dTag}.xlsx`, content, binary:true});
+      const matchedIds=new Set(matched.map(t=>t.id));
+      extra=extra.filter(t=>!matchedIds.has(t.id));   // don't double-count in the catch-all below
+    });
+    if(extra.length){
+      const header=['Date','Task','Short ID','Age'];
+      const rows=extra.map(t=>[dLabel, p, t.id, t.age]);
+      const content=aoaToXlsxArrayBuffer(header, rows, 'Extra');
+      files.push({name:`Extra_${sanitizeFilePart(p)}_Unassigned_${dTag}.xlsx`, content, binary:true});
+    }
+  });
+  return files;
+}
+$('dlExtra').addEventListener('click', async ()=>{
+  const files=buildExtraTicketFiles();
+  if(!files.length){ toast('No extra tickets to export'); return; }
+  if(files.length===1){
+    const blob=new Blob([files[0].content],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=files[0].name; a.click();
+    setTimeout(()=>URL.revokeObjectURL(a.href),1500);
+    toast('Downloaded '+files[0].name);
+    return;
+  }
+  const d=new Date($('rdate').value+'T00:00:00');
+  const ok=await downloadZip('Extra_Tickets_'+fmtDate(d).replace(/\//g,'-')+'.zip', files);
+  if(ok) toast(files.length+' extra-ticket file(s) downloaded as ZIP');
 });
 
 /* ============ BLOCK 5: TICKET LOOKUP ============
    Checks pasted Short IDs against the most recently generated allocation
    (allocCache from "Generate Allocation" in Work Allocation). Read-only — never
    assigns or changes anything, just reports what it finds. */
+// Pulls a Short ID out of a single pasted token — either it's already a bare
+// ID, or it's a full ticket link (e.g. https://t.corp.amazon.com/D209619666,
+// or a link with extra path segments/query string) and we take the last
+// meaningful path segment as the ID.
+function extractTicketId(token){
+  let t=(token||'').trim();
+  if(!t) return '';
+  if(/^https?:\/\//i.test(t)){
+    try{
+      const u=new URL(t);
+      const parts=u.pathname.split('/').filter(Boolean);
+      t = parts.length ? parts[parts.length-1] : t;
+    }catch(e){
+      t = t.replace(/^https?:\/\//i,'').split('?')[0].split('#')[0];
+      const parts=t.split('/').filter(Boolean);
+      t = parts.length ? parts[parts.length-1] : t;
+    }
+  }
+  return t.trim();
+}
 function parseLookupIds(text){
   return [...new Set(
-    (text||'').split(/[\s,]+/).map(s=>s.trim()).filter(Boolean)
+    (text||'').split(/[\s,]+/).map(s=>extractTicketId(s)).filter(Boolean)
   )];
 }
+let lookupUnassignedIds=[];   // pasted IDs NOT found in the current allocation — for the copy button
 $('lookupBtn').addEventListener('click',()=>{
   const ids=parseLookupIds($('lookupInput').value);
   const box=$('lookupResults');
-  if(!ids.length){ box.innerHTML='<div class="empty"><div class="ico">📋</div>Paste at least one ticket ID above.</div>'; return; }
+  lookupUnassignedIds=[];
+  if(!ids.length){ box.innerHTML='<div class="empty"><div class="ico">📋</div>Paste at least one ticket ID or link above.</div>'; return; }
   if(!allocCache || !allocCache.length){
     box.innerHTML='<div class="empty"><div class="ico">🎯</div>No allocation generated yet — go to Work Allocation and click "Generate Allocation" first.</div>';
     return;
@@ -2465,16 +2673,35 @@ $('lookupBtn').addEventListener('click',()=>{
       found++;
       h+=`<tr><td>${esc(id)}</td><td style="color:var(--success);font-weight:700">✓ In allocation</td><td>${esc(r.proc)}</td><td>${esc(r.who)}</td><td>${r.age!=null?r.age:''}</td></tr>`;
     } else {
+      lookupUnassignedIds.push(id);
       h+=`<tr style="background:#fff2f1"><td>${esc(id)}</td><td style="color:#e5453b;font-weight:700">✕ Not in allocation</td><td colspan="3"></td></tr>`;
     }
   });
   h+='</tbody></table>';
-  const summary=`<div style="font-size:13px;color:var(--text2);margin-bottom:8px"><b>${found}</b> of <b>${ids.length}</b> ticket(s) found in the current allocation.</div>`;
+  const copyBtn = lookupUnassignedIds.length
+    ? `<button class="btn ghost sm" id="copyUnassignedBtn" type="button">📋 Copy ${lookupUnassignedIds.length} unassigned ID(s)</button>`
+    : '';
+  const summary=`<div class="row" style="justify-content:space-between;margin-bottom:8px">
+      <div style="font-size:13px;color:var(--text2)"><b>${found}</b> of <b>${ids.length}</b> ticket(s) found in the current allocation.</div>
+      ${copyBtn}
+    </div>`;
   box.innerHTML=summary+h;
+});
+$('lookupResults').addEventListener('click',async e=>{
+  if(e.target && e.target.id==='copyUnassignedBtn'){
+    const text=lookupUnassignedIds.join('\n');
+    try{
+      await navigator.clipboard.writeText(text);
+      toast('Copied '+lookupUnassignedIds.length+' unassigned ticket ID(s)');
+    }catch(err){
+      toast('Could not auto-copy — select and press Ctrl+C');
+    }
+  }
 });
 $('lookupClear').addEventListener('click',()=>{
   $('lookupInput').value='';
   $('lookupResults').innerHTML='';
+  lookupUnassignedIds=[];
 });
 
 /* ============ BLOCK 4: VERIFICATION (worked dump -> verifier CSVs) ============ */
@@ -2599,11 +2826,12 @@ function buildVerifFiles(){
   const wk=weekNo(d);   // week number is based on the process date itself, per the macro
   const files=verifFiles.map(f=>{
     const prefix=VERIF_FILEMAP[f.task]||f.task.replace(/[^A-Za-z0-9]+/g,'_');
-    // EXACT macro order: {Prefix}_Wk_{weeknum}_{verifier}_{dd.mm}.csv
-    const name=`${prefix}_Wk_${wk}_${f.verifier}_${dstr}.csv`;
-    const header='Task_Name,Date,SIM_ID,Auditor,root_cause,marketplaceId';
-    const lines=f.rows.map(r=>[r.task,r.date,r.id,r.auditor,'NA','1'].map(v=>{v=String(v==null?'':v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;}).join(','));
-    return {name, content:[header].concat(lines).join('\n')};
+    // EXACT macro naming: {Prefix}_Wk_{weeknum}_{verifier}_{dd.mm}.xlsx (real Excel workbook)
+    const name=`${prefix}_Wk_${wk}_${f.verifier}_${dstr}.xlsx`;
+    const header=['Task_Name','Date','SIM_ID','Auditor','root_cause','marketplaceId'];
+    const rows=f.rows.map(r=>[r.task,r.date,r.id,r.auditor,'NA','1']);
+    const content=aoaToXlsxArrayBuffer(header, rows, 'Verification');
+    return {name, content, binary:true};
   });
   return {files, dstr, wk};
 }
