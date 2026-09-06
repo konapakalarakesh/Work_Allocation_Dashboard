@@ -461,10 +461,16 @@ a { color: var(--color-link, var(--color-primary)); }</style>
   /* ---- Main block lock ---- */
   #lockMainBtn.locked-active{background:var(--danger,#e5453b);color:#fff;border-color:transparent}
   #p-main.locked{position:relative}
-  #p-main.locked .card{opacity:.6;filter:grayscale(.15)}
+  #p-main.locked .card:not(.lock-exempt){opacity:.6;filter:grayscale(.15)}
   #p-main.locked input,#p-main.locked select,#p-main.locked button{cursor:not-allowed !important}
+  #p-main.locked .lock-exempt input,#p-main.locked .lock-exempt select,#p-main.locked .lock-exempt button{cursor:pointer !important}
+  #p-main.locked .lock-exempt{box-shadow:0 0 0 2px rgba(28,167,80,.35), var(--shadow)}
+  #p-main.locked .lock-exempt h2::after{
+    content:"✏️ editable while locked"; font-size:10px; font-weight:700; color:var(--success);
+    background:rgba(28,167,80,.12); border:1px solid rgba(28,167,80,.35); border-radius:20px; padding:2px 8px; margin-left:auto;
+  }
   #p-main.locked::before{
-    content:"🔒 Main block is locked — click \"Unlock Main\" above to edit or to let Reset config touch it";
+    content:"🔒 Main block is locked — click \"Unlock Main\" above to edit other sections. Auditors & Process Mapping and Verifiers & Verification Mapping stay editable even while locked.";
     display:block;font-size:12px;font-weight:700;color:#fff;background:var(--danger,#e5453b);
     border-radius:8px;padding:8px 12px;margin-bottom:14px;
   }
@@ -520,7 +526,7 @@ a { color: var(--color-link, var(--color-primary)); }</style>
         <button class="btn sm" id="addProc">+ Add process</button>
       </div>
     </div>
-    <div class="card">
+    <div class="card lock-exempt">
       <h2><span class="l">👥 Auditors &amp; Process Mapping</span><span class="pill" id="audCount"></span></h2>
       <div class="hint">Each row = an auditor tagged to a process with a capacity (HC) and a Priority (1–6). Auditors work Priority 1 first; if that process has 0 tickets, the engine falls through to Priority 2, then 3, and so on.</div>
       <div id="mapTable" class="scrollwell" style="max-height:420px;overflow:auto"></div>
@@ -541,7 +547,7 @@ a { color: var(--color-link, var(--color-primary)); }</style>
       <div class="hint">Minutes each auditor has today. Defaults to a full 480-min shift; edit for part-day, overtime, or short shifts. This directly caps how many tickets the engine gives them.</div>
       <div id="availTable" class="scrollwell" style="max-height:360px;overflow:auto"></div>
     </div>
-    <div class="card">
+    <div class="card lock-exempt">
       <h2><span class="l">✅ Verifiers &amp; Verification Mapping</span><span class="pill" id="verCountMain"></span></h2>
       <div class="hint">Verifiers tagged per process, with the daily verification count. Edit count, change process, delete, or add. This drives the verification numbers in Daily Planning.</div>
       <div id="verTableMain" class="scrollwell" style="max-height:360px;overflow:auto"></div>
@@ -612,6 +618,7 @@ a { color: var(--color-link, var(--color-primary)); }</style>
       <div class="banner" id="leaveBanner" style="display:none">🌴 <span id="leaveBannerT"></span> (auto-carried from Daily Planning — no work assigned)</div>
       <div class="banner" id="verifReserveNote" style="display:none"></div>
       <div class="hint">Default TT counts are auto-balanced by capacity across the tickets available for each process. Edit any cell, then Generate.</div>
+      <div class="hint">🕓 <b>Age Range</b> — by default every auditor is drawn from the oldest tickets first (exact age, not just the Backlog/&lt;5 label). To restrict someone to a specific age band instead (e.g. only 5–9 day tickets), set Min/Max in their row. Leave both blank for the default oldest-first behavior. If fewer matching tickets exist than their TT count, they simply get what's available in that band — it won't auto-borrow from other ages.</div>
       <div id="workTable" class="scrollwell" style="max-height:420px;overflow:auto"></div>
     </div>
     <div class="row">
@@ -768,6 +775,7 @@ let verifSource = null;      // optional SharePoint CSV rows
 let leaves = {};             // name -> 'full'|'half'|'skip'  (set in Daily Planning)
 let allocCache = null;       // last computed allocation
 let ttOverrides = {};        // "assoc|process" -> number (Work Allocation edits)
+let ttAgeRange = {};         // "assoc|process" -> {min,max} (optional age-band restriction for that auditor/process; unset = oldest-first, no cap)
 let verifCommittedMin = {};  // verifier -> minutes already claimed by verification (set by Generate Verification; reduces audit availability)
 
 function load(){
@@ -870,7 +878,8 @@ function saveSession(){
       dumpRows, dumpFileLabel: (dumpRows&&$('fname').textContent)||null,
       workedRows, workedFileLabel: (workedRows&&$('wfname')&&$('wfname').textContent)||null,
       sampleRows,
-      allocCache, ttOverrides, leaves, verifFiles, verifCommittedMin
+      allocCache, ttOverrides, ttAgeRange, leaves, verifFiles, verifCommittedMin,
+      mail1Shown   // whether Daily Planning's "Generate All 4 Tables" output should stay visible after a refresh
     }));
   }catch(e){ console.error('session save failed', e); }
   saveDayBackup();
@@ -892,7 +901,7 @@ function saveDayBackup(){
     store.days[dateVal]={
       dumpRows, dumpFileLabel:(dumpRows&&$('fname')&&$('fname').textContent)||null,
       workedRows, workedFileLabel:(workedRows&&$('wfname')&&$('wfname').textContent)||null,
-      sampleRows, allocCache, ttOverrides, leaves, verifFiles, verifCommittedMin
+      sampleRows, allocCache, ttOverrides, ttAgeRange, leaves, verifFiles, verifCommittedMin, mail1Shown
     };
     store.order=store.order.filter(d=>d!==dateVal);
     store.order.push(dateVal);
@@ -905,8 +914,8 @@ function restoreDayBackup(dateVal){
   const store=dayBackupStore();
   const snap=store.days[dateVal]; if(!snap) return false;
   dumpRows=snap.dumpRows||null; workedRows=snap.workedRows||null; sampleRows=snap.sampleRows||null;
-  allocCache=snap.allocCache||null; ttOverrides=snap.ttOverrides||{}; leaves=snap.leaves||{};
-  verifFiles=snap.verifFiles||null; verifCommittedMin=snap.verifCommittedMin||{};
+  allocCache=snap.allocCache||null; ttOverrides=snap.ttOverrides||{}; ttAgeRange=snap.ttAgeRange||{}; leaves=snap.leaves||{};
+  verifFiles=snap.verifFiles||null; verifCommittedMin=snap.verifCommittedMin||{}; mail1Shown=!!snap.mail1Shown;
   $('rdate').value=dateVal;
   $('fname').style.display=(dumpRows&&dumpRows.length)?'block':'none';
   $('fname').textContent=snap.dumpFileLabel||(dumpRows&&dumpRows.length?('✓ Restored — '+dumpRows.length+' tickets'):'');
@@ -915,13 +924,13 @@ function restoreDayBackup(dateVal){
     $('wfname').textContent=snap.workedFileLabel||(workedRows&&workedRows.length?('✓ Restored — '+workedRows.length+' worked rows'):'');
   }
   if($('genVerif')) $('genVerif').disabled=!(workedRows&&workedRows.length);
-  if($('mail1card')) $('mail1card').style.display='none';
-  if($('render1')) $('render1').innerHTML='';
-  if($('mail2card')) $('mail2card').style.display='none';
-  if($('workSummary')) $('workSummary').innerHTML='';
+  // re-render (rather than clear) any tables this restored day had generated —
+  // all three are pure functions of the state above, so they redraw exactly as
+  // they were without needing to click Generate again.
+  if(mail1Shown && dumpRows && dumpRows.length && typeof renderMail1==='function') renderMail1(false); else { if($('mail1card')) $('mail1card').style.display='none'; if($('render1')) $('render1').innerHTML=''; }
+  if(allocCache && allocCache.length && typeof renderMail2Summary==='function') renderMail2Summary(allocCache); else { if($('mail2card')) $('mail2card').style.display='none'; if($('workSummary')) $('workSummary').innerHTML=''; }
   if($('dlAudit')) $('dlAudit').style.display=(allocCache&&allocCache.length)?'inline-block':'none';
-  if($('verifCard')) $('verifCard').style.display='none';
-  if($('verifSummary')) $('verifSummary').innerHTML='';
+  if(verifFiles && verifFiles.length && typeof renderVerifSummary==='function') renderVerifSummary(); else { if($('verifCard')) $('verifCard').style.display='none'; if($('verifSummary')) $('verifSummary').innerHTML=''; }
   if($('dlVerifZip')) $('dlVerifZip').style.display=(verifFiles&&verifFiles.length)?'inline-block':'none';
   if($('dlVerifIndiv')) $('dlVerifIndiv').style.display=(verifFiles&&verifFiles.length)?'inline-block':'none';
   if(sampleRows && sampleRows.length){ if(typeof renderSampleTable==='function') renderSampleTable(); }
@@ -951,9 +960,11 @@ function loadSession(){
     if(sess.sampleRows) sampleRows=sess.sampleRows;
     if(sess.allocCache) allocCache=sess.allocCache;
     if(sess.ttOverrides) ttOverrides=sess.ttOverrides;
+    if(sess.ttAgeRange) ttAgeRange=sess.ttAgeRange;
     if(sess.leaves) leaves=sess.leaves;
     if(sess.verifFiles) verifFiles=sess.verifFiles;
     if(sess.verifCommittedMin) verifCommittedMin=sess.verifCommittedMin;
+    if(sess.mail1Shown) mail1Shown=true;
     if(dumpRows && dumpRows.length){
       $('fname').style.display='block';
       $('fname').textContent=sess.dumpFileLabel || ('✓ Restored from last session — '+dumpRows.length+' tickets');
@@ -964,18 +975,24 @@ function loadSession(){
       $('genVerif').disabled=false;
     }
     if(sampleRows && sampleRows.length){ renderSampleTable(); }
+    // Re-draw any previously-generated output tables so they survive a refresh —
+    // every one of these is a pure function of state that's already restored
+    // above, so nothing needs re-uploading or re-clicking Generate.
+    if(mail1Shown && dumpRows && dumpRows.length && typeof renderMail1==='function'){ renderMail1(false); }
     if(allocCache && allocCache.length){
       $('dlAudit').style.display='inline-block';
+      if(typeof renderMail2Summary==='function') renderMail2Summary(allocCache, null, false);
     }
     if(verifFiles && verifFiles.length){
       $('dlVerifZip').style.display='inline-block';
       $('dlVerifIndiv').style.display='inline-block';
+      if(typeof renderVerifSummary==='function') renderVerifSummary(false);
     }
   }catch(e){ console.error('session restore failed', e); }
 }
 function clearSession(){
   localStorage.removeItem(SESSION_KEY);
-  dumpRows=null; workedRows=null; allocCache=null; ttOverrides={}; leaves={}; verifFiles=null; verifCommittedMin={}; sampleRows=null;
+  dumpRows=null; workedRows=null; allocCache=null; ttOverrides={}; ttAgeRange={}; leaves={}; verifFiles=null; verifCommittedMin={}; sampleRows=null; mail1Shown=false;
   $('fname').style.display='none'; $('fname').textContent='';
   if($('wfname')){ $('wfname').style.display='none'; $('wfname').textContent=''; }
   if($('sampleCard')) $('sampleCard').style.display='none';
@@ -1263,22 +1280,48 @@ function defaultTTs(pool){
    the level of actual ticket IDs, not just counts.
    LE Validation: ONE aggregate row per auditor with a count — never exploded into
    fake per-ticket IDs, to keep the export small and because LE has no age. -------- */
-function allocate(pool, tts){
+function allocate(pool, tts, ageRanges){
+  ageRanges = ageRanges || {};
   const used=new Set(), alloc=[];
   realProcesses().forEach(p=>{
     const backlog=(pool[p+'|Backlog']||[]).slice().sort((x,y)=>y.age-x.age);
     const lt5=(pool[p+'|<5']||[]).slice().sort((x,y)=>y.age-x.age);
-    const bucketPool=[...backlog, ...lt5];
+    // "avail" is the EXACT-age-sorted (oldest-first) working queue for this process —
+    // both passes below draw from it and remove what they take, so nothing is ever
+    // double-assigned and the highest-age ticket still available is always taken first.
+    let avail=[...backlog, ...lt5];
     const names=[...new Set(mapForProcess(p).map(m=>m[0]))].filter(a=>(tts[a+'|'+p]||0)>0);
     if(!names.length) return;
     const remaining={}; names.forEach(a=>remaining[a]=tts[a+'|'+p]||0);
+
+    // Pass 1 — auditors with an explicit age-range preference (set in "TT Counts per
+    // Auditor") only ever receive tickets inside that band, oldest-match first. This
+    // runs before the default pass so a restricted auditor's carve-out is honored
+    // even if it means those aged tickets would otherwise have gone to someone else.
+    const ranged = names.filter(a=>{ const r=ageRanges[a+'|'+p]; return r && (r.min!=null || r.max!=null); });
+    ranged.forEach(a=>{
+      const r=ageRanges[a+'|'+p];
+      const lo = r.min!=null ? +r.min : -Infinity;
+      const hi = r.max!=null ? +r.max : Infinity;
+      while(remaining[a]>0){
+        const idx=avail.findIndex(t=>t.age>=lo && t.age<=hi);
+        if(idx===-1) break;   // no more tickets left in this auditor's age band
+        const t=avail.splice(idx,1)[0];
+        used.add(t.id); alloc.push({proc:p, id:t.id, who:a, age:t.age});
+        remaining[a]--;
+      }
+    });
+
+    // Pass 2 — everyone else (no age preference = default) round-robins whatever's
+    // left in "avail", which is still oldest-first, exactly like before.
+    const unranged = names.filter(a=>ranged.indexOf(a)===-1);
     let ptr=0, anyLeft=true;
-    while(anyLeft && ptr<bucketPool.length){
+    while(anyLeft && ptr<avail.length){
       anyLeft=false;
-      for(const a of names){
+      for(const a of unranged){
         if(remaining[a]<=0) continue;
-        if(ptr>=bucketPool.length) break;
-        const t=bucketPool[ptr++];
+        if(ptr>=avail.length) break;
+        const t=avail[ptr++];
         used.add(t.id); alloc.push({proc:p, id:t.id, who:a, age:t.age});
         remaining[a]--;
         if(remaining[a]>0) anyLeft=true;
@@ -1867,12 +1910,14 @@ $('lockMainBtn').addEventListener('click',()=>{
   toast(mainLocked?'🔒 Main block locked — its values will survive Reset config':'🔓 Main block unlocked');
 });
 // capture-phase guard: while locked, swallow clicks/edits inside the Main panel
-// before they reach any of Main's own add/edit/delete handlers.
+// before they reach any of Main's own add/edit/delete handlers — EXCEPT inside
+// a ".lock-exempt" card (Auditors & Process Mapping, Verifiers & Verification
+// Mapping), which stay fully editable even while the rest of Main is locked.
 $('p-main').addEventListener('click',e=>{
-  if(mainLocked){ e.stopPropagation(); e.preventDefault(); toast('🔒 Unlock Main to make changes'); }
+  if(mainLocked && !e.target.closest('.lock-exempt')){ e.stopPropagation(); e.preventDefault(); toast('🔒 Unlock Main to make changes'); }
 }, true);
 $('p-main').addEventListener('input',e=>{
-  if(mainLocked){ e.stopPropagation(); e.preventDefault(); }
+  if(mainLocked && !e.target.closest('.lock-exempt')){ e.stopPropagation(); e.preventDefault(); }
 }, true);
 applyMainLockUI();
 
@@ -2139,8 +2184,18 @@ $('leaveGrid').addEventListener('input',e=>{
 $('leaveGrid').addEventListener('change',()=>saveSession());
 $('lsearch').addEventListener('input',e=>renderLeaves(e.target.value));
 
+let mail1Shown=false;   // whether Daily Planning's 4 tables should stay visible after a refresh (set true on Generate, false on Reset)
 $('genMail1').addEventListener('click',()=>{
   if(!dumpRows){alert('Upload the dump first.');return;}
+  renderMail1(true);
+  mail1Shown=true;
+  saveSession();
+});
+/* -------- builds & shows the Daily Planning "4 tables" output. Pure function of
+   current state (dumpRows/leaves/CFG/report date) — pulled out of the click
+   handler so it can also be called on page load to redraw the exact same output
+   without needing dumpRows re-uploaded or the button re-clicked. -------- */
+function renderMail1(showToast){
   const t1=table1(); const t2=table2(); const t3=table3(); const t4=table4();
   const wk=weekNo(new Date($('rdate').value+'T00:00:00'));
   const dstr=fmtDate(new Date($('rdate').value+'T00:00:00'));
@@ -2200,12 +2255,13 @@ $('genMail1').addEventListener('click',()=>{
 
   h+=`<div class="note" style="margin-top:12px">Regards,<br>Rakesh</div>`;
   $('render1').innerHTML=h; $('mail1card').style.display='block';
-  toast('All 4 Daily Planning tables generated');
-});
+  if(showToast) toast('All 4 Daily Planning tables generated');
+}
 $('resetMail1').addEventListener('click',()=>{
   // Clears only the generated Daily Planning output so leaves/availability can be
   // adjusted and "Generate All 4 Tables" run again. Does not touch other blocks.
   $('render1').innerHTML=''; $('mail1card').style.display='none';
+  mail1Shown=false;
   saveSession();
   toast('Daily Planning output cleared — adjust and regenerate');
 });
@@ -2253,7 +2309,7 @@ function renderWork(){
   const totalT=Object.values(pool).reduce((s,a)=>s+a.length,0);
   $('wk1').textContent=totalT; $('wk3').textContent=onLeave.filter(a=>leaves[a]==='full').length;
   // table grouped by process — real processes first (priority order per auditor), LE Validation filler last
-  let h='<table><thead><tr><th>Process</th><th>Auditor</th><th>Priority</th><th>Avail (min)</th><th>Default Assigned</th><th>Assign TT</th></tr></thead><tbody>';
+  let h='<table><thead><tr><th>Process</th><th>Auditor</th><th>Priority</th><th>Avail (min)</th><th>Default Assigned</th><th>Assign TT</th><th>Age Range <span style="font-weight:400;font-size:9.5px;opacity:.85">(blank = oldest first)</span></th></tr></thead><tbody>';
   let toAlloc=0, leTotal=0, activeSet=new Set();
   processes().forEach(p=>{
     const isLE=p===LE_PROC;
@@ -2269,33 +2325,66 @@ function renderWork(){
       const pr = isLE ? '—' : (CFG.mapping.find(m=>m[0]===a&&m[1]===p)||[])[3]||1;
       const avail=auditorAvailMin(a);
       const rowStyle = isLE ? ' style="color:var(--text2)"' : '';
+      const rng = ttAgeRange[key]||{};
+      const ageCell = isLE
+        ? '<span style="color:var(--muted);font-size:11px">— n/a</span>'
+        : `<span style="display:inline-flex;align-items:center;gap:4px;white-space:nowrap">
+             <input class="num" style="width:52px" placeholder="Min" title="Minimum ticket age (days) for this auditor" data-agemin="${esc(key)}" value="${rng.min!=null?rng.min:''}">
+             <span style="color:var(--text2);font-size:11px">–</span>
+             <input class="num" style="width:52px" placeholder="Max" title="Maximum ticket age (days) for this auditor" data-agemax="${esc(key)}" value="${rng.max!=null?rng.max:''}">
+           </span>`;
       h+=`<tr${rowStyle}><td>${esc(p)}${isLE?' <span class="pill" style="font-size:9px">filler</span>':''}</td><td>${esc(a)}${badge}</td><td>${pr}</td><td>${avail}</td><td>${def}</td>
-        <td><input class="num" data-tt="${esc(key)}" value="${val}"></td></tr>`;
+        <td><input class="num" data-tt="${esc(key)}" value="${val}"></td><td>${ageCell}</td></tr>`;
     });
   });
   h+='</tbody></table>'; $('workTable').innerHTML=h;
   $('wk2').textContent=toAlloc; $('wk5').textContent=leTotal; $('wk4').textContent=activeSet.size;
 }
 $('workTable').addEventListener('input',e=>{
-  const k=e.target.dataset.tt; if(!k)return;
-  ttOverrides[k]=parseInt(e.target.value)||0;
-  // live kpi update
-  const {pool}=buildPool(); const defs=defaultTTs(pool);
-  let toAlloc=0, leTotal=0; const act=new Set();
-  const allKeys=new Set([...Object.keys(defs), ...Object.keys(ttOverrides)]);
-  allKeys.forEach(key=>{
-    const v=(ttOverrides[key]!=null?ttOverrides[key]:defs[key]||0);
-    if(key.endsWith('|'+LE_PROC)) leTotal+=v; else toAlloc+=v;
-    if(v>0)act.add(key.split('|')[0]);
-  });
-  $('wk2').textContent=toAlloc;$('wk5').textContent=leTotal;$('wk4').textContent=act.size;
+  const k=e.target.dataset.tt;
+  if(k){
+    ttOverrides[k]=parseInt(e.target.value)||0;
+    // live kpi update
+    const {pool}=buildPool(); const defs=defaultTTs(pool);
+    let toAlloc=0, leTotal=0; const act=new Set();
+    const allKeys=new Set([...Object.keys(defs), ...Object.keys(ttOverrides)]);
+    allKeys.forEach(key=>{
+      const v=(ttOverrides[key]!=null?ttOverrides[key]:defs[key]||0);
+      if(key.endsWith('|'+LE_PROC)) leTotal+=v; else toAlloc+=v;
+      if(v>0)act.add(key.split('|')[0]);
+    });
+    $('wk2').textContent=toAlloc;$('wk5').textContent=leTotal;$('wk4').textContent=act.size;
+    return;
+  }
+  const kmin=e.target.dataset.agemin, kmax=e.target.dataset.agemax;
+  if(kmin || kmax){
+    const key=kmin||kmax;
+    const row=Object.assign({}, ttAgeRange[key]);
+    const v=e.target.value.trim();
+    const num = v===''?null:Math.max(0,parseFloat(v));
+    if(kmin) row.min = (num==null||isNaN(num)) ? null : num;
+    if(kmax) row.max = (num==null||isNaN(num)) ? null : num;
+    if(row.min==null && row.max==null) delete ttAgeRange[key]; else ttAgeRange[key]=row;
+  }
 });
-$('workTable').addEventListener('change',()=>saveSession());   // persist once the value is committed, not every keystroke
+$('workTable').addEventListener('change',e=>{
+  // auto-correct an inverted range (min typed higher than max) once the field is committed
+  const key=e.target.dataset.agemin||e.target.dataset.agemax;
+  if(key){
+    const row=ttAgeRange[key];
+    if(row && row.min!=null && row.max!=null && row.min>row.max){
+      const t=row.min; row.min=row.max; row.max=t;
+      renderWork();
+      toast('Min/Max were swapped so Min ≤ Max');
+    }
+  }
+  saveSession();   // persist once the value is committed, not every keystroke
+});
 $('resetTT').addEventListener('click',()=>{
   // Resets only Work Allocation: TT counts back to capacity-based defaults and
   // clears the last generated allocation/summary, so it can be changed and
   // "Generate Allocation" run again. Daily Planning / Verification are untouched.
-  ttOverrides={}; allocCache=null;
+  ttOverrides={}; ttAgeRange={}; allocCache=null;
   $('mail2card').style.display='none'; $('workSummary').innerHTML='';
   $('dlAudit').style.display='none';
   renderWork(); saveSession();
@@ -2306,9 +2395,18 @@ $('genMail2').addEventListener('click',()=>{
   const {pool}=buildPool(); const defs=defaultTTs(pool);
   // use every default key (auditor|process), applying overrides
   const tts={}; Object.keys(defs).forEach(key=>{ tts[key]=(ttOverrides[key]!=null?ttOverrides[key]:defs[key]||0); });
-  allocCache=allocate(pool,tts);
-  const realRows=allocCache.filter(r=>r.id && r.proc!==LE_PROC).sort((a,b)=>a.proc.localeCompare(b.proc)||a.who.localeCompare(b.who));
-  const leRows=allocCache.filter(r=>r.proc===LE_PROC && r.count);   // aggregate rows: {proc, who, count}
+  allocCache=allocate(pool,tts,ttAgeRange);
+  renderMail2Summary(allocCache, pool);
+  saveSession();
+});
+/* -------- renders the Work Allocation summary card from an already-computed
+   allocCache. Pulled out of the genMail2 click handler so it can also be called
+   on page load (from loadSession) to redraw the summary without re-running the
+   allocation — this is what keeps the table visible after a refresh. -------- */
+function renderMail2Summary(alloc, pool, showToast){
+  if(showToast==null) showToast=true;
+  const realRows=alloc.filter(r=>r.id && r.proc!==LE_PROC).sort((a,b)=>a.proc.localeCompare(b.proc)||a.who.localeCompare(b.who));
+  const leRows=alloc.filter(r=>r.proc===LE_PROC && r.count);   // aggregate rows: {proc, who, count}
   // AGE-WISE per-auditor counts: Backlog (>=5) vs <5 (real tickets only; LE has no age)
   const byWho={};   // who -> {task, backlog, lt5}
   realRows.forEach(r=>{
@@ -2323,12 +2421,12 @@ $('genMail2').addEventListener('click',()=>{
   leRows.sort((a,b)=>a.who.localeCompare(b.who)).forEach(r=>{ sh+=`<tr style="color:var(--text2)"><td>${esc(r.who)}</td><td>${esc(LE_PROC)} <span class="pill" style="font-size:9px">filler</span></td><td>0</td><td>${r.count}</td><td><b>${r.count}</b></td></tr>`; });
   const leTotal=leRows.reduce((s,r)=>s+r.count,0);
   sh+=`<tr style="font-weight:700;background:#fff2dd"><td>Total</td><td></td><td>${tB}</td><td>${t5}</td><td>${tB+t5}</td></tr></tbody></table>`;
-  const totalDump=Object.values(pool).reduce((s,arr)=>s+arr.length,0);
-  $('workSummary').innerHTML='<div style="font-size:13px;color:var(--text2);margin-bottom:8px"><b>'+realRows.length+'</b> tickets allocated (of '+totalDump+' in the dump — assignment is capped by auditor availability, not by clearing the whole dump) · <b>'+leTotal+'</b> LE Validation filler for leftover time. Full ticket-level data in the Excel download.</div>'+sh;
+  if(!pool && dumpRows) pool=buildPool().pool;
+  const totalDumpN = pool ? Object.values(pool).reduce((s,arr)=>s+arr.length,0) : realRows.length;
+  $('workSummary').innerHTML='<div style="font-size:13px;color:var(--text2);margin-bottom:8px"><b>'+realRows.length+'</b> tickets allocated (of '+totalDumpN+' in the dump — assignment is capped by auditor availability, not by clearing the whole dump) · <b>'+leTotal+'</b> LE Validation filler for leftover time. Full ticket-level data in the Excel download.</div>'+sh;
   $('mail2card').style.display='block'; $('dlAudit').style.display='inline-block';
-  saveSession();
-  toast(realRows.length+' tickets + '+leTotal+' LE allocated');
-});
+  if(showToast) toast(realRows.length+' tickets + '+leTotal+' LE allocated');
+}
 $('dlAudit').addEventListener('click',()=>{
   const d=fmtDate(new Date($('rdate').value+'T00:00:00'));
   const realRows=allocCache.filter(r=>r.id)
@@ -2436,7 +2534,8 @@ $('sampleTable').addEventListener('click',e=>{
 /* -------- assembles the assignment summary + capacity tables from the current
    verifFiles state, and renders them. Read-only display — the place to change
    counts is the Sample Preview table BEFORE clicking Generate. -------- */
-function renderVerifSummary(){
+function renderVerifSummary(persist){
+  if(persist==null) persist=true;
   if(!verifFiles) return;
   // summary table: verifier | process | tickets | status
   const byV={};
@@ -2464,7 +2563,7 @@ function renderVerifSummary(){
   sh+='</tbody></table>';
   sh+='<div class="hint" style="margin-top:8px">This reserved time is now subtracted automatically wherever availability is used in Work Allocation — no separate step needed.</div>';
   $('verifSummary').innerHTML=sh; $('verifCard').style.display='block'; $('dlVerifZip').style.display='inline-block'; $('dlVerifIndiv').style.display='inline-block';
-  saveSession();
+  if(persist) saveSession();
 }
 $('genVerif').addEventListener('click',()=>{
   if(!workedRows){alert('Upload the worked dump first.');return;}
