@@ -534,6 +534,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     <div class="logo">⚡</div>
     <div><h1>Work Allocation Dashboard</h1><div class="sub">Main · Daily Planning · Work Allocation · Verification</div></div>
     <div class="spacer"></div>
+    <span id="folderStatus" style="font-size:11px;color:var(--text2);max-width:260px;text-align:right;margin-right:4px"></span>
+    <button class="btn ghost sm" id="chooseFolderBtn" title="Pick one folder (e.g. on your Desktop). Every file you download from anywhere on this page will be saved there, sorted into a sub-folder per report date, replacing older files of the same name.">📁 Set save folder</button>
     <button class="btn ghost sm" id="lockMainBtn">🔓 Lock Main</button>
     <button class="btn ghost sm" id="resetBtn">↺ Reset config</button>
   </header>
@@ -1665,6 +1667,136 @@ function downloadFilesIndividually(files){
   });
 }
 
+/* ================= LOCAL SAVE FOLDER (File System Access API) =================
+   Lets every download from anywhere in the dashboard land in ONE folder the user
+   picks once (e.g. a folder on their Desktop), organized as:
+     <chosen folder>/<report date, YYYY-MM-DD>/<file>
+   Re-running a download for the same date overwrites the existing file instead
+   of piling up duplicates/copies. Only Chromium-based browsers (Chrome/Edge)
+   support this API; everywhere else we silently fall back to the normal
+   browser download behaviour this app already had. */
+const FS_SUPPORTED = (typeof window!=='undefined' && 'showDirectoryPicker' in window);
+let rootDirHandle = null;
+const FS_IDB_NAME='wa_dashboard_fs', FS_IDB_STORE='handles', FS_IDB_KEY='rootDir';
+function fsIdbGet(key){
+  return new Promise(res=>{
+    try{
+      const req=indexedDB.open(FS_IDB_NAME,1);
+      req.onupgradeneeded=()=>{ try{req.result.createObjectStore(FS_IDB_STORE);}catch(e){} };
+      req.onsuccess=()=>{
+        try{
+          const tx=req.result.transaction(FS_IDB_STORE,'readonly');
+          const g=tx.objectStore(FS_IDB_STORE).get(key);
+          g.onsuccess=()=>res(g.result||null);
+          g.onerror=()=>res(null);
+        }catch(e){ res(null); }
+      };
+      req.onerror=()=>res(null);
+    }catch(e){ res(null); }
+  });
+}
+function fsIdbSet(key,val){
+  return new Promise(res=>{
+    try{
+      const req=indexedDB.open(FS_IDB_NAME,1);
+      req.onupgradeneeded=()=>{ try{req.result.createObjectStore(FS_IDB_STORE);}catch(e){} };
+      req.onsuccess=()=>{
+        try{
+          const tx=req.result.transaction(FS_IDB_STORE,'readwrite');
+          tx.objectStore(FS_IDB_STORE).put(val,key);
+          tx.oncomplete=()=>res(true);
+          tx.onerror=()=>res(false);
+        }catch(e){ res(false); }
+      };
+      req.onerror=()=>res(false);
+    }catch(e){ res(false); }
+  });
+}
+async function fsVerifyPerm(handle){
+  try{
+    const opts={mode:'readwrite'};
+    if((await handle.queryPermission(opts))==='granted') return true;
+    if((await handle.requestPermission(opts))==='granted') return true;
+  }catch(e){}
+  return false;
+}
+// promptIfMissing must only be true inside a click handler (user-gesture requirement)
+async function ensureRootDir(promptIfMissing){
+  if(rootDirHandle && await fsVerifyPerm(rootDirHandle)) return rootDirHandle;
+  if(!rootDirHandle){
+    const saved=await fsIdbGet(FS_IDB_KEY);
+    if(saved){
+      rootDirHandle=saved;
+      if(await fsVerifyPerm(rootDirHandle)) return rootDirHandle;
+    }
+  }
+  if(!promptIfMissing) return null;
+  try{
+    const handle=await window.showDirectoryPicker({id:'waDashboardRoot', mode:'readwrite'});
+    rootDirHandle=handle;
+    await fsIdbSet(FS_IDB_KEY, handle);
+    updateFolderStatus();
+    return handle;
+  }catch(e){ return null; }   // user cancelled the picker
+}
+function dateFolderName(){
+  const v = $('rdate') && $('rdate').value;
+  const d = v ? new Date(v+'T00:00:00') : new Date();
+  return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+}
+async function writeFilesToDisk(files){
+  const root = await ensureRootDir(true);
+  if(!root) return null;
+  const folderName=dateFolderName();
+  const dayDir = await root.getDirectoryHandle(folderName, {create:true});
+  for(const f of files){
+    const fh = await dayDir.getFileHandle(f.name, {create:true});   // create:true also opens an existing file
+    const w = await fh.createWritable();                            // createWritable() truncates first, so this always replaces old content
+    await w.write(f.content);
+    await w.close();
+  }
+  return folderName;
+}
+function updateFolderStatus(folderName){
+  const el=$('folderStatus'); if(!el) return;
+  if(!FS_SUPPORTED){ el.textContent='Auto-save folder needs Chrome or Edge'; return; }
+  if(!rootDirHandle){ el.textContent='No save folder set — files will just download normally'; return; }
+  el.textContent = folderName
+    ? ('📁 Saving into: '+rootDirHandle.name+' / '+folderName)
+    : ('📁 '+rootDirHandle.name+' (click a download to reconnect)');
+}
+/* Every download button in the app should call this instead of downloadZip /
+   downloadFilesIndividually directly. If a save folder is set up (and the
+   browser supports it), files are written straight into
+   <folder>/<report date>/ — overwriting same-named files — and the browser's
+   normal Downloads folder is never touched. Otherwise it falls back to
+   whatever the button used to do. */
+async function saveFiles(files, opts){
+  opts=opts||{};
+  if(!files || !files.length) return false;
+  if(FS_SUPPORTED){
+    const folderName = await writeFilesToDisk(files);
+    if(folderName){
+      updateFolderStatus(folderName);
+      toast('Saved '+files.length+' file(s) → '+rootDirHandle.name+' / '+folderName);
+      return true;
+    }
+    // picker was cancelled / permission refused — fall through to a plain browser download below
+  }
+  if(files.length===1){
+    const f=files[0];
+    const type = f.binary ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' : 'text/csv;charset=utf-8';
+    const blob=new Blob([f.content],{type});
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=f.name; a.click();
+    setTimeout(()=>URL.revokeObjectURL(a.href),1500);
+  } else if(opts.fallbackMode==='individual'){
+    downloadFilesIndividually(files);
+  } else {
+    await downloadZip(opts.fallbackName || ('Files_'+Date.now()+'.zip'), files);
+  }
+  return true;
+}
+
 /* ================= VERIFICATION ================= */
 // Task_Name (canonical, post-normalize) -> filename prefix — copied EXACTLY from
 // your Get_Task_File_Prefix macro (Select Case block) so verification filenames
@@ -2615,7 +2747,16 @@ $('dlAudit').addEventListener('click',()=>{
   const leRows=allocCache.filter(r=>r.proc===LE_PROC && r.count)
     .sort((a,b)=>a.who.localeCompare(b.who))
     .map(r=>[d, LE_PROC, r.count, r.who, '']);   // count goes in the Short ID column instead of a fake ID
-  downloadXLSX((d.replace(/\//g,'-'))+'-Audit.xlsx',['Date','Task','Short ID','Auditor','Age'],[...realRows,...leRows],'Allocation');
+  const header=['Date','Task','Short ID','Auditor','Age'];
+  const rows=[...realRows,...leRows];
+  const dTag=d.replace(/\//g,'-');
+  if(typeof XLSX==='undefined'){
+    alert('Excel library failed to load (check your internet connection) — downloading as CSV instead.');
+    saveFiles([{name:dTag+'-Audit.csv', content:aoaToCsvString(header, rows), binary:false}]);
+    return;
+  }
+  const content=aoaToXlsxArrayBuffer(header, rows, 'Allocation');
+  saveFiles([{name:dTag+'-Audit.xlsx', content, binary:true}]);
 });
 
 /* ============ EXTRA / LEFTOVER TICKETS ============
@@ -2662,16 +2803,8 @@ function buildExtraTicketFiles(){
 $('dlExtra').addEventListener('click', async ()=>{
   const files=buildExtraTicketFiles();
   if(!files.length){ toast('No extra tickets to export'); return; }
-  if(files.length===1){
-    const blob=new Blob([files[0].content],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
-    const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=files[0].name; a.click();
-    setTimeout(()=>URL.revokeObjectURL(a.href),1500);
-    toast('Downloaded '+files[0].name);
-    return;
-  }
   const d=new Date($('rdate').value+'T00:00:00');
-  const ok=await downloadZip('Extra_Tickets_'+fmtDate(d).replace(/\//g,'-')+'.zip', files);
-  if(ok) toast(files.length+' extra-ticket file(s) downloaded as ZIP');
+  await saveFiles(files, {fallbackMode:'zip', fallbackName:'Extra_Tickets_'+fmtDate(d).replace(/\//g,'-')+'.zip'});
 });
 
 /* ============ BLOCK 5: TICKET LOOKUP ============
@@ -2889,14 +3022,12 @@ function buildVerifFiles(){
 $('dlVerifZip').addEventListener('click',async()=>{
   if(!verifFiles) return;
   const {files, dstr, wk}=buildVerifFiles();
-  const ok=await downloadZip('Verification_'+dstr+'_Wk_'+wk+'.zip', files);
-  if(ok) toast('ZIP downloaded: '+files.length+' files');
+  await saveFiles(files, {fallbackMode:'zip', fallbackName:'Verification_'+dstr+'_Wk_'+wk+'.zip'});
 });
-$('dlVerifIndiv').addEventListener('click',()=>{
+$('dlVerifIndiv').addEventListener('click',async()=>{
   if(!verifFiles) return;
   const {files}=buildVerifFiles();
-  downloadFilesIndividually(files);
-  toast(files.length+' files downloading individually');
+  await saveFiles(files, {fallbackMode:'individual'});
 });
 
 /* ---- reset ---- */
@@ -2906,6 +3037,29 @@ $('resetBtn').addEventListener('click',()=>{
     : 'Reset all processes, auditors, mappings & verifiers to defaults — this also clears any uploaded dump, allocation, and verification results. Continue?';
   if(confirm(msg)){resetCfg();clearSession();renderProcTable();renderVerMain();renderLeaves();renderWork();toast(mainLocked?'Reset done — Main block preserved (locked)':'Everything reset');}
 });
+
+/* ---- save folder control ---- */
+$('chooseFolderBtn').addEventListener('click', async ()=>{
+  if(!FS_SUPPORTED){ alert('Auto-save to a folder needs Chrome or Edge. In other browsers, downloads will keep going to your normal Downloads folder.'); return; }
+  const handle = await ensureRootDir(true);
+  if(handle){ updateFolderStatus(dateFolderName()); toast('Save folder set: '+handle.name); }
+});
+updateFolderStatus();
+// try to silently pick back up a folder chosen in an earlier session. Only
+// queryPermission (never requestPermission) here, since re-requesting needs a
+// user gesture — if it wasn't already granted, the first download click will
+// prompt for it via ensureRootDir instead.
+(async ()=>{
+  if(!FS_SUPPORTED) return;
+  const saved = await fsIdbGet(FS_IDB_KEY);
+  if(saved){
+    rootDirHandle=saved;
+    try{
+      const granted = (await rootDirHandle.queryPermission({mode:'readwrite'}))==='granted';
+      updateFolderStatus(granted ? dateFolderName() : undefined);
+    }catch(e){ updateFolderStatus(); }
+  }
+})();
 
 /* ---- init ---- */
 loadSession();
