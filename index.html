@@ -486,6 +486,80 @@ a { color: var(--color-link, var(--color-primary)); }</style>
   #capacityPopup table{font-size:11.5px}
   #capacityPopup th,#capacityPopup td{padding:5px 8px}
   @media(max-width:900px){ #capacityPopup{position:static;width:100%;margin-bottom:14px;top:auto;right:auto} }
+
+  /* ================= new process / setup cards ================= */
+  body.no-date #newProcCard,body.no-date #setupCard{display:none !important}
+  .np-row{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;padding:10px 0;border-top:1px solid var(--border)}
+  .np-row .np-name{min-width:230px;flex:1}.np-row .np-name span{display:block;font-size:11px;color:var(--text2)}
+  .np-row label{font-size:10.5px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.3px;display:flex;flex-direction:column;gap:3px}
+  .np-row label .num{width:104px;text-align:left}
+  #setupCard summary{cursor:pointer;font-weight:700;font-size:13px}
+  #setupCard ul{margin:8px 0 0 18px;line-height:1.7;font-size:12.5px}
+  tr.notin td{color:var(--muted)}
+  /* ================= date-first workflow ================= */
+  .flabel{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.4px}
+  .flabel .req{background:var(--danger);color:#fff;border-radius:10px;padding:1px 7px;font-size:9.5px;margin-left:4px;letter-spacing:0}
+  .datechip{margin-top:6px;min-height:22px}
+  .chip{display:inline-block;font-size:11px;font-weight:700;border-radius:20px;padding:3px 10px}
+  .chip.ok{background:rgba(28,167,80,.14);color:var(--success)}
+  .chip.warn{background:rgba(245,158,11,.18);color:#9a5b00}
+  .datenote{margin-top:12px;font-size:12.5px;border-radius:9px;padding:9px 12px}
+  .datenote.warn{background:rgba(229,69,59,.08);border:1px solid rgba(229,69,59,.35);color:#a02a22}
+  .datenote.ok{background:var(--surface2);border:1px solid var(--border);color:var(--text2)}
+  #rdate.shake{animation:shake .45s;border-color:var(--danger);box-shadow:0 0 0 3px rgba(229,69,59,.18)}
+  @keyframes shake{20%,60%{transform:translateX(-5px)}40%,80%{transform:translateX(5px)}}
+  .date-gate{display:none;text-align:center;padding:48px 20px;background:var(--surface);border:2px dashed var(--border);border-radius:var(--radius);color:var(--text2);margin-bottom:16px}
+  .date-gate .ico{font-size:38px;margin-bottom:8px}.date-gate b{display:block;font-size:16px;color:var(--text);margin-bottom:6px}.date-gate .btn{margin-top:14px}
+  body.no-date .date-gate{display:block}
+  body.no-date #p-planning>*:not(.date-gate),body.no-date #p-work>*:not(.date-gate),body.no-date #p-verif>*:not(.date-gate),body.no-date #p-lookup>*:not(.date-gate){display:none !important}
+  body.no-date #drop{opacity:.55;border-color:var(--danger)}
+  .navdot{display:none;width:9px;height:9px;border-radius:50%;background:var(--warn);margin-left:6px;vertical-align:middle;box-shadow:0 0 0 3px rgba(245,158,11,.25)}
+  .navdot.on{display:inline-block}
+  /* ================= "results are outdated" acknowledgement ================= */
+  .statusbar{border-radius:10px;padding:10px 14px;margin:0 0 12px;font-size:12.5px}
+  .statusbar.ok{background:rgba(28,167,80,.09);border:1px solid rgba(28,167,80,.35);color:#0f6a31}
+  .statusbar.warn{background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.55);color:#7a4a00}
+  .statusbar .sb-row{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
+  .statusbar ul{margin:6px 0 0 18px;font-size:12px;line-height:1.6}
+  .btn.pulse{animation:pulse 1.6s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(245,158,11,.65)}70%{box-shadow:0 0 0 12px rgba(245,158,11,0)}100%{box-shadow:0 0 0 0 rgba(245,158,11,0)}}
+  .chk{border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:12.5px}
+  .chk.ok{background:rgba(28,167,80,.09);border:1px solid rgba(28,167,80,.35)}
+  .chk.warn{background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.55)}
+  .chk-h{font-weight:700}.chk-s{margin-top:8px}.chk ul{margin:4px 0 0 18px;line-height:1.6}.chk summary{cursor:pointer}
+  /* ================= smoother editing ================= */
+  .num[type=number]{-moz-appearance:textfield}
+  .num[type=number]::-webkit-inner-spin-button,.num[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+  .num.flash{animation:flash .7s}
+  @keyframes flash{0%{background:#d9f7e3;border-color:var(--success)}100%{background:#fff}}
+  .wtoolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+  .chkl{font-size:12px;color:var(--text2);display:inline-flex;align-items:center;gap:5px;cursor:pointer;white-space:nowrap}
+  .wtable td{vertical-align:middle}
+  .wtable tr.phead td{background:var(--surface3) !important;border-top:2px solid var(--border);font-size:12.5px;padding:8px 10px}
+  .wtable tr.phead{cursor:default}
+  .pbadge{margin-left:8px}
+  .bd{display:inline-block;font-size:10.5px;font-weight:700;background:#fff;border:1px solid var(--border);color:var(--text2);border-radius:20px;padding:2px 9px;margin-right:5px}
+  .bd.bad{background:#ffe3e0;border-color:#f3b4ae;color:#b3261e}.bd.warn{background:#fff0d1;border-color:#f0cf8c;color:#8a5a00}.bd.good{background:#dff5e7;border-color:#a8dfbd;color:#0f6a31}
+  .lnk{background:none;border:none;color:var(--accent);font-size:11px;font-weight:700;cursor:pointer;margin-left:8px;padding:2px 4px;border-radius:5px}
+  .lnk:hover{background:rgba(20,110,180,.1)}
+  .stepper{display:inline-flex;align-items:center;gap:3px;white-space:nowrap}
+  .stepper button{width:26px;height:26px;border:1px solid var(--border);background:var(--surface2);border-radius:6px;font-size:15px;line-height:1;cursor:pointer;color:var(--text);padding:0}
+  .stepper button:hover{background:var(--primary);color:#fff;border-color:var(--primary)}
+  .stepper .num{width:58px;text-align:center;font-weight:700}
+  .stepper .rv,.lav .rv{visibility:hidden;font-size:13px;color:var(--primary-d);background:none}
+  tr.edited .stepper .rv,.lrow.edited .lav .rv{visibility:visible}
+  .lav .rv{width:22px;height:22px;border:1px solid var(--border);border-radius:6px;cursor:pointer;padding:0;margin-left:3px}
+  tr.edited td.tt{background:#fff1da !important}
+  tr.edited .num[data-tt]{border-color:var(--primary);background:#fff7ea;color:#a35c00}
+  td.load{white-space:nowrap;font-size:11.5px;color:var(--text2)}
+  td.load.over{background:#ffe3e0 !important;color:#b3261e;font-weight:700}
+  .lrow{align-items:center}.lrow .lname{font-weight:600;min-width:84px}.lrow.edited{border-color:var(--primary);background:#fff7ea}
+  .lrow.lv-full{background:#fdeceb;border-color:#f3b4ae}.lrow.lv-half{background:#fff6df;border-color:#f0cf8c}.lrow.lv-skip{background:#eef0f3}
+  .lav{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text2)}.lav .num{width:62px}
+  .toast{max-width:min(92vw,680px);text-align:center;z-index:900}
+  /* capacity popup: dock bottom-right so it no longer covers the Age Range / Assign columns */
+  #capacityPopup{top:auto !important;bottom:20px;right:20px;width:320px;max-height:55vh}
+  @media(max-width:900px){ #capacityPopup{bottom:auto !important} }
 </style>
 <script>/* SheetJS (xlsx) v0.18.5 — bundled inline so Excel export works with NO internet/CDN access (fixes CDN being blocked on restricted/corporate networks) */
 /*! xlsx.js (C) 2013-present SheetJS -- http://sheetjs.com */
@@ -534,36 +608,49 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     <div class="logo">⚡</div>
     <div><h1>Work Allocation Dashboard</h1><div class="sub">Main · Daily Planning · Work Allocation · Verification</div></div>
     <div class="spacer"></div>
+    <span id="saveStatus" style="font-size:11px;max-width:320px;text-align:right;margin-right:6px"></span>
     <span id="folderStatus" style="font-size:11px;color:var(--text2);max-width:260px;text-align:right;margin-right:4px"></span>
     <button class="btn ghost sm" id="chooseFolderBtn" title="Pick one folder (e.g. on your Desktop). Every file you download from anywhere on this page will be saved there, sorted into a sub-folder per report date, replacing older files of the same name.">📁 Set save folder</button>
     <button class="btn ghost sm" id="lockMainBtn">🔓 Lock Main</button>
     <button class="btn ghost sm" id="resetBtn">↺ Reset config</button>
   </header>
 
-  <!-- upload strip (shared) -->
-  <div class="card">
-    <div class="row">
-      <div style="flex:1">
-        <div class="drop" id="drop"><span class="ico">📥</span> &nbsp; <b>Drop SIM-T dump CSV</b> (28-col export) or click <div class="fname" id="fname"></div></div>
+  <!-- date + upload strip (shared) — the DATE comes first: nothing works until one is chosen -->
+  <div class="card" id="dateCard">
+    <div class="row" style="align-items:flex-start">
+      <div style="width:250px">
+        <label class="flabel">① Report date <span class="req">required</span></label>
+        <div class="row" style="gap:6px;margin-top:4px;flex-wrap:nowrap">
+          <input type="date" id="rdate" class="txt" style="flex:1">
+          <button class="btn ghost sm" id="todayBtn" type="button" title="Set the report date to today">Today</button>
+        </div>
+        <div id="dateChip" class="datechip"></div>
+      </div>
+      <div style="flex:1;min-width:260px">
+        <label class="flabel">② SIM-T dump <span style="font-weight:400;color:var(--muted)">(saved against the date on the left)</span></label>
+        <div class="drop" id="drop" style="margin-top:4px"><span class="ico">📥</span> &nbsp; <b>Drop SIM-T dump CSV</b> (28-col export) or click <div class="fname" id="fname"></div></div>
         <input type="file" id="file" accept=".csv,.xlsx,.xls" hidden="">
       </div>
-      <div style="width:180px"><label style="font-size:11px;color:var(--text2)">Report date</label>
-        <input type="date" id="rdate" class="txt" style="margin-top:4px"></div>
     </div>
+    <div id="dateNote" class="datenote warn"></div>
     <div class="row" id="dayBackupRow" style="margin-top:10px;display:none">
-      <label style="font-size:11px;color:var(--text2)">Restore a stored day</label>
-      <select class="txt" id="dayBackupSelect" style="width:180px"></select>
-      <button class="btn sm ghost" id="restoreDayBtn">⤵ Restore this day</button>
-      <span style="font-size:11px;color:var(--text2)">Only the last 2 days you generated/uploaded data for are kept.</span>
+      <label style="font-size:11px;color:var(--text2)">Stored days</label>
+      <select class="txt" id="dayBackupSelect" style="width:330px"></select>
+      <button class="btn sm ghost" id="restoreDayBtn" type="button">📂 Open this day</button>
+      <button class="btn sm ghost" id="delDayBtn" type="button">🗑 Delete</button>
+      <span style="font-size:11px;color:var(--text2)">Each date keeps its own dump, leaves, counts, allocation &amp; verification (last 7 days are kept in this browser).</span>
     </div>
   </div>
+
+  <div class="card" id="newProcCard" style="display:none;border-color:var(--primary)"></div>
+  <div class="card" id="setupCard" style="display:none"></div>
 
   <!-- nav -->
   <div class="nav">
     <div class="navb on" data-p="main"><div class="n">BLOCK 1</div><div class="t">🧩 Main</div><div class="d">Processes · Auditors · Mapping</div></div>
-    <div class="navb" data-p="planning"><div class="n">BLOCK 2</div><div class="t">📅 Daily Planning</div><div class="d">Leaves → Mail 1</div></div>
-    <div class="navb" data-p="work"><div class="n">BLOCK 3</div><div class="t">🎯 Work Allocation</div><div class="d">Assign → Mail 2 + Excel</div></div>
-    <div class="navb" data-p="verif"><div class="n">BLOCK 4</div><div class="t">✅ Verification</div><div class="d">Sample → Mail 3</div></div>
+    <div class="navb" data-p="planning"><div class="n">BLOCK 2</div><div class="t">📅 Daily Planning<span class="navdot" id="dot-planning" title="Generated output is out of date"></span></div><div class="d">Leaves → Mail 1</div></div>
+    <div class="navb" data-p="work"><div class="n">BLOCK 3</div><div class="t">🎯 Work Allocation<span class="navdot" id="dot-work" title="Generated output is out of date"></span></div><div class="d">Assign → Mail 2 + Excel</div></div>
+    <div class="navb" data-p="verif"><div class="n">BLOCK 4</div><div class="t">✅ Verification<span class="navdot" id="dot-verif" title="Generated output is out of date"></span></div><div class="d">Sample → Mail 3</div></div>
     <div class="navb" data-p="lookup"><div class="n">BLOCK 5</div><div class="t">🔎 Ticket Lookup</div><div class="d">Paste IDs → find owner</div></div>
   </div>
 
@@ -596,7 +683,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     </div>
     <div class="card">
       <h2><span class="l">⏱️ Auditor Availability</span><span class="pill">Default 480 min · editable per person</span></h2>
-      <div class="hint">Minutes each auditor has today. Defaults to a full 480-min shift; edit for part-day, overtime, or short shifts. This directly caps how many tickets the engine gives them.</div>
+      <div class="hint">Default minutes per auditor, used for EVERY date (a change made in Daily Planning overrides it for that one date only). Defaults to a full 480-min shift; edit for part-day, overtime, or short shifts. This directly caps how many tickets the engine gives them.</div>
       <div id="availTable" class="scrollwell" style="max-height:360px;overflow:auto"></div>
     </div>
     <div class="card lock-exempt">
@@ -634,11 +721,13 @@ https://github.com/nodeca/pako/blob/main/LICENSE
 
   <!-- ============ BLOCK 2: DAILY PLANNING ============ -->
   <div class="panel" id="p-planning">
+    <div class="date-gate"><div class="ico">📅</div><b>Select a report date first</b><div>The dump, leaves, counts, allocation and verification are all saved <u>per date</u>. Pick the date at the top of the page to see or generate data for that day.</div><button class="btn sm" type="button" data-focusdate>Choose date</button></div>
     <div class="card">
-      <h2><span class="l">🌴 Update Leaves</span><span class="pill">Full = no work · Half = ½ capacity</span></h2>
-      <input class="lsearch" id="lsearch" placeholder="🔍 Search auditor…">
+      <h2><span class="l">🌴 Update Leaves</span><span class="pill" id="leaveSummary"></span><span class="pill">Full = no work · Half = ½ capacity</span></h2>
+      <div class="row" style="margin-bottom:10px;flex-wrap:nowrap"><input class="lsearch" id="lsearch" placeholder="🔍 Search auditor…" style="margin:0;flex:1"><button class="btn ghost sm" id="copyPrevBtn" type="button" title="Copy leaves and custom available minutes from the most recent earlier stored day">📋 Copy from previous day</button></div>
       <div class="leave-grid" id="leaveGrid"></div>
     </div>
+    <div id="planStatus" class="statusbar" style="display:none"></div>
     <div class="row"><button class="btn g" id="genMail1">✨ Generate All 4 Tables</button><button class="btn ghost" id="resetMail1">↺ Reset Daily Planning</button></div>
     <div class="card" id="mail1card" style="display:none;margin-top:16px">
       <div class="mailbar"><b>Daily Planning — 4 Tables</b><button class="copy" id="copy1">📋 Copy all 4 tables</button></div>
@@ -648,6 +737,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
 
   <!-- ============ BLOCK 3: WORK ALLOCATION ============ -->
   <div class="panel" id="p-work">
+    <div class="date-gate"><div class="ico">📅</div><b>Select a report date first</b><div>The dump, leaves, counts, allocation and verification are all saved <u>per date</u>. Pick the date at the top of the page to see or generate data for that day.</div><button class="btn sm" type="button" data-focusdate>Choose date</button></div>
     <div id="capacityPopup" style="display:none">
       <div class="cp-head"><b id="cpTitle"></b><button class="btn ghost sm" id="cpClose" type="button">✕</button></div>
       <div id="cpBody"></div>
@@ -675,8 +765,16 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       <div class="banner" id="verifReserveNote" style="display:none"></div>
       <div class="hint">Default TT counts are auto-balanced by capacity across the tickets available for each process. Edit any cell, then Generate.</div>
       <div class="hint">🕓 <b>Age Range</b> — by default every auditor is drawn from the oldest tickets first (exact age, not just the Backlog/&lt;5 label). To restrict someone to a specific age band instead (e.g. only 5–9 day tickets), set Min/Max in their row. Leave both blank for the default oldest-first behavior. If fewer matching tickets exist than their TT count, they simply get what's available in that band — it won't auto-borrow from other ages.</div>
+            <div class="wtoolbar">
+        <input class="lsearch" id="workFilter" placeholder="🔍 Filter by auditor or process…" style="margin:0;flex:1;min-width:200px">
+        <label class="chkl"><input type="checkbox" id="workOnlyEdited"> only edited</label>
+        <span class="pill" id="editCount">0 manual edits</span>
+        <button class="btn ghost sm" id="clearEdits" type="button" style="display:none" title="Drop every manual count and go back to the auto defaults">↺ Clear my edits</button>
+      </div>
+      <div class="hint" style="margin-top:0">✏️ <b>Quick editing:</b> type a number, use <b>− / +</b> or ↑/↓, press <b>Enter</b> to jump to the next row. Edited cells turn orange (↺ puts one back to default). <b>Day load</b> turns red if an auditor's counts need more minutes than they have. Click a process header for <i>who can take more</i>.</div>
       <div id="workTable" class="scrollwell" style="max-height:420px;overflow:auto"></div>
     </div>
+    <div id="allocStatus" class="statusbar" style="display:none"></div>
     <div class="row">
       <button class="btn g" id="genMail2">✨ Generate Allocation</button>
       <button class="btn ghost" id="resetTT">↺ Reset Work Allocation</button>
@@ -685,6 +783,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     </div>
     <div class="card" id="mail2card" style="display:none;margin-top:16px">
       <div class="mailbar"><b>Allocation Summary — who got how many</b><button class="copy" id="copy2">📋 Copy table</button></div>
+      <div id="allocCheck"></div>
       <div id="workSummary"></div>
       <div id="extraTicketsNote" style="display:none;margin-top:10px"></div>
     </div>
@@ -692,6 +791,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
 
   <!-- ============ BLOCK 4: VERIFICATION ============ -->
   <div class="panel" id="p-verif">
+    <div class="date-gate"><div class="ico">📅</div><b>Select a report date first</b><div>The dump, leaves, counts, allocation and verification are all saved <u>per date</u>. Pick the date at the top of the page to see or generate data for that day.</div><button class="btn sm" type="button" data-focusdate>Choose date</button></div>
     <div class="card">
       <h2><span class="l">📥 Upload Worked/Resolved Dump</span><span class="pill">Verifiers &amp; sample %: set in Main</span></h2>
       <div class="hint">Upload the day's completed audits (columns: Task/Task_Name, Date, SIM_ID/Short ID, Auditor). The tool samples each auditor's work per the process sample %, assigns to your Main verifiers (verifier ≠ auditor), and produces one CSV per verifier per process with every sampled ticket in it. If a process has only one verifier and they also worked the ticket, it's flagged in its own file instead of being dropped.</div>
@@ -703,6 +803,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       <div class="hint">Per Task Name + Auditor: how many they worked, the verification sample %, and how many get pulled for verification. Edit the Sample count or delete a row, then click Generate Verification below.</div>
       <div id="sampleTable" class="scrollwell" style="max-height:360px;overflow:auto"></div>
     </div>
+    <div id="verifStatus" class="statusbar" style="display:none"></div>
     <div class="row">
       <button class="btn g" id="genVerif" disabled="">✨ Generate Verification Files</button>
       <button class="btn ghost" id="resetVerif">↺ Reset Verification</button>
@@ -718,6 +819,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
 
   <!-- ============ BLOCK 5: TICKET LOOKUP ============ -->
   <div class="panel" id="p-lookup">
+    <div class="date-gate"><div class="ico">📅</div><b>Select a report date first</b><div>The dump, leaves, counts, allocation and verification are all saved <u>per date</u>. Pick the date at the top of the page to see or generate data for that day.</div><button class="btn sm" type="button" data-focusdate>Choose date</button></div>
     <div class="card">
       <h2><span class="l">🔎 Ticket Lookup</span><span class="pill">Checks the last generated Work Allocation</span></h2>
       <div class="hint">Paste one or more Short IDs (any mix of new-lines, commas, or spaces) — e.g. tickets a manager already assigned to someone. You can also paste full ticket links (e.g. https://t.corp.amazon.com/D209619666) and the ticket ID will be pulled out automatically. This checks them against the most recent allocation you generated in Work Allocation, so it doesn't re-assign anything.</div>
@@ -744,84 +846,22 @@ const SESSION_KEY = "wad_session_v1";   // uploaded dump, allocation results, le
 
 /* -------- default config (editable in Main block) -------- */
 const DEFAULTS = {
-  aht: {
-    "Invalid and Hijack clean up":31.98,"BLMA & GTIN Exemption":5.47,"GTA Listing Error 8572 (MBO matching)":9.33,
-    "Legacy Barcode Suppressions":5.17,"Non BLMA Barcode Suppression":19.0,
-    "KPEX Ops":13.53,"UPCx Appeals":7.07,"Item Identity Anchoring":10.45
-  },
-  // mapping: [associate, process, hc]
-  mapping: [
-    ["kishorsq","Invalid and Hijack clean up",1],["umadhury","Invalid and Hijack clean up",1],["hriteshs","Invalid and Hijack clean up",1],["jeyamohy","Invalid and Hijack clean up",1],
-    ["nsanih","Legacy Barcode Suppressions",1],["pushswet","Legacy Barcode Suppressions",1],["jnikdand","Legacy Barcode Suppressions",1],
-    ["kumrrib","Legacy Barcode Suppressions",1],["mathivaq","Legacy Barcode Suppressions",1],["battucm","Legacy Barcode Suppressions",1],["gauravon","Legacy Barcode Suppressions",1],
-    ["amitapm","Non BLMA Barcode Suppression",1],["nsanih","Non BLMA Barcode Suppression",1],["aishchan","Non BLMA Barcode Suppression",1],
-    ["kusshar","Non BLMA Barcode Suppression",1],["deepshm","Non BLMA Barcode Suppression",1],["syezahid","Non BLMA Barcode Suppression",1],
-    ["gogaditi","GTA Listing Error 8572 (MBO matching)",1],["nayajeev","GTA Listing Error 8572 (MBO matching)",1],["konapaks","GTA Listing Error 8572 (MBO matching)",1],["gauravon","GTA Listing Error 8572 (MBO matching)",1],
-    ["nayajeev","KPEX Ops",1],
-    ["mthuran","BLMA & GTIN Exemption",1],["sayantia","BLMA & GTIN Exemption",1],["chkeerth","BLMA & GTIN Exemption",1],["sprathep","BLMA & GTIN Exemption",1],
-    ["kundshiv","BLMA & GTIN Exemption",1],["sjashwa","BLMA & GTIN Exemption",1],["niranjas","BLMA & GTIN Exemption",1],
-    ["konapaks","UPCx Appeals",1],
-    ["kishorsq","Item Identity Anchoring",1],["jeyamohy","Item Identity Anchoring",1]
-  ],
-  // verifier mapping: [verifier, process]
-  verifiers: [
-    ["jnikdand","Invalid and Hijack clean up",0],["hriteshs","Invalid and Hijack clean up",0],
-    ["jeyamohy","Item Identity Anchoring",0],["kishorsq","Item Identity Anchoring",0],
-    ["nsanih","Legacy Barcode Suppressions",0],["jnikdand","Legacy Barcode Suppressions",0],
-    ["amitapm","Non BLMA Barcode Suppression",0],["nsanih","Non BLMA Barcode Suppression",0],
-    ["chkeerth","BLMA & GTIN Exemption",0],["kbkmth","BLMA & GTIN Exemption",0],["amitapm","BLMA & GTIN Exemption",0],
-    ["nsanih","KPEX Ops",0],
-    ["hriteshs","GTA Listing Error 8572 (MBO matching)",0],["sayantia","GTA Listing Error 8572 (MBO matching)",0],["nayajeev","GTA Listing Error 8572 (MBO matching)",0],
-    ["hriteshs","UPCx Appeals",0],["konapaks","UPCx Appeals",0]
-  ],
-  // sample fraction per process (from your formula sheet). default 20%.
-  sampleRate: {
-    "Invalid and Hijack clean up":0.565,"BLMA & GTIN Exemption":0.214,"GTA Listing Error 8572 (MBO matching)":0.22,
-    "Legacy Barcode Suppressions":0.135,"Non BLMA Barcode Suppression":0.35,
-    "KPEX Ops":0.35,"UPCx Appeals":0.176,"Item Identity Anchoring":0.135
-  },
-  // verification AHT (minutes) — ONE value per process. Sub-task AHT breakdowns
-  // (e.g. MBO's Approval/RP/Count) aren't usable in practice since we don't know
-  // which sub-type a ticket is until it's actually verified, so multi-type entries
-  // were averaged into a single number. "BLMA & GTIN Exemption" uses the more
-  // confident of its two original readings (V-Probate); "CRB Verif" and "BAKS
-  // verif" didn't match any of the 8 named processes, kept as their own rows.
-  verifAht: {
-    "LE Validation": 0.77,
-    "BLMA & GTIN Exemption": 5.47,
-    "GTA Listing Error 8572 (MBO matching)": 2.75,
-    "Item Identity Anchoring": 5.47,
-    "Invalid and Hijack clean up": 31.98,
-    "Legacy Barcode Suppressions": 5.47,
-    "UPCx Appeals": 3.0,
-    "KPEX Ops": 5.47,
-    "Non BLMA Barcode Suppression": 10.0,
-    "CRB Verif": 0.77,
-    "BAKS verif": 10.49
-  },
-  assignLE: false    // if false, leftover time is simply left unassigned instead of becoming LE Validation. Default is No.
+  // Nothing is built in: the process list comes from the dump itself. When a new
+  // process/task shows up the dashboard asks for its AHT etc. (see "New process found").
+  aht: {},
+  mapping: [],      // [auditor, process, hc, priority] — added manually in Main
+  verifiers: [],    // [verifier, process, count, priority] — added manually in Main
+  sampleRate: {},   // process -> sample fraction
+  verifAht: {"LE Validation":0.77},   // minutes; only the system LE filler is pre-set
+  assignLE: false,
+  ignoredProcs: []  // dump names you chose to ignore
 };
 
 /* Normalizes any raw task/process text — old SharePoint names, dump AssignedGroup
    values, or the new updated names themselves — down to ONE canonical name (the
    Updated SharePoint Task Name). Everything downstream (mapping, AHT, verifiers,
    sampleRate, file naming) is keyed on these canonical names. */
-const GROUP_ALIAS = {
-  // -> Invalid and Hijack clean up
-  "3p clean-up":"Invalid and Hijack clean up","3P Clean-up":"Invalid and Hijack clean up","3p Clean up":"Invalid and Hijack clean up","Invalid And Hijack Clean Up":"Invalid and Hijack clean up","Invalid and Hijack Clean Up":"Invalid and Hijack clean up",
-  // -> BLMA & GTIN Exemption
-  "GTIN Maintenance":"BLMA & GTIN Exemption","BLMA and GTIN Exemption":"BLMA & GTIN Exemption","Blma & Gtin Exemption":"BLMA & GTIN Exemption",
-  // -> Item Identity Anchoring
-  "Anchor Appeals - GCO":"Item Identity Anchoring","Anchor Appeals":"Item Identity Anchoring","Anchor Appeal":"Item Identity Anchoring",
-  // -> Legacy Barcode Suppressions
-  "Barcode":"Legacy Barcode Suppressions","Barcode Suppression":"Legacy Barcode Suppressions","Barcode Unsuppression":"Legacy Barcode Suppressions",
-  // -> GTA Listing Error 8572 (MBO matching)
-  "MBO Matching":"GTA Listing Error 8572 (MBO matching)","MBO Matching team":"GTA Listing Error 8572 (MBO matching)","Mbo Matching":"GTA Listing Error 8572 (MBO matching)","GTA Listing Error 8572 (MBO Matching)":"GTA Listing Error 8572 (MBO matching)",
-  // -> UPCx Appeals
-  "UPCX Access":"UPCx Appeals","UPCX access":"UPCx Appeals","Upcx Access":"UPCx Appeals",
-  // -> Non BLMA Barcode Suppression
-  "Non-BLMA Suppressions":"Non BLMA Barcode Suppression","Non-BLMA Barcode suppressions":"Non BLMA Barcode Suppression","BTAP GTIN Update":"Non BLMA Barcode Suppression","Non-Blma Barcode Suppression":"Non BLMA Barcode Suppression"
-};
+const GROUP_ALIAS = {};   // no renaming: process names are taken exactly as they appear in the dump (only trimmed)
 const QUIP = "https://quip-amazon.com/a61zADvbDFTo/Capacity-Planner-2026";
 const WORK_MIN = 480;
 const LE_PROC = "LE Validation";     // default filler task for leftover minutes (1 min = 1 LE)
@@ -836,6 +876,9 @@ let leftoverCache = {};      // process -> [{id,age}] tickets from the pool that
 let ttOverrides = {};        // "assoc|process" -> number (Work Allocation edits)
 let ttAgeRange = {};         // "assoc|process" -> {min,max} (optional age-band restriction for that auditor/process; unset = oldest-first, no cap)
 let verifCommittedMin = {};  // verifier -> minutes already claimed by verification (set by Generate Verification; reduces audit availability)
+let currentDate='';   // the selected report date ('' = none yet) — every piece of day data below belongs to this date
+let dayAvail={};      // auditor -> minutes, set in Daily Planning for THIS date only (falls back to Main's default)
+let allocMeta=null, mail1Meta=null, verifMeta=null, mail1Html='';   // what each generated output was built from (drives the 'outdated' alerts)
 
 function load(){
   let cfg;
@@ -853,6 +896,7 @@ function load(){
   if(!cfg.verifAht) cfg.verifAht = JSON.parse(JSON.stringify(DEFAULTS.verifAht));
   // whether leftover time becomes LE Validation filler (default on)
   if(cfg.assignLE==null) cfg.assignLE = false;
+  if(!Array.isArray(cfg.ignoredProcs)) cfg.ignoredProcs = [];
   // RENAME any old/stale process-name strings already saved in this browser (from
   // earlier versions of this tool) to the current canonical names — without this,
   // a saved config from before a process was renamed silently stops matching
@@ -916,7 +960,8 @@ function resetCfg(){
     sampleRate: JSON.parse(JSON.stringify(CFG.sampleRate)),
     verifAht: JSON.parse(JSON.stringify(CFG.verifAht)),
     availMin: JSON.parse(JSON.stringify(CFG.availMin||{})),
-    assignLE: CFG.assignLE
+    assignLE: CFG.assignLE,
+    ignoredProcs: JSON.parse(JSON.stringify(CFG.ignoredProcs||[]))
   } : null;
   CFG = JSON.parse(JSON.stringify(DEFAULTS));
   CFG.availMin={};
@@ -925,151 +970,161 @@ function resetCfg(){
   save();
 }
 
-/* -------- SESSION persistence: uploaded dump, generated allocation, leaves,
-   manual TT overrides, and verification results — all survive a page refresh or
-   closed tab, exactly like the config does, until Reset is clicked. Only the
-   underlying data is restored automatically; open a tab (Work Allocation /
-   Verification) or click Generate again to refresh that tab's detailed view —
-   it'll be instant since nothing needs re-uploading. -------- */
-function saveSession(){
-  try{
-    localStorage.setItem(SESSION_KEY, JSON.stringify({
-      dumpRows, dumpFileLabel: (dumpRows&&$('fname').textContent)||null,
-      workedRows, workedFileLabel: (workedRows&&$('wfname')&&$('wfname').textContent)||null,
-      sampleRows,
-      allocCache, leftoverCache, ttOverrides, ttAgeRange, leaves, verifFiles, verifCommittedMin,
-      mail1Shown   // whether Daily Planning's "Generate All 4 Tables" output should stay visible after a refresh
-    }));
-  }catch(e){ console.error('session save failed', e); }
-  saveDayBackup();
+/* -------- DATE-SPECIFIC PERSISTENCE --------
+   Everything that belongs to ONE working day (SIM-T dump, worked dump, leaves,
+   per-day availability, manual TT counts, age ranges, generated allocation,
+   verification output and the Daily Planning tables) is stored under that day's
+   report date: "wad_day_v3:<YYYY-MM-DD>". Nothing is shared between dates, and
+   nothing can be viewed/uploaded/generated until a date is selected.
+   Global configuration (processes, mappings, verifiers, AHT…) stays in wad_config_v2.
+   To keep the browser quota safe, only the 3 dump columns the engine actually reads
+   are stored, and the oldest stored day is dropped automatically if space runs out. */
+const DAY_PREFIX="wad_day_v3:", DAY_INDEX_KEY="wad_day_index_v3", DAY_META_KEY="wad_day_meta_v3", LAST_DATE_KEY="wad_last_date_v3";
+const LEGACY_DAYBACKUP_KEY="wad_daybackup_v1";
+const MAX_DAYS=7, STORE_BUDGET=3500000;   // days kept / max characters across all stored days
+let saveTimer=null, pendingLegacy=null;
+
+function lsGetJSON(k,def){ try{ const s=localStorage.getItem(k); return s?JSON.parse(s):def; }catch(e){ return def; } }
+function dayIndexGet(){ const a=lsGetJSON(DAY_INDEX_KEY,[]); return Array.isArray(a)?a:[]; }
+function dayIndexSet(a){ try{ localStorage.setItem(DAY_INDEX_KEY, JSON.stringify(a)); }catch(e){} }
+function dayMetaGet(){ return lsGetJSON(DAY_META_KEY,{}); }
+function dayMetaSet(m){ try{ localStorage.setItem(DAY_META_KEY, JSON.stringify(m)); }catch(e){} }
+function dropDayRaw(d){ try{ localStorage.removeItem(DAY_PREFIX+d); }catch(e){} const m=dayMetaGet(); delete m[d]; dayMetaSet(m); }
+function dropDay(d){ dropDayRaw(d); dayIndexSet(dayIndexGet().filter(x=>x!==d)); }
+function readDay(d){ return lsGetJSON(DAY_PREFIX+d, null); }
+
+/* only ShortId / AssignedGroup / Age are ever read from the dump */
+/* the dump's ticket-status column: first header that is exactly/contains "status" (case-insensitive) */
+function statusKey(r){
+  if(!r) return null;
+  const ks=Object.keys(r); const low=k=>k.toLowerCase().replace(/[^a-z]/g,'');
+  return ks.find(k=>low(k)==='status') || ks.find(k=>low(k)==='ticketstatus'||low(k)==='issuestatus'||low(k)==='currentstatus') || ks.find(k=>low(k).indexOf('status')>=0) || null;
+}
+function slimDump(rows){ const sk=statusKey((rows||[])[0]); return (rows||[]).map(r=>({ShortId:r.ShortId, AssignedGroup:r.AssignedGroup, Age:r.Age, Status:(sk?r[sk]:r.Status)||''})); }
+let _stRef=null,_stMap={};
+function statusMap(){
+  if(!dumpRows) return {};
+  if(_stRef===dumpRows) return _stMap;
+  const sk=statusKey(dumpRows[0]), m={};
+  dumpRows.forEach(r=>{ if(r.ShortId!=null) m[r.ShortId]=String((sk?r[sk]:r.Status)||'').trim(); });
+  _stRef=dumpRows; _stMap=m; return m;
+}
+/* sample rows reference worked rows — store only the counts and re-attach rows on load */
+function slimSample(rows){ return (rows||[]).map(s=>({task:s.task, auditor:s.auditor, auditCount:s.auditCount, verfPct:s.verfPct, sample:s.sample})); }
+function rehydrateSample(slim, worked){
+  const by={};
+  (worked||[]).forEach(r=>{ const k=norm(r.task)+'||'+r.auditor; (by[k]=by[k]||[]).push(r); });
+  return (slim||[]).map(s=>Object.assign({}, s, {rows: by[s.task+'||'+s.auditor]||[]}));
+}
+function sortedObj(o){ const r={}; Object.keys(o||{}).sort().forEach(k=>{ r[k]=o[k]; }); return r; }
+let _dsRef=null,_dsVal='';
+function dumpSig(){
+  if(!dumpRows) return '';
+  if(_dsRef===dumpRows) return _dsVal;
+  let h=5381;
+  for(const r of dumpRows){
+    const s=(r.ShortId||'')+'|'+(r.AssignedGroup||'')+'|'+(r.Age||'');
+    for(let i=0;i<s.length;i++) h=((h<<5)+h+s.charCodeAt(i))|0;
+  }
+  _dsRef=dumpRows; _dsVal=dumpRows.length+':'+h; return _dsVal;
 }
 
-/* -------- optional 2-day restore point: keeps a snapshot of the session (dump,
-   allocation, leaves, verification) per Report date, capped at the 2 most
-   recently touched dates, so an earlier day's data can be brought back if
-   needed. Purely additive — doesn't change any existing save/load behavior. -------- */
-const DAY_BACKUP_KEY = "wad_daybackup_v1";
-function dayBackupStore(){
-  try{ const s=localStorage.getItem(DAY_BACKUP_KEY); return s?JSON.parse(s):{order:[],days:{}}; }catch(e){ return {order:[],days:{}}; }
+function snapshotDay(){
+  return {
+    v:3, savedAt:Date.now(), date:currentDate,
+    dumpRows: dumpRows?slimDump(dumpRows):null, dumpFileLabel:(dumpRows&&$('fname').textContent)||null,
+    workedRows, workedFileLabel:(workedRows&&$('wfname')&&$('wfname').textContent)||null,
+    sampleRows: sampleRows?slimSample(sampleRows):null,
+    allocCache, leftoverCache, ttOverrides, ttAgeRange, leaves, dayAvail, verifFiles, verifCommittedMin,
+    mail1Shown, mail1Html, allocMeta, mail1Meta, verifMeta
+  };
 }
-function saveDayBackup(){
-  try{
-    const dateVal = $('rdate') && $('rdate').value; if(!dateVal) return;
-    if(!(dumpRows&&dumpRows.length) && !(workedRows&&workedRows.length)) return;   // nothing worth keeping yet
-    const store=dayBackupStore();
-    store.days[dateVal]={
-      dumpRows, dumpFileLabel:(dumpRows&&$('fname')&&$('fname').textContent)||null,
-      workedRows, workedFileLabel:(workedRows&&$('wfname')&&$('wfname').textContent)||null,
-      sampleRows, allocCache, leftoverCache, ttOverrides, ttAgeRange, leaves, verifFiles, verifCommittedMin, mail1Shown
-    };
-    store.order=store.order.filter(d=>d!==dateVal);
-    store.order.push(dateVal);
-    while(store.order.length>2){ const old=store.order.shift(); delete store.days[old]; }
-    localStorage.setItem(DAY_BACKUP_KEY, JSON.stringify(store));
-  }catch(e){ console.error('day backup save failed', e); }
-  if(typeof renderDayBackupSelect==='function') renderDayBackupSelect();
+
+function setSaveStatus(s){
+  const el=document.getElementById('saveStatus'); if(!el) return;
+  if(s==='saving'){ el.textContent='💾 Saving…'; el.style.color='var(--text2)'; }
+  else if(s==='ok'){ const t=new Date(); el.textContent='💾 Saved '+pad(t.getHours())+':'+pad(t.getMinutes())+' · '+currentDate; el.style.color='var(--success)'; }
+  else if(s==='error'){ el.textContent='⚠ NOT SAVED — browser storage is full. Download your files now.'; el.style.color='var(--danger)'; }
+  else { el.textContent=''; }
 }
-function restoreDayBackup(dateVal){
-  const store=dayBackupStore();
-  const snap=store.days[dateVal]; if(!snap) return false;
-  dumpRows=snap.dumpRows||null; workedRows=snap.workedRows||null; sampleRows=snap.sampleRows||null;
-  allocCache=snap.allocCache||null; leftoverCache=snap.leftoverCache||{}; ttOverrides=snap.ttOverrides||{}; ttAgeRange=snap.ttAgeRange||{}; leaves=snap.leaves||{};
-  verifFiles=snap.verifFiles||null; verifCommittedMin=snap.verifCommittedMin||{}; mail1Shown=!!snap.mail1Shown;
-  $('rdate').value=dateVal;
-  $('fname').style.display=(dumpRows&&dumpRows.length)?'block':'none';
-  $('fname').textContent=snap.dumpFileLabel||(dumpRows&&dumpRows.length?('✓ Restored — '+dumpRows.length+' tickets'):'');
-  if($('wfname')){
-    $('wfname').style.display=(workedRows&&workedRows.length)?'block':'none';
-    $('wfname').textContent=snap.workedFileLabel||(workedRows&&workedRows.length?('✓ Restored — '+workedRows.length+' worked rows'):'');
-  }
-  if($('genVerif')) $('genVerif').disabled=!(workedRows&&workedRows.length);
-  // re-render (rather than clear) any tables this restored day had generated —
-  // all three are pure functions of the state above, so they redraw exactly as
-  // they were without needing to click Generate again.
-  if(mail1Shown && dumpRows && dumpRows.length && typeof renderMail1==='function') renderMail1(false); else { if($('mail1card')) $('mail1card').style.display='none'; if($('render1')) $('render1').innerHTML=''; }
-  if(allocCache && allocCache.length && typeof renderMail2Summary==='function') renderMail2Summary(allocCache); else { if($('mail2card')) $('mail2card').style.display='none'; if($('workSummary')) $('workSummary').innerHTML=''; }
-  if($('dlAudit')) $('dlAudit').style.display=(allocCache&&allocCache.length)?'inline-block':'none';
-  if(verifFiles && verifFiles.length && typeof renderVerifSummary==='function') renderVerifSummary(); else { if($('verifCard')) $('verifCard').style.display='none'; if($('verifSummary')) $('verifSummary').innerHTML=''; }
-  if($('dlVerifZip')) $('dlVerifZip').style.display=(verifFiles&&verifFiles.length)?'inline-block':'none';
-  if($('dlVerifIndiv')) $('dlVerifIndiv').style.display=(verifFiles&&verifFiles.length)?'inline-block':'none';
-  if(sampleRows && sampleRows.length){ if(typeof renderSampleTable==='function') renderSampleTable(); }
-  else if($('sampleCard')) $('sampleCard').style.display='none';
-  if(typeof renderLeaves==='function') renderLeaves();
-  if(typeof renderWork==='function') renderWork();
-  saveSession();
+
+/* saveSession() is called all over the app after any change — it just schedules one
+   debounced write for the CURRENT date. flushSave() writes immediately. */
+function saveSession(){
+  if(!currentDate) return;
+  if(saveTimer) clearTimeout(saveTimer);
+  saveTimer=setTimeout(flushSave,250);
+  setSaveStatus('saving');
+  if(typeof scheduleStatus==='function') scheduleStatus();
+}
+function flushSave(){
+  if(saveTimer){ clearTimeout(saveTimer); saveTimer=null; }
+  if(!currentDate) return true;
+  const hasData=(dumpRows&&dumpRows.length)||(workedRows&&workedRows.length)||Object.keys(leaves).length||Object.keys(ttOverrides).length||Object.keys(dayAvail).length||Object.keys(ttAgeRange).length;
+  if(!hasData){ dropDay(currentDate); if(typeof renderStoredDays==='function') renderStoredDays(); setSaveStatus('idle'); return true; }
+  let payload;
+  try{ payload=JSON.stringify(snapshotDay()); }catch(e){ console.error(e); setSaveStatus('error'); return false; }
+  const tryWrite=()=>{ try{ localStorage.setItem(DAY_PREFIX+currentDate, payload); return true; }catch(e){ return false; } };
+  const pruned=[];
+  let ok=tryWrite();
+  let idx=dayIndexGet().filter(d=>d!==currentDate);
+  while(!ok && idx.length){ const old=idx.shift(); dropDayRaw(old); pruned.push(old); ok=tryWrite(); }   // quota hit → free the oldest OTHER day
+  if(!ok){ setSaveStatus('error'); return false; }
+  idx.push(currentDate);
+  while(idx.length>MAX_DAYS){ const old=idx.shift(); dropDayRaw(old); pruned.push(old); }
+  const total=()=>idx.reduce((s,d)=>s+((localStorage.getItem(DAY_PREFIX+d)||'').length),0);
+  while(idx.length>1 && total()>STORE_BUDGET){ const old=idx.shift(); dropDayRaw(old); pruned.push(old); }
+  dayIndexSet(idx);
+  const m=dayMetaGet();
+  m[currentDate]={tickets:(dumpRows||[]).length, worked:(workedRows||[]).length, alloc:!!(allocCache&&allocCache.length), verif:!!(verifFiles&&verifFiles.length), at:Date.now()};
+  dayMetaSet(m);
+  setSaveStatus('ok');
+  if(pruned.length) toast('Storage was getting full — oldest stored day(s) removed: '+pruned.join(', '));
+  if(typeof renderStoredDays==='function') renderStoredDays();
   return true;
 }
-function renderDayBackupSelect(){
-  const store=dayBackupStore();
-  const sel=$('dayBackupSelect'), row=$('dayBackupRow');
-  if(!sel||!row) return;
-  if(!store.order.length){ row.style.display='none'; return; }
-  row.style.display='flex';
-  const cur=sel.value;
-  sel.innerHTML=store.order.slice().reverse().map(d=>`<option value="${d}">${d}</option>`).join('');
-  if(store.order.includes(cur)) sel.value=cur;
-}
-function loadSession(){
+window.addEventListener('pagehide', ()=>{ try{ flushSave(); }catch(e){} });
+window.addEventListener('beforeunload', ()=>{ try{ flushSave(); }catch(e){} });
+document.addEventListener('visibilitychange', ()=>{ if(document.visibilityState==='hidden'){ try{ flushSave(); }catch(e){} } });
+
+/* one-time import of the previous version's 2-day backups (and, if it's not already
+   covered by one of them, the old single session — offered when you first pick a date) */
+function migrateLegacy(){
   try{
-    const s=localStorage.getItem(SESSION_KEY);
-    if(!s) return;
-    const sess=JSON.parse(s);
-    if(sess.dumpRows) dumpRows=sess.dumpRows;
-    if(sess.workedRows) workedRows=sess.workedRows;
-    if(sess.sampleRows) sampleRows=sess.sampleRows;
-    if(sess.allocCache) allocCache=sess.allocCache;
-    if(sess.leftoverCache) leftoverCache=sess.leftoverCache;
-    if(sess.ttOverrides) ttOverrides=sess.ttOverrides;
-    if(sess.ttAgeRange) ttAgeRange=sess.ttAgeRange;
-    if(sess.leaves) leaves=sess.leaves;
-    if(sess.verifFiles) verifFiles=sess.verifFiles;
-    if(sess.verifCommittedMin) verifCommittedMin=sess.verifCommittedMin;
-    if(sess.mail1Shown) mail1Shown=true;
-    if(dumpRows && dumpRows.length){
-      $('fname').style.display='block';
-      $('fname').textContent=sess.dumpFileLabel || ('✓ Restored from last session — '+dumpRows.length+' tickets');
+    const raw=localStorage.getItem(LEGACY_DAYBACKUP_KEY);
+    const migratedSizes=[];
+    if(raw){
+      const st=JSON.parse(raw); let ok=true;
+      (st.order||[]).forEach(d=>{
+        const s=st.days&&st.days[d]; if(!s) return;
+        if(localStorage.getItem(DAY_PREFIX+d)){ migratedSizes.push((s.dumpRows||[]).length); return; }
+        const snap=Object.assign({v:3,savedAt:Date.now(),date:d}, s, {
+          dumpRows:s.dumpRows?slimDump(s.dumpRows):null, sampleRows:s.sampleRows?slimSample(s.sampleRows):null, dayAvail:{}
+        });
+        try{
+          localStorage.setItem(DAY_PREFIX+d, JSON.stringify(snap));
+          const idx=dayIndexGet().filter(x=>x!==d); idx.push(d); dayIndexSet(idx);
+          const m=dayMetaGet(); m[d]={tickets:(snap.dumpRows||[]).length, worked:(snap.workedRows||[]).length, alloc:!!(snap.allocCache&&snap.allocCache.length), verif:!!(snap.verifFiles&&snap.verifFiles.length), at:Date.now()}; dayMetaSet(m);
+          migratedSizes.push((snap.dumpRows||[]).length);
+        }catch(e){ ok=false; }
+      });
+      if(ok) localStorage.removeItem(LEGACY_DAYBACKUP_KEY);
     }
-    if(workedRows && workedRows.length){
-      $('wfname').style.display='block';
-      $('wfname').textContent=sess.workedFileLabel || ('✓ Restored from last session — '+workedRows.length+' worked rows');
-      $('genVerif').disabled=false;
+    const sRaw=localStorage.getItem(SESSION_KEY);
+    if(sRaw){
+      const s=JSON.parse(sRaw);
+      const n=(s.dumpRows||[]).length;
+      if(!n || migratedSizes.indexOf(n)>=0) localStorage.removeItem(SESSION_KEY);   // empty, or already inside a dated backup
+      else pendingLegacy=s;
     }
-    if(sampleRows && sampleRows.length){ renderSampleTable(); }
-    // Re-draw any previously-generated output tables so they survive a refresh —
-    // every one of these is a pure function of state that's already restored
-    // above, so nothing needs re-uploading or re-clicking Generate.
-    if(mail1Shown && dumpRows && dumpRows.length && typeof renderMail1==='function'){ renderMail1(false); }
-    if(allocCache && allocCache.length){
-      $('dlAudit').style.display='inline-block';
-      if(typeof renderMail2Summary==='function') renderMail2Summary(allocCache, null, false);
-    }
-    if(verifFiles && verifFiles.length){
-      $('dlVerifZip').style.display='inline-block';
-      $('dlVerifIndiv').style.display='inline-block';
-      if(typeof renderVerifSummary==='function') renderVerifSummary(false);
-    }
-  }catch(e){ console.error('session restore failed', e); }
+  }catch(e){ console.error('legacy migration', e); }
 }
+/* Reset config → wipes the CURRENT date's data (other dates untouched) */
 function clearSession(){
-  localStorage.removeItem(SESSION_KEY);
-  dumpRows=null; workedRows=null; allocCache=null; leftoverCache={}; ttOverrides={}; ttAgeRange={}; leaves={}; verifFiles=null; verifCommittedMin={}; sampleRows=null; mail1Shown=false;
-  $('fname').style.display='none'; $('fname').textContent='';
-  if($('wfname')){ $('wfname').style.display='none'; $('wfname').textContent=''; }
-  if($('sampleCard')) $('sampleCard').style.display='none';
-  if($('genVerif')) $('genVerif').disabled=true;
-  if($('dlAudit')) $('dlAudit').style.display='none';
-  if($('dlVerifZip')) $('dlVerifZip').style.display='none';
-  if($('dlVerifIndiv')) $('dlVerifIndiv').style.display='none';
-  if($('mail2card')) $('mail2card').style.display='none';
-  if($('verifCard')) $('verifCard').style.display='none';
-  // Daily Planning's generated tables and Work Allocation's summary are plain
-  // innerHTML snapshots — not re-derived from dumpRows/leaves automatically —
-  // so a full reset has to clear them explicitly or they'd linger with stale data.
-  if($('mail1card')) $('mail1card').style.display='none';
-  if($('render1')) $('render1').innerHTML='';
-  if($('workSummary')) $('workSummary').innerHTML='';
-  if($('verifSummary')) $('verifSummary').innerHTML='';
-  if($('sampleTable')) $('sampleTable').innerHTML='';
+  if(currentDate) dropDay(currentDate);
+  resetDayState();
+  if(typeof renderStoredDays==='function') renderStoredDays();
+  setSaveStatus('idle');
 }
 
 /* -------- derived helpers -------- */
@@ -1173,7 +1228,7 @@ function capsFor(p){
 function auditorAvailMinRaw(a){
   const lv=leaves[a];
   if(lv==='full' || lv==='skip') return 0;
-  const base=(CFG.availMin && CFG.availMin[a]!=null) ? (+CFG.availMin[a]||0) : WORK_MIN;
+  const base=(dayAvail && dayAvail[a]!=null) ? (+dayAvail[a]||0) : (CFG.availMin && CFG.availMin[a]!=null) ? (+CFG.availMin[a]||0) : WORK_MIN;
   return lv==='half' ? Math.floor(base/2) : base;
 }
 function auditorAvailMin(a){
@@ -1814,11 +1869,7 @@ const VERIF_FILEMAP = {
   "KPEX Ops":"KPEX_Appeals"
 };
 // per-process sample % (from Verf Details). Editable via CFG.sampleRate in Main.
-const VERIF_SAMPLE_DEFAULT = {
-  "Invalid and Hijack clean up":0.565,"BLMA & GTIN Exemption":0.214,"Legacy Barcode Suppressions":0.135,
-  "GTA Listing Error 8572 (MBO matching)":0.22,"UPCx Appeals":0.176,"KPEX Ops":0.35,"Item Identity Anchoring":0.135,
-  "Non BLMA Barcode Suppression":0.35
-};
+const VERIF_SAMPLE_DEFAULT = {};   // no built-in sample rates; unset processes fall back to 20%
 function verifSampleRate(task){
   if(CFG.sampleRate && CFG.sampleRate[task]!=null) return CFG.sampleRate[task];
   return VERIF_SAMPLE_DEFAULT[task]!=null?VERIF_SAMPLE_DEFAULT[task]:0.2;
@@ -2121,7 +2172,8 @@ function aoaToCsvString(header, rows){
    ============================================================ */
 const $=id=>document.getElementById(id);
 const esc=s=>String(s==null?'':s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
-function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1600);}
+let _toastT=null;
+function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(_toastT);_toastT=setTimeout(()=>t.classList.remove('show'),Math.max(1600,Math.min(6000,String(msg).length*55)));}
 
 /* ---- Main block lock UI ---- */
 function applyMainLockUI(){
@@ -2151,17 +2203,243 @@ $('p-main').addEventListener('input',e=>{
 }, true);
 applyMainLockUI();
 
-/* ---- 2-day restore point UI ---- */
-$('restoreDayBtn').addEventListener('click',()=>{
+/* ======== DATE-FIRST WORKFLOW ======== */
+function todayISO(){ const t=new Date(); return t.getFullYear()+'-'+pad(t.getMonth()+1)+'-'+pad(t.getDate()); }
+function requireDate(){
+  if(currentDate) return true;
+  toast('📅 Select a report date first');
+  const r=$('rdate'); r.focus(); r.classList.remove('shake'); void r.offsetWidth; r.classList.add('shake');
+  try{ if(r.showPicker) r.showPicker(); }catch(e){}
+  return false;
+}
+/* wipes the in-memory state for a day + every generated output on screen (never touches storage) */
+function resetDayState(){
+  dumpRows=null; workedRows=null; sampleRows=null; allocCache=null; leftoverCache={}; ttOverrides={}; ttAgeRange={}; leaves={}; dayAvail={};
+  verifFiles=null; verifCommittedMin={}; mail1Shown=false; mail1Html=''; allocMeta=null; mail1Meta=null; verifMeta=null; workCache=null;
+  ['fname','wfname','sampleCard','dlAudit','dlExtra','dlVerifZip','dlVerifIndiv','mail1card','mail2card','verifCard','extraTicketsNote','allocStatus','planStatus','verifStatus']
+    .forEach(id=>{ const e=$(id); if(e) e.style.display='none'; });
+  ['fname','wfname'].forEach(id=>{ if($(id)) $(id).textContent=''; });
+  ['render1','workSummary','verifSummary','sampleTable','allocCheck','lookupResults'].forEach(id=>{ if($(id)) $(id).innerHTML=''; });
+  if($('genVerif')) $('genVerif').disabled=true;
+  lookupUnassignedIds=[];
+  if(typeof hideCapacityPopup==='function') hideCapacityPopup();
+}
+function applyDay(snap){
+  resetDayState();
+  if(snap){
+    dumpRows=snap.dumpRows||null; workedRows=snap.workedRows||null;
+    sampleRows=snap.sampleRows?rehydrateSample(snap.sampleRows, workedRows):null;
+    allocCache=snap.allocCache||null; leftoverCache=snap.leftoverCache||{}; ttOverrides=snap.ttOverrides||{}; ttAgeRange=snap.ttAgeRange||{};
+    leaves=snap.leaves||{}; dayAvail=snap.dayAvail||{}; verifFiles=snap.verifFiles||null; verifCommittedMin=snap.verifCommittedMin||{};
+    mail1Shown=!!snap.mail1Shown; mail1Html=snap.mail1Html||''; allocMeta=snap.allocMeta||null; mail1Meta=snap.mail1Meta||null; verifMeta=snap.verifMeta||null;
+    if(dumpRows&&dumpRows.length){ $('fname').style.display='block'; $('fname').textContent=snap.dumpFileLabel||('✓ Restored — '+dumpRows.length+' tickets'); }
+    if(workedRows&&workedRows.length){ $('wfname').style.display='block'; $('wfname').textContent=snap.workedFileLabel||('✓ Restored — '+workedRows.length+' worked rows'); $('genVerif').disabled=false; }
+    if(mail1Shown && dumpRows && dumpRows.length){
+      if(mail1Html){ $('render1').innerHTML=mail1Html; $('mail1card').style.display='block'; }
+      else renderMail1(false);
+    }
+    if(allocCache && allocCache.length){ renderMail2Summary(allocCache, null, false); renderAllocCheck(); }
+    if(verifFiles && verifFiles.length) renderVerifSummary(false);
+    if(sampleRows && sampleRows.length) renderSampleTable();
+  }
+  renderProcTable(); renderVerMain(); renderLeaves($('lsearch').value); renderWork();
+  updateDateUI(); scheduleStatus();
+}
+function setCurrentDate(d){
+  flushSave();                                   // always save the OLD date first
+  currentDate=d||'';
+  try{ if(currentDate) sessionStorage.setItem(LAST_DATE_KEY,currentDate); else sessionStorage.removeItem(LAST_DATE_KEY); }catch(e){}
+  $('rdate').value=currentDate;
+  document.body.classList.toggle('no-date', !currentDate);
+  let snap=currentDate?readDay(currentDate):null, importedLegacy=false;
+  if(currentDate && !snap && pendingLegacy && pendingLegacy.dumpRows && pendingLegacy.dumpRows.length){
+    if(confirm('Found data saved by the previous version of this dashboard ('+pendingLegacy.dumpRows.length+' tickets, not tied to any date).\n\nLoad it into '+currentDate+'?\n\n(Cancel = start '+currentDate+' empty; you will be asked again next time you open an empty date.)')){
+      snap=Object.assign({}, pendingLegacy, {dumpRows:slimDump(pendingLegacy.dumpRows), sampleRows:pendingLegacy.sampleRows?slimSample(pendingLegacy.sampleRows):null, dayAvail:{}});
+      importedLegacy=true;
+    }
+  }
+  applyDay(snap);
+  if(importedLegacy){ pendingLegacy=null; try{ localStorage.removeItem(SESSION_KEY); }catch(e){} saveSession(); }
+  if(currentDate && snap) toast('Loaded saved data for '+currentDate);
+  else if(currentDate) toast('📅 '+currentDate+' — empty day, upload the dump to start');
+}
+function renderStoredDays(){
+  const sel=$('dayBackupSelect'), row=$('dayBackupRow'); if(!sel||!row) return;
+  const idx=dayIndexGet(), meta=dayMetaGet();
+  if(!idx.length){ row.style.display='none'; return; }
+  row.style.display='flex';
+  sel.innerHTML=idx.slice().sort().reverse().map(d=>{
+    const m=meta[d]||{};
+    const bits=[(m.tickets||0)+' tickets']; if(m.alloc) bits.push('allocated'); if(m.verif) bits.push('verified');
+    return `<option value="${d}">${d}${d===currentDate?' (open)':''} — ${bits.join(' · ')}</option>`;
+  }).join('');
+  sel.value = idx.indexOf(currentDate)>=0 ? currentDate : sel.options[0].value;
+}
+function updateDateUI(){
+  const chip=$('dateChip'), note=$('dateNote'); if(!chip||!note) return;
+  if(!currentDate){
+    chip.innerHTML='';
+    note.className='datenote warn';
+    note.innerHTML='📅 <b>Select a report date to begin.</b> Until then nothing can be viewed, uploaded or generated. Every dump, count, allocation and verification you make is saved against the date you pick — so a file can never land on the wrong day.';
+    return;
+  }
+  const d=new Date(currentDate+'T00:00:00'), t=new Date(); t.setHours(0,0,0,0);
+  const diff=Math.round((d-t)/86400000);
+  chip.innerHTML = diff===0 ? '<span class="chip ok">● Today</span>'
+    : diff<0 ? `<span class="chip warn">⚠ ${-diff} day${-diff>1?'s':''} ago — not today</span>`
+    : `<span class="chip warn">⚠ ${diff} day${diff>1?'s':''} ahead</span>`;
+  const bits=[
+    dumpRows&&dumpRows.length ? `📥 dump <b>${dumpRows.length}</b> tickets` : '📥 no dump yet',
+    allocCache&&allocCache.length ? '🎯 allocation generated' : '🎯 allocation not generated',
+    verifFiles&&verifFiles.length ? '✅ verification generated' : '✅ verification not generated'
+  ];
+  note.className='datenote ok';
+  note.innerHTML=`Working on <b>${d.toLocaleDateString(undefined,{weekday:'short',day:'2-digit',month:'short',year:'numeric'})}</b> &nbsp;·&nbsp; ${bits.join(' &nbsp;·&nbsp; ')}`;
+}
+$('rdate').addEventListener('change',e=>setCurrentDate(e.target.value));
+$('todayBtn').addEventListener('click',()=>setCurrentDate(todayISO()));
+$('restoreDayBtn').addEventListener('click',()=>{ const d=$('dayBackupSelect').value; if(d) setCurrentDate(d); });
+$('delDayBtn').addEventListener('click',()=>{
   const d=$('dayBackupSelect').value; if(!d) return;
-  if(!confirm('Restore stored data for '+d+'? This replaces the dump, allocation, leaves, and verification results currently loaded on screen (your saved Main config is unaffected). Continue?')) return;
-  if(restoreDayBackup(d)) toast('Restored data for '+d);
+  if(!confirm('Delete ALL stored data for '+d+' (dump, counts, allocation, verification)? Other dates are not touched.')) return;
+  if(d===currentDate){ resetDayState(); dropDay(d); applyDay(null); } else dropDay(d);
+  renderStoredDays(); toast('Deleted stored data for '+d);
 });
-renderDayBackupSelect();
+document.addEventListener('click',e=>{ if(e.target.closest('[data-focusdate]')){ const r=$('rdate'); r.focus(); try{ if(r.showPicker) r.showPicker(); }catch(_){} } });
 
-/* ---- date default (allocation is always this single day) ---- */
-$('rdate').value=new Date().toISOString().slice(0,10);
+/* ======== STATUS / "RESULTS ARE OUT OF DATE" ACKNOWLEDGEMENT ========
+   After you click a Generate button we remember exactly which inputs produced it.
+   Any later change that would give a DIFFERENT result flags the output as outdated,
+   names what changed, and offers a one-click regenerate. Read-only — never alters
+   the engine or any count. */
+function diffMaps(newer, older, blank){
+  const out=[]; const ks=new Set([...Object.keys(newer||{}),...Object.keys(older||{})]);
+  ks.forEach(k=>{ const n=newer&&newer[k]!=null?newer[k]:blank, o=older&&older[k]!=null?older[k]:blank; if(JSON.stringify(n)!==JSON.stringify(o)) out.push({k,old:o,now:n}); });
+  return out;
+}
+const LV_WORD={full:'Full leave',half:'Half leave',skip:'Skip (adhoc)','':'present'};
+function listLines(lines, max){ max=max||6; const shown=lines.slice(0,max); if(lines.length>max) shown.push('…and '+(lines.length-max)+' more'); return shown; }
+function nonzero(o){ const r={}; Object.keys(o||{}).forEach(k=>{ if((+o[k]||0)!==0) r[k]=+o[k]; }); return r; }
+function allocInputsNow(){
+  const {pool}=buildPool(); const defs=defaultTTs(pool);
+  const tts={}; Object.keys(defs).forEach(key=>{ tts[key]=(ttOverrides[key]!=null?ttOverrides[key]:defs[key]||0); });   // same rule as Generate Allocation
+  return {pool,defs,tts};
+}
+function allocStaleReasons(){
+  if(!allocCache||!allocCache.length||!allocMeta) return null;
+  const R=[]; const now=allocInputsNow();
+  if(dumpSig()!==allocMeta.dump) R.push('📥 The SIM-T dump was replaced');
+  const cd=diffMaps(nonzero(now.tts), allocMeta.tts||{}, 0).map(x=>{ const [a,p]=x.k.split('|'); return `🎯 ${a} · ${p}: ${x.old} → ${x.now}`; });
+  R.push(...listLines(cd,7));
+  const ad=diffMaps(ttAgeRange, allocMeta.age||{}, null).map(x=>{ const [a,p]=x.k.split('|'); const f=r=>r?((r.min!=null?r.min:'0')+'–'+(r.max!=null?r.max:'∞')):'none'; return `🕓 ${a} · ${p}: age range ${f(x.old)} → ${f(x.now)}`; });
+  R.push(...listLines(ad,4));
+  const ld=diffMaps(leaves, allocMeta.leaves||{}, '').map(x=>`🌴 ${x.k}: ${LV_WORD[x.old]||x.old} → ${LV_WORD[x.now]||x.now}`);
+  R.push(...listLines(ld,4));
+  return R;
+}
+function mail1SigObj(){
+  return { dump:dumpSig(), leaves:sortedObj(leaves), mapping:JSON.stringify(CFG.mapping.map(m=>[m[0],m[1],m[2]])),
+    aht:JSON.stringify(sortedObj(CFG.aht)), ver:JSON.stringify(CFG.verifiers.map(v=>[v[0],v[1]])),
+    vc:JSON.stringify(sortedObj(verifCommittedMin)), vs:JSON.stringify(sortedObj(CFG.sampleRate)), va:JSON.stringify(sortedObj(CFG.verifAht)) };
+}
+function mail1StaleReasons(){
+  if(!mail1Shown||!mail1Meta) return null;
+  const cur=mail1SigObj(), old=mail1Meta, R=[];
+  if(cur.dump!==old.dump) R.push('📥 The SIM-T dump was replaced');
+  R.push(...listLines(diffMaps(cur.leaves, old.leaves||{}, '').map(x=>`🌴 ${x.k}: ${LV_WORD[x.old]||x.old} → ${LV_WORD[x.now]||x.now}`),6));
+  if(cur.mapping!==old.mapping) R.push('🧩 Auditor mapping / HC changed in Main');
+  if(cur.aht!==old.aht) R.push('⏱ Process AHT changed in Main');
+  if(cur.ver!==old.ver) R.push('✅ Verifier mapping changed in Main');
+  if(cur.vc!==old.vc) R.push('🧪 Verification time reservation changed');
+  if(cur.vs!==old.vs || cur.va!==old.va) R.push('📊 Verification sample % / AHT changed');
+  return R;
+}
+function verifSigObj(){
+  const s={}; (sampleRows||[]).forEach(r=>{ s[r.task+'||'+r.auditor]=r.sample; });
+  const av={}; verifierNames().forEach(v=>{ av[v]=auditorAvailMinRaw(v); });
+  return { sample:sortedObj(s), ver:JSON.stringify(CFG.verifiers.map(v=>[v[0],v[1],v[3]])), va:JSON.stringify(sortedObj(CFG.verifAht)), av:sortedObj(av) };
+}
+function verifStaleReasons(){
+  if(!verifFiles||!verifFiles.length||!verifMeta) return null;
+  const cur=verifSigObj(), old=verifMeta, R=[];
+  R.push(...listLines(diffMaps(cur.sample, old.sample||{}, 0).map(x=>{ const [t,a]=x.k.split('||'); return `🧪 Sample ${a} · ${t}: ${x.old} → ${x.now}`; }),5));
+  if(cur.ver!==old.ver) R.push('✅ Verifier mapping / priority changed in Main');
+  if(cur.va!==old.va) R.push('⏱ Verification AHT changed in Main');
+  R.push(...listLines(diffMaps(cur.av, old.av||{}, 0).map(x=>`🌴 ${x.k}: available minutes ${x.old} → ${x.now}`),4));
+  return R;
+}
+function paintStatus(id, reasons, okText, title, btnLabel, regen){
+  const box=$(id); if(!box) return;
+  if(reasons===null){ box.style.display='none'; box.innerHTML=''; return; }
+  box.style.display='block';
+  if(!reasons.length){ box.className='statusbar ok'; box.innerHTML='<div class="sb-row">✅ '+okText+'</div>'; return; }
+  box.className='statusbar warn';
+  box.innerHTML='<div class="sb-row"><div><b>⚠ '+title+'</b> — '+reasons.length+' change'+(reasons.length>1?'s':'')+' since you last clicked Generate:<ul>'+reasons.map(r=>'<li>'+esc(r)+'</li>').join('')+'</ul></div><button class="btn sm g" type="button" data-regen="'+regen+'">'+btnLabel+'</button></div>';
+}
+function updateStatus(){
+  updateDateUI();
+  try{ renderSetupCards(); }catch(e){ console.error('setup cards',e); }
+  let a=null,m=null,v=null;
+  try{ a=allocStaleReasons(); }catch(e){ console.error('alloc status',e); }
+  try{ m=mail1StaleReasons(); }catch(e){ console.error('plan status',e); }
+  try{ v=verifStaleReasons(); }catch(e){ console.error('verif status',e); }
+  paintStatus('allocStatus',a,'Allocation is up to date — it matches every count, leave and availability above.','The allocation below is OUTDATED','↻ Regenerate allocation','alloc');
+  paintStatus('planStatus',m,'Daily Planning tables are up to date.','The Daily Planning tables are OUTDATED','↻ Regenerate tables','plan');
+  paintStatus('verifStatus',v,'Verification files are up to date with the sample counts and verifier setup.','The verification files are OUTDATED','↻ Regenerate verification','verif');
+  const st=x=>Array.isArray(x)&&x.length>0;
+  const dot=(id,on)=>{ const e=$(id); if(e) e.classList.toggle('on',on); };
+  dot('dot-work',st(a)); dot('dot-planning',st(m)); dot('dot-verif',st(v));
+  if($('genMail2')) $('genMail2').classList.toggle('pulse',st(a));
+  if($('genMail1')) $('genMail1').classList.toggle('pulse',st(m));
+  if($('genVerif')) $('genVerif').classList.toggle('pulse',st(v));
+}
+let _stTimer=null;
+function scheduleStatus(){ clearTimeout(_stTimer); _stTimer=setTimeout(()=>{ try{ updateStatus(); }catch(e){ console.error(e); } },150); }
+['input','change','click'].forEach(ev=>document.addEventListener(ev,scheduleStatus,true));
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-regen]'); if(!b) return;
+  const w=b.dataset.regen;
+  if(w==='alloc') $('genMail2').click(); else if(w==='plan') $('genMail1').click(); else if(w==='verif') $('genVerif').click();
+});
 
+/* ======== Post-generate "Allocation check" — what was asked vs what was delivered ======== */
+function buildAllocMeta(tts, defs){
+  const manual=Object.keys(tts).filter(k=>ttOverrides[k]!=null && (+ttOverrides[k]||0)!==(defs[k]||0)).map(k=>({k, def:defs[k]||0, val:+ttOverrides[k]||0}));
+  const need={}; Object.keys(tts).forEach(k=>{ const [a,p]=k.split('|'); const aht=(p===LE_PROC)?(CFG.aht[LE_PROC]||1):(CFG.aht[p]||0); need[a]=(need[a]||0)+(+tts[k]||0)*aht; });
+  const over=Object.keys(need).map(a=>({who:a, need:Math.round(need[a]*10)/10, avail:auditorAvailMin(a)})).filter(x=>x.need>x.avail+1e-6);
+  const {pool}=buildPool(); const req={};
+  Object.keys(tts).forEach(k=>{ const [a,p]=k.split('|'); if(p!==LE_PROC) req[p]=(req[p]||0)+(+tts[k]||0); });
+  const oversub=Object.keys(req).map(p=>({p, pool:(pool[p+'|Backlog']||[]).length+(pool[p+'|<5']||[]).length, req:req[p]})).filter(x=>x.req>x.pool);
+  return { dump:dumpSig(), tts:nonzero(tts), age:JSON.parse(JSON.stringify(ttAgeRange)), leaves:Object.assign({},leaves), manual, over, oversub, at:Date.now() };
+}
+function renderAllocCheck(){
+  const box=$('allocCheck'); if(!box) return;
+  if(!allocCache||!allocCache.length||!allocMeta||!allocMeta.tts){ box.innerHTML=''; return; }
+  const got={}; allocCache.forEach(r=>{ if(r.id && r.proc!==LE_PROC){ const k=r.who+'|'+r.proc; got[k]=(got[k]||0)+1; } });
+  const short=[];
+  Object.keys(allocMeta.tts).forEach(k=>{
+    const [a,p]=k.split('|'); if(p===LE_PROC) return;
+    const req=+allocMeta.tts[k]||0, g=got[k]||0; if(req<=g) return;
+    const r=(allocMeta.age||{})[k]; const banded=r&&(r.min!=null||r.max!=null);
+    short.push({a,p,req,g,why: banded?('no more tickets aged '+(r.min!=null?r.min:'0')+'–'+(r.max!=null?r.max:'∞')+' days'):'the process ran out of tickets'});
+  });
+  const manual=allocMeta.manual||[], over=allocMeta.over||[], oversub=allocMeta.oversub||[];
+  const left=Object.keys(leftoverCache||{}).map(p=>({p,n:(leftoverCache[p]||[]).length})).filter(x=>x.n>0);
+  const issues=short.length+over.length+oversub.length;
+  let h=`<div class="chk ${issues?'warn':'ok'}"><div class="chk-h">${issues?('⚠ Allocation check — '+issues+' thing'+(issues>1?'s':'')+' worth a look'):'✓ Allocation check — every requested count was delivered'}</div>`;
+  const li=a=>'<ul>'+a.map(x=>'<li>'+x+'</li>').join('')+'</ul>';
+  if(short.length) h+='<div class="chk-s"><b>Delivered fewer than requested</b>'+li(short.map(x=>`${esc(x.a)} · ${esc(x.p)}: asked ${x.req}, got ${x.g} — ${esc(x.why)}`))+'</div>';
+  if(oversub.length) h+='<div class="chk-s"><b>More requested than the process has</b>'+li(oversub.map(x=>`${esc(x.p)}: ${x.req} requested vs ${x.pool} tickets in the dump`))+'</div>';
+  if(over.length) h+='<div class="chk-s"><b>Counts exceed available minutes</b>'+li(over.map(x=>`${esc(x.who)}: needs ${x.need} min, has ${x.avail} min`))+'</div>';
+  if(manual.length) h+=`<details class="chk-s"><summary><b>${manual.length} manual count${manual.length>1?'s':''} applied</b> (differ from the auto default)</summary>`+li(listLines(manual.map(x=>{ const [a,p]=x.k.split('|'); return `${esc(a)} · ${esc(p)}: default ${x.def} → ${x.val}`; }),12))+'</details>';
+  if(left.length) h+='<div class="chk-s"><b>Left over (unassigned)</b>'+li(left.map(x=>`${esc(x.p)}: ${x.n} ticket${x.n>1?'s':''}`))+'</div>';
+  box.innerHTML=h+'</div>';
+}
+
+/* ======== Small global editing niceties (all tabs) ======== */
+document.addEventListener('focusin',e=>{ const t=e.target; if(t && t.matches && t.matches('input.num')){ try{ t.select(); }catch(_){} } });
+document.addEventListener('wheel',()=>{ const a=document.activeElement; if(a && a.type==='number') a.blur(); },{passive:true});   // scrolling must never nudge a number
+document.addEventListener('change',e=>{ const t=e.target; if(t && t.matches && t.matches('input.num')){ t.classList.add('flash'); setTimeout(()=>t.classList.remove('flash'),700); } });
 
 /* ---- nav ---- */
 document.querySelector('.nav').addEventListener('click',e=>{
@@ -2176,18 +2454,28 @@ document.querySelector('.nav').addEventListener('click',e=>{
   if(p==='main'){ renderVerMain(); renderAvailTable(); }
 });
 
-/* ---- upload ---- */
+/* ---- upload (requires a report date) ---- */
 const drop=$('drop'),file=$('file');
-drop.addEventListener('click',()=>file.click());
+drop.addEventListener('click',()=>{ if(!requireDate()) return; file.click(); });
 drop.addEventListener('dragover',e=>{e.preventDefault();drop.classList.add('hot');});
 drop.addEventListener('dragleave',()=>drop.classList.remove('hot'));
 drop.addEventListener('drop',e=>{e.preventDefault();drop.classList.remove('hot');if(e.dataTransfer.files[0])loadDump(e.dataTransfer.files[0]);});
-file.addEventListener('change',e=>{if(e.target.files[0])loadDump(e.target.files[0]);});
+file.addEventListener('change',e=>{ if(e.target.files[0]) loadDump(e.target.files[0]); e.target.value=''; });
 function loadDump(f){
+  if(!requireDate()) return;
+  if(currentDate!==todayISO() && !confirm('You are loading this dump into '+currentDate+', which is NOT today ('+todayISO()+').\n\nContinue?')) return;
+  if(dumpRows && dumpRows.length && !confirm('A dump is already loaded for '+currentDate+' ('+dumpRows.length+' tickets).\n\nReplace it? The manual counts and generated allocation for this date will be reset (leaves & availability are kept).')) return;
+  const forDate=currentDate;
   readTabularFile(f, (rows)=>{
+    if(forDate!==currentDate){ toast('Date was changed while the file was reading — upload ignored'); return; }
     dumpRows=rows;
-    $('fname').style.display='block';$('fname').textContent='✓ '+f.name+' — '+dumpRows.length+' tickets';
-    ttOverrides={}; allocCache=null; renderProcTable(); saveSession(); toast('Dump loaded: '+dumpRows.length+' tickets');
+    $('fname').style.display='block';$('fname').textContent='✓ '+f.name+' — '+dumpRows.length+' tickets · for '+currentDate;
+    // a new dump is the ONE event that resets counts for everybody
+    ttOverrides={}; allocCache=null; leftoverCache={}; allocMeta=null;
+    ['mail2card','dlAudit','dlExtra','extraTicketsNote'].forEach(id=>{ if($(id)) $(id).style.display='none'; });
+    if($('workSummary')) $('workSummary').innerHTML=''; if($('allocCheck')) $('allocCheck').innerHTML='';
+    hideCapacityPopup();
+    renderProcTable(); renderWork(); saveSession(); toast('Dump loaded for '+currentDate+': '+dumpRows.length+' tickets — all counts recalculated');
   });
 }
 
@@ -2197,18 +2485,25 @@ function renderProcTable(){
   const {rows,total}=hcTable(counts);
   let h='<table><thead><tr><th>Process</th><th>Total Volume</th><th>&lt;5</th><th>Backlog</th><th>AHT (min)</th><th>HC Needed</th><th></th></tr></thead><tbody>';
   rows.filter(r=>r.proc!==LE_PROC).forEach(r=>{
-    h+=`<tr><td>${esc(r.proc)}</td><td>${r.total}</td><td>${r.lt}</td><td>${r.bk}</td>
+    h+=`<tr${dumpRows&&r.total===0?' class="notin"':''}><td>${esc(r.proc)}${dumpRows&&r.total===0?' <span class="pill" style="font-size:9px">not in this dump</span>':''}</td><td>${r.total}</td><td>${r.lt}</td><td>${r.bk}</td>
       <td><input class="num" data-aht="${esc(r.proc)}" value="${r.aht}"></td>
-      <td><b>${r.hc.toFixed(2)}</b></td>
+      <td><b data-hc="${esc(r.proc)}">${r.hc.toFixed(2)}</b></td>
       <td><button class="btn danger" data-delproc="${esc(r.proc)}">✕</button></td></tr>`;
   });
-  h+=`<tr style="font-weight:700;background:var(--surface3)"><td>Total</td><td></td><td></td><td></td><td></td><td>${total.toFixed(2)}</td><td></td></tr>`;
+  h+=`<tr style="font-weight:700;background:var(--surface3)"><td>Total</td><td></td><td></td><td></td><td></td><td data-hctotal>${total.toFixed(2)}</td><td></td></tr>`;
   h+='</tbody></table>';
   $('procTable').innerHTML=h;
   fillProcSelect('newAudProc'); renderMapTable(); renderAvailTable();
 }
+/* typing an AHT must NOT rebuild the table (that stole focus after every digit) — update the HC cells in place */
+function updateProcHC(){
+  const {counts}=dumpRows?buildPool():{counts:Object.fromEntries(processes().map(p=>[p,{'<5':0,'Backlog':0}]))};
+  const {rows,total}=hcTable(counts);
+  rows.forEach(r=>{ document.querySelectorAll('#procTable [data-hc]').forEach(el=>{ if(el.dataset.hc===r.proc) el.textContent=r.hc.toFixed(2); }); });
+  const t=document.querySelector('#procTable [data-hctotal]'); if(t) t.textContent=total.toFixed(2);
+}
 $('procTable').addEventListener('input',e=>{
-  if(e.target.dataset.aht){CFG.aht[e.target.dataset.aht]=parseFloat(e.target.value)||0;save();renderProcTable();}
+  if(e.target.dataset.aht){ CFG.aht[e.target.dataset.aht]=parseFloat(e.target.value)||0; save(); updateProcHC(); }
 });
 $('procTable').addEventListener('click',e=>{
   const p=e.target.dataset.delproc; if(!p)return;
@@ -2267,6 +2562,7 @@ document.addEventListener('input',e=>{
   CFG.availMin=CFG.availMin||{};
   CFG.availMin[a]=Math.max(0,parseInt(e.target.value)||0);
   save();
+  if(dayAvail[a]==null) clearOverridesFor(a);   // default minutes changed → only THIS auditor's manual counts are recalculated
 });
 /* ===== Main: Verifiers block ===== */
 function fillProcSelectMain(id){ document.getElementById(id).innerHTML=realProcesses().map(p=>`<option>${esc(p)}</option>`).join(''); }
@@ -2343,7 +2639,7 @@ function renderVerifAhtTable(){
     h+=`<tr>
       <td>${esc(p)}</td>
       <td><input class="num" data-vaht-p="${esc(p)}" value="${Math.round(min*60*100)/100}"></td>
-      <td style="color:var(--text2)">${min.toFixed(2)}</td>
+      <td style="color:var(--text2)" data-vmin="${esc(p)}">${min.toFixed(2)}</td>
       <td><button class="btn danger" data-delvaht-p="${esc(p)}">✕</button></td></tr>`;
   });
   h+='</tbody></table>';
@@ -2353,7 +2649,9 @@ document.getElementById('verifAhtTable').addEventListener('input',e=>{
   const p=e.target.dataset.vahtP; if(p==null)return;
   const sec=parseFloat(e.target.value)||0;
   CFG.verifAht[p]=Math.round((sec/60)*1000)/1000;
-  save(); renderVerifAhtTable();
+  save();
+  // update the "AHT (min)" cell in place — re-rendering here used to kick the cursor out after every keystroke
+  document.querySelectorAll('#verifAhtTable [data-vmin]').forEach(el=>{ if(el.dataset.vmin===p) el.textContent=CFG.verifAht[p].toFixed(2); });
 });
 document.getElementById('verifAhtTable').addEventListener('click',e=>{
   const p=e.target.dataset.delvahtP; if(p==null)return;
@@ -2381,47 +2679,88 @@ $('addMap').addEventListener('click',()=>{
 });
 
 /* ============ BLOCK 2: DAILY PLANNING ============ */
+/* Only the auditor whose leave/availability changed gets their manual Work-Allocation
+   counts reset; every other manual count is kept. (A new dump is the only thing that
+   resets everyone.) */
+function clearOverridesFor(a){
+  let n=0; Object.keys(ttOverrides).forEach(k=>{ if(k.split('|')[0]===a){ delete ttOverrides[k]; n++; } });
+  return n;
+}
+function impactToast(a, what){
+  const n=clearOverridesFor(a), kept=Object.keys(ttOverrides).length;
+  toast(a+': '+what+' — '+(n?('their '+n+' manual count'+(n>1?'s':'')+' reset'):'counts recalculated')+(kept?(' · '+kept+' other manual count'+(kept>1?'s':'')+' kept'):''));
+}
+function baseAvail(a){ return (CFG.availMin && CFG.availMin[a]!=null) ? CFG.availMin[a] : WORK_MIN; }
 function renderLeaves(filter=''){
-  const list=auditors().filter(a=>a.includes(filter.toLowerCase()));
+  const list=auditors().filter(a=>a.includes(String(filter).toLowerCase()));
+  const nF=Object.values(leaves).filter(v=>v==='full').length, nH=Object.values(leaves).filter(v=>v==='half').length, nS=Object.values(leaves).filter(v=>v==='skip').length;
+  if($('leaveSummary')) $('leaveSummary').textContent=nF+' full · '+nH+' half · '+nS+' skip'+(Object.keys(dayAvail).length?(' · '+Object.keys(dayAvail).length+' custom minutes'):'');
   $('leaveGrid').innerHTML=list.map(a=>{
     const lv=leaves[a]||'';
-    const mins=(CFG.availMin && CFG.availMin[a]!=null) ? CFG.availMin[a] : WORK_MIN;
-    return `<div class="lrow"><span>${esc(a)}</span>
+    const has=dayAvail[a]!=null, mins=has?dayAvail[a]:baseAvail(a), dis=(lv==='full'||lv==='skip')?'disabled':'';
+    return `<div class="lrow${has?' edited':''}${lv?' lv-'+lv:''}"><span class="lname">${esc(a)}</span>
       <span class="seg">
-        <button data-a="${esc(a)}" data-v="full" class="${lv==='full'?'full':''}">Full</button>
-        <button data-a="${esc(a)}" data-v="half" class="${lv==='half'?'half':''}">Half</button>
-        <button data-a="${esc(a)}" data-v="skip" class="${lv==='skip'?'skip':''}">Skip</button>
+        <button type="button" data-a="${esc(a)}" data-v="full" class="${lv==='full'?'full':''}">Full</button>
+        <button type="button" data-a="${esc(a)}" data-v="half" class="${lv==='half'?'half':''}">Half</button>
+        <button type="button" data-a="${esc(a)}" data-v="skip" class="${lv==='skip'?'skip':''}">Skip</button>
       </span>
-      <span style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text2)">
-        <input class="num" data-avail="${esc(a)}" value="${mins}" style="width:56px" ${lv==='full'||lv==='skip'?'disabled':''}> min
-      </span></div>`;
-  }).join('');
+      <span class="lav"><input class="num" type="number" min="0" max="1440" step="15" inputmode="numeric" data-dayavail="${esc(a)}" value="${mins}" ${dis}> min
+        ${has?`<button type="button" class="rv" data-avreset="${esc(a)}" title="Back to the default (${baseAvail(a)} min)">↺</button>`:''}</span></div>`;
+  }).join('') || '<div class="empty" style="grid-column:1/-1;padding:18px">No auditor matches.</div>';
 }
 $('leaveGrid').addEventListener('click',e=>{
-  const b=e.target.closest('button'); if(!b)return;
+  const rs=e.target.closest('[data-avreset]');
+  if(rs){ const a=rs.dataset.avreset; delete dayAvail[a]; renderLeaves($('lsearch').value); impactToast(a,'availability back to default'); saveSession(); return; }
+  const b=e.target.closest('button[data-v]'); if(!b)return;
   const a=b.dataset.a,v=b.dataset.v;
   leaves[a]=leaves[a]===v?undefined:v; if(!leaves[a])delete leaves[a];
-  ttOverrides={};   // leaves changed -> recompute allocation from fresh capacity
   renderLeaves($('lsearch').value);
+  impactToast(a, leaves[a]?({full:'on full leave',half:'on half leave',skip:'skipped (adhoc)'}[leaves[a]]):'leave cleared');
   saveSession();
 });
 $('leaveGrid').addEventListener('input',e=>{
-  const a=e.target.dataset.avail; if(!a) return;
-  CFG.availMin=CFG.availMin||{};
-  CFG.availMin[a]=Math.max(0,parseInt(e.target.value)||0);
-  ttOverrides={}; save();
+  const a=e.target.dataset.dayavail; if(!a) return;
+  dayAvail[a]=Math.max(0,parseInt(e.target.value)||0);
+  clearOverridesFor(a);   // only THIS auditor's manual counts are reset
+  const row=e.target.closest('.lrow'); row.classList.add('edited');
+  if(!row.querySelector('[data-avreset]')){ const b=document.createElement('button'); b.type='button'; b.className='rv'; b.dataset.avreset=a; b.title='Back to the default ('+baseAvail(a)+' min)'; b.textContent='↺'; e.target.parentNode.appendChild(b); }
+  if($('leaveSummary')) $('leaveSummary').textContent=$('leaveSummary').textContent.replace(/ · \d+ custom minutes/,'')+' · '+Object.keys(dayAvail).length+' custom minutes';
+  saveSession();
 });
-$('leaveGrid').addEventListener('change',()=>saveSession());
+$('leaveGrid').addEventListener('change',e=>{
+  if(e.target.dataset.dayavail) impactToast(e.target.dataset.dayavail, 'available time set to '+(dayAvail[e.target.dataset.dayavail]||0)+' min');
+  saveSession();
+});
 $('lsearch').addEventListener('input',e=>renderLeaves(e.target.value));
+/* Copy leaves + custom availability from the most recent EARLIER stored date.
+   Only auditors whose leave/minutes actually change lose their manual counts. */
+$('copyPrevBtn').addEventListener('click',()=>{
+  if(!requireDate()) return;
+  const prev=dayIndexGet().filter(d=>d<currentDate).sort().pop();
+  if(!prev){ toast('No earlier stored day to copy from'); return; }
+  const snap=readDay(prev); if(!snap){ toast('Could not read '+prev); return; }
+  const pl=snap.leaves||{}, pa=snap.dayAvail||{};
+  const nL=Object.keys(pl).length, nA=Object.keys(pa).length;
+  if(!nL && !nA){ toast(prev+' had no leaves or custom minutes to copy'); return; }
+  if((Object.keys(leaves).length||Object.keys(dayAvail).length) && !confirm('Replace the leaves and custom minutes currently set for '+currentDate+' with those from '+prev+' ('+nL+' leave(s), '+nA+' custom minute value(s))?')) return;
+  const known=new Set(auditors());
+  const newL={}, newA={}; Object.keys(pl).forEach(a=>{ if(known.has(a)) newL[a]=pl[a]; }); Object.keys(pa).forEach(a=>{ if(known.has(a)) newA[a]=pa[a]; });
+  const affected=new Set([...Object.keys(leaves),...Object.keys(dayAvail),...Object.keys(newL),...Object.keys(newA)]);
+  affected.forEach(a=>{ if(leaves[a]!==newL[a] || dayAvail[a]!==newA[a]) clearOverridesFor(a); });
+  leaves=newL; dayAvail=newA;
+  renderLeaves($('lsearch').value); saveSession();
+  toast('Copied from '+prev+': '+Object.keys(newL).length+' leave(s), '+Object.keys(newA).length+' custom minute value(s)');
+});
 
 let mail1Shown=false;   // whether Daily Planning's 4 tables should stay visible after a refresh (set true on Generate, false on Reset)
 $('genMail1').addEventListener('click',()=>{
+  if(!requireDate()) return;
   if(!dumpRows){alert('Upload the dump first.');return;}
   // Auto-calculate headcount from the current leaves/requirement before building
   // the tables, so there's no separate manual "Auto-suggest HC" click needed.
   if(suggestHCForAll()){ renderMapTable(); renderProcTable(); }
   renderMail1(true);
-  mail1Shown=true;
+  mail1Shown=true; mail1Meta=mail1SigObj();
   saveSession();
 });
 /* -------- builds & shows the Daily Planning "4 tables" output. Pure function of
@@ -2444,7 +2783,7 @@ function renderMail1(showToast){
   // ---- TABLE 1: Task / Age / Count / To be Assigned / AHT / HC ----
   h+=`<div class="tsec">Daily Task & Headcount Allocation — ${dstr} — Week ${wk}</div>`;
   h+=`<table><thead><tr><th>Task</th><th>Total</th><th>Age</th><th>Count of IssueId</th><th>To be Assigned &gt;5</th><th>AHT</th><th>HC Required</th></tr></thead><tbody>`;
-  t1.rows.forEach(r=>{
+  t1.rows.filter(r=>r.total>0).forEach(r=>{
     // three age rows per task; Task/Total/AHT/HC on first row only
     h+=`<tr><td rowspan="3">${esc(r.proc)}</td><td rowspan="3">${r.total}</td><td>&lt;5</td><td>${r.lt5}</td><td></td><td rowspan="3">${r.aht}</td><td rowspan="3">${r.hc.toFixed(2)}</td></tr>`;
     h+=`<tr><td>&gt;=5 - &lt;9</td><td>${r.mid}</td><td>${r.mid}</td></tr>`;
@@ -2455,7 +2794,7 @@ function renderMail1(showToast){
   // ---- TABLE 2: Task-level Headcount Allocation ----
   h+=`<div class="tsec">Task Level Headcount Allocation</div>`;
   h+=`<table><thead><tr><th>Task</th><th>Headcount</th></tr></thead><tbody>`;
-  t2.rows.forEach(r=>{
+  t2.rows.filter(r=>r.isLeave||(+r.hc||0)>0).forEach(r=>{
     if(r.isLeave){ h+=`<tr><td>Leave</td><td>${r.hc}</td></tr>`; return; }
     h+=`<tr><td>${esc(r.task)}</td><td>${(+r.hc).toFixed(2).replace(/\.00$/,'')}</td></tr>`;
   });
@@ -2487,19 +2826,22 @@ function renderMail1(showToast){
   h+=`</tbody></table>`;
 
   h+=`<div class="note" style="margin-top:12px">Regards,<br>Rakesh</div>`;
-  $('render1').innerHTML=h; $('mail1card').style.display='block';
+  $('render1').innerHTML=h; mail1Html=h; $('mail1card').style.display='block';
   if(showToast) toast('All 4 Daily Planning tables generated');
 }
 $('resetMail1').addEventListener('click',()=>{
-  // Clears the generated Daily Planning output AND the Update Leaves block
-  // (Full/Half/Skip selections + any manual availability overrides), so the
-  // whole Daily Planning step starts fresh. Does not touch other blocks.
+  if(!requireDate()) return;
+  // Clears the generated Daily Planning output AND this day's Update Leaves block
+  // (Full/Half/Skip + per-day availability). Only the auditors whose leave/minutes
+  // actually change get their manual Work-Allocation counts reset.
+  const touched=new Set([...Object.keys(leaves),...Object.keys(dayAvail)]);
+  let cleared=0; touched.forEach(a=>{ cleared+=clearOverridesFor(a); });
   $('render1').innerHTML=''; $('mail1card').style.display='none';
-  mail1Shown=false;
-  leaves={}; CFG.availMin={}; ttOverrides={};
+  mail1Shown=false; mail1Html=''; mail1Meta=null;
+  leaves={}; dayAvail={};
   renderLeaves($('lsearch').value);
-  save(); saveSession();
-  toast('Daily Planning reset — leaves cleared, adjust and regenerate');
+  saveSession();
+  toast('Daily Planning reset — leaves cleared'+(cleared?(' · '+cleared+' manual count(s) of affected auditors reset'):'')+', other manual counts kept');
 });
 $('copy1').addEventListener('click',async()=>{toast(await copyRich($('render1'))?'✓ Copied!':'Press Ctrl+C');});
 $('copy2').addEventListener('click',async()=>{toast(await copyRich($('workSummary'))?'✓ Copied!':'Press Ctrl+C');});
@@ -2516,11 +2858,14 @@ document.getElementById('leToggle').addEventListener('click',e=>{
   save(); renderLeToggle();
   if(dumpRows) renderWork();   // re-run so counts reflect the new setting immediately
 });
+let workCache=null;   // {pool, defs} the Work Allocation table was last rendered from
+function currentTT(k){ return ttOverrides[k]!=null?ttOverrides[k]:((workCache&&workCache.defs[k])||0); }
+function ahtFor(p){ return p===LE_PROC ? (CFG.aht[LE_PROC]||1) : (CFG.aht[p]||0); }
 function renderWork(){
   renderLeToggle();
   if(!dumpRows){
     $('workTable').innerHTML='<div class="empty"><div class="ico">📥</div>Upload the dump first.</div>';
-    $('workKpis').style.display='none';
+    $('workKpis').style.display='none'; workCache=null;
     $('wk1').textContent='0';$('wk2').textContent='0';$('wk3').textContent='0';$('wk4').textContent='0';$('wk5').textContent='0';
     if($('leaveBanner')) $('leaveBanner').style.display='none';
     if($('verifReserveNote')) $('verifReserveNote').style.display='none';
@@ -2528,6 +2873,7 @@ function renderWork(){
   }
   const {pool,counts}=buildPool();
   const defs=defaultTTs(pool);
+  workCache={pool,defs};
   const onLeave=Object.keys(leaves);
   // banner
   if(onLeave.length){$('leaveBanner').style.display='block';$('leaveBannerT').textContent=onLeave.map(a=>a+(leaves[a]==='half'?' (½)':'')).join(', ');}
@@ -2544,12 +2890,13 @@ function renderWork(){
   $('workKpis').style.display='grid';
   const totalT=Object.values(pool).reduce((s,a)=>s+a.length,0);
   $('wk1').textContent=totalT; $('wk3').textContent=onLeave.filter(a=>leaves[a]==='full').length;
-  // table grouped by process — real processes first (priority order per auditor), LE Validation filler last
-  let h='<table><thead><tr><th>Process</th><th>Auditor</th><th>Priority</th><th>Avail (min)</th><th>Default Assigned</th><th>Assign TT</th><th>Age Range <span style="font-weight:400;font-size:9.5px;opacity:.85">(blank = oldest first)</span></th></tr></thead><tbody>';
+  // table grouped by process (a header row per process) — real processes first, LE Validation filler last
+  let h='<table class="wtable"><thead><tr><th>Auditor</th><th>Priority</th><th>Avail (min)</th><th>Default</th><th>Assign TT</th><th title="Minutes this auditor\'s counts need across ALL their processes / minutes available today">Day load (min)</th><th>Age Range <span style="font-weight:400;font-size:9.5px;opacity:.85">(blank = oldest first)</span></th></tr></thead><tbody>';
   let toAlloc=0, leTotal=0, activeSet=new Set();
   processes().forEach(p=>{
     const isLE=p===LE_PROC;
     const names = isLE ? auditors() : [...new Set(mapForProcess(p).map(m=>m[0]))];
+    let rowsH='';
     names.forEach(a=>{
       const key=a+'|'+p, def=defs[key]||0;
       const val=(ttOverrides[key]!=null?ttOverrides[key]:def);
@@ -2560,7 +2907,6 @@ function renderWork(){
       const badge = lv==='full'?' <span style="color:#e5453b;font-weight:700">(leave)</span>':lv==='half'?' <span style="color:#b26b00;font-weight:700">(½)</span>':lv==='skip'?' <span style="color:#888">(adhoc)</span>':'';
       const pr = isLE ? '—' : (CFG.mapping.find(m=>m[0]===a&&m[1]===p)||[])[3]||1;
       const avail=auditorAvailMin(a);
-      const rowStyle = isLE ? ' style="color:var(--text2)"' : '';
       const rng = ttAgeRange[key]||{};
       const ageCell = isLE
         ? '<span style="color:var(--muted);font-size:11px">— n/a</span>'
@@ -2569,13 +2915,81 @@ function renderWork(){
              <span style="color:var(--text2);font-size:11px">–</span>
              <input class="num" style="width:52px" placeholder="Max" title="Maximum ticket age (days) for this auditor" data-agemax="${esc(key)}" value="${rng.max!=null?rng.max:''}">
            </span>`;
-      h+=`<tr${rowStyle}><td>${esc(p)}${isLE?' <span class="pill" style="font-size:9px">filler</span>':''}</td><td>${esc(a)}${badge}</td><td>${pr}</td><td>${avail}</td><td>${def}</td>
-        <td><input class="num" data-tt="${esc(key)}" value="${val}"></td><td>${ageCell}</td></tr>`;
+      rowsH+=`<tr data-key="${esc(key)}" data-search="${esc((a+' '+p).toLowerCase())}"${isLE?' class="le"':''}>
+        <td class="aud">${esc(a)}${badge}</td><td>${pr}</td><td class="avail">${avail}</td><td class="def">${def}</td>
+        <td class="tt"><span class="stepper">
+          <button type="button" tabindex="-1" data-step="${esc(key)}" data-d="-1" title="−1">−</button>
+          <input class="num" type="number" min="0" step="1" inputmode="numeric" data-tt="${esc(key)}" value="${val}">
+          <button type="button" tabindex="-1" data-step="${esc(key)}" data-d="1" title="+1">+</button>
+          <button type="button" tabindex="-1" class="rv" data-revert="${esc(key)}" title="Back to the auto default (${def})">↺</button>
+        </span></td>
+        <td class="load"></td><td>${ageCell}</td></tr>`;
     });
+    if(!rowsH) return;
+    h+=`<tr class="phead" data-proc="${esc(p)}"><td colspan="7"><b>${esc(p)}</b>${isLE?' <span class="pill" style="font-size:9px">filler</span>':''}
+        <span class="pbadge" data-pbadge="${esc(p)}"></span>
+        ${isLE?'':`<button type="button" class="lnk" data-resetproc="${esc(p)}">↺ reset this process</button><button type="button" class="lnk" data-showcap="${esc(p)}">📊 who can take more</button>`}</td></tr>`+rowsH;
   });
   h+='</tbody></table>'; $('workTable').innerHTML=h;
   $('wk2').textContent=toAlloc; $('wk5').textContent=leTotal; $('wk4').textContent=activeSet.size;
+  refreshWorkLive(); applyWorkFilter();
 }
+/* updates everything that depends on the counts WITHOUT re-rendering the table
+   (so typing never loses focus): edited highlight, day-load, per-process pool/assigned/left, KPIs */
+function refreshWorkLive(){
+  if(!workCache) return;
+  const {defs,pool}=workCache;
+  const val=k=>ttOverrides[k]!=null?ttOverrides[k]:(defs[k]||0);
+  const rows=[...document.querySelectorAll('#workTable tr[data-key]')];
+  const usedBy={}, assignedBy={}; let edits=0;
+  rows.forEach(tr=>{ const k=tr.dataset.key; const [a,p]=k.split('|'); const v=val(k);
+    usedBy[a]=(usedBy[a]||0)+v*ahtFor(p); if(p!==LE_PROC) assignedBy[p]=(assignedBy[p]||0)+v; });
+  rows.forEach(tr=>{
+    const k=tr.dataset.key, a=k.split('|')[0], v=val(k);
+    const edited = ttOverrides[k]!=null && (+ttOverrides[k]||0)!==(defs[k]||0);
+    if(edited) edits++;
+    tr.classList.toggle('edited',edited);
+    const inp=tr.querySelector('input[data-tt]'); if(inp && document.activeElement!==inp) inp.value=v;
+    const used=Math.round((usedBy[a]||0)*10)/10, avail=auditorAvailMin(a), ld=tr.querySelector('.load');
+    ld.textContent=used+' / '+avail; ld.classList.toggle('over', used>avail+1e-6);
+    ld.title = used>avail+1e-6 ? ('Over by '+Math.round((used-avail)*10)/10+' min — more work than this auditor has time for today') : 'Fits within available time';
+  });
+  document.querySelectorAll('#workTable [data-pbadge]').forEach(el=>{
+    const p=el.dataset.pbadge;
+    if(p===LE_PROC){ let s=0; rows.forEach(tr=>{ if(tr.dataset.key.split('|')[1]===LE_PROC) s+=val(tr.dataset.key); }); el.innerHTML='<span class="bd">'+s+' LE filler</span>'; return; }
+    const total=(pool[p+'|Backlog']||[]).length+(pool[p+'|<5']||[]).length, asg=assignedBy[p]||0, left=total-asg;
+    el.innerHTML='<span class="bd">Pool '+total+'</span><span class="bd">Assigned '+asg+'</span>'+(left>0?'<span class="bd bad">'+left+' unassigned</span>':left<0?'<span class="bd warn">over by '+(-left)+'</span>':'<span class="bd good">✓ fully assigned</span>');
+  });
+  // KPIs (same formula as before)
+  let toAlloc=0, leTotal=0; const act=new Set();
+  new Set([...Object.keys(defs), ...Object.keys(ttOverrides)]).forEach(key=>{
+    const v=val(key);
+    if(key.endsWith('|'+LE_PROC)) leTotal+=v; else toAlloc+=v;
+    if(v>0) act.add(key.split('|')[0]);
+  });
+  $('wk2').textContent=toAlloc; $('wk5').textContent=leTotal; $('wk4').textContent=act.size;
+  if($('editCount')) $('editCount').textContent=edits+' manual edit'+(edits===1?'':'s');
+  if($('clearEdits')) $('clearEdits').style.display=edits?'inline-block':'none';
+}
+function applyWorkFilter(){
+  const q=(($('workFilter')&&$('workFilter').value)||'').trim().toLowerCase(), only=$('workOnlyEdited')&&$('workOnlyEdited').checked;
+  document.querySelectorAll('#workTable tr[data-key]').forEach(tr=>{
+    tr.style.display=((!q||tr.dataset.search.includes(q)) && (!only||tr.classList.contains('edited')))?'':'none';
+  });
+  document.querySelectorAll('#workTable tr.phead').forEach(hd=>{
+    let n=hd.nextElementSibling, any=false;
+    while(n && !n.classList.contains('phead')){ if(n.style.display!=='none') any=true; n=n.nextElementSibling; }
+    hd.style.display=any?'':'none';
+  });
+}
+$('workFilter').addEventListener('input',applyWorkFilter);
+$('workOnlyEdited').addEventListener('change',()=>{ refreshWorkLive(); applyWorkFilter(); });
+$('clearEdits').addEventListener('click',()=>{
+  const n=Object.keys(ttOverrides).length; if(!n) return;
+  if(!confirm('Clear all '+n+' manual count edit(s) and go back to the auto defaults? (Age ranges and leaves are kept.)')) return;
+  ttOverrides={}; hideCapacityPopup(); renderWork(); saveSession(); toast('Manual counts cleared — back to auto defaults');
+});
+
 /* ============ CAPACITY POPUP ============
    Whenever a "Assign TT" cell is edited, shows: how many tickets that process
    still has (its full pool), how many are currently assigned across everyone
@@ -2585,22 +2999,20 @@ function renderWork(){
    This is what makes "if I lower/raise someone's count, who do I compensate
    with" a quick glance instead of a manual recheck. -------- */
 function computeProcessCapacitySnapshot(p, editedAuditor){
-  const {pool}=buildPool();
+  const pool=(workCache&&workCache.pool)||buildPool().pool;
+  const defs=(workCache&&workCache.defs)||defaultTTs(pool);
   const totalDemand=((pool[p+'|Backlog']||[]).length)+((pool[p+'|<5']||[]).length);
-  const defs=defaultTTs(pool);
+  const val=k=>ttOverrides[k]!=null?ttOverrides[k]:(defs[k]||0);
+  // minutes each auditor has ALREADY committed across ALL of their processes
+  const usedMin={};
+  new Set([...Object.keys(defs),...Object.keys(ttOverrides)]).forEach(k=>{ const [a,pp]=k.split('|'); usedMin[a]=(usedMin[a]||0)+val(k)*ahtFor(pp); });
   const names=[...new Set(mapForProcess(p).map(m=>m[0]))];
   let assigned=0;
   const rows=names.map(a=>{
-    const key=a+'|'+p;
-    const def=defs[key]||0;
-    const val=(ttOverrides[key]!=null?ttOverrides[key]:def);
-    assigned+=val;
+    const key=a+'|'+p, cur=val(key); assigned+=cur;
     const aht=CFG.aht[p]||0;
-    const avail=auditorAvailMin(a);
-    const usedMin=val*aht;
-    const spareMin=Math.max(0, avail-usedMin);
-    const headroom=aht>0?Math.floor(spareMin/aht):0;
-    return {auditor:a, current:val, headroom};
+    const spareMin=Math.max(0, auditorAvailMin(a)-(usedMin[a]||0));
+    return {auditor:a, key, current:cur, headroom: aht>0?Math.floor(spareMin/aht):0};
   });
   return {totalDemand, assigned, leftover:totalDemand-assigned, rows};
 }
@@ -2608,6 +3020,7 @@ function renderCapacityPopup(key){
   const [a,p]=key.split('|');
   if(p===LE_PROC){ hideCapacityPopup(); return; }   // LE filler has no fixed ticket pool
   const snap=computeProcessCapacitySnapshot(p, a);
+  $('capacityPopup').dataset.key=key;
   $('cpTitle').textContent='📊 '+p;
   let body=`<div style="font-size:12px;line-height:1.7;margin-bottom:8px">
       <div>Tickets in this process: <b>${snap.totalDemand}</b></div>
@@ -2617,14 +3030,15 @@ function renderCapacityPopup(key){
     body+=`<div style="font-size:12.5px;font-weight:700;color:var(--danger);margin-bottom:8px">⚠ ${snap.leftover} ticket(s) still unassigned in this process</div>`;
     const candidates=snap.rows.filter(r=>r.auditor!==a && r.headroom>0).sort((x,y)=>y.headroom-x.headroom);
     if(candidates.length){
-      body+='<div style="font-size:10.5px;text-transform:uppercase;letter-spacing:.4px;color:var(--text2);font-weight:700;margin-bottom:4px">Who can take the rest</div>';
-      body+='<table style="width:100%"><thead><tr><th>Auditor</th><th>Can take up to</th></tr></thead><tbody>';
+      body+='<div style="font-size:10.5px;text-transform:uppercase;letter-spacing:.4px;color:var(--text2);font-weight:700;margin-bottom:4px">Who can take the rest <span style="text-transform:none;font-weight:400">(time left today)</span></div>';
+      body+='<table style="width:100%"><thead><tr><th>Auditor</th><th>Can take</th><th></th></tr></thead><tbody>';
       candidates.forEach(c=>{
-        body+=`<tr><td>${esc(c.auditor)}</td><td><b>${Math.min(c.headroom, snap.leftover)}</b></td></tr>`;
+        const n=Math.min(c.headroom, snap.leftover);
+        body+=`<tr><td>${esc(c.auditor)}</td><td><b>${n}</b></td><td><button type="button" class="btn sm ghost" data-give="${esc(c.key)}" data-n="${n}">+ give ${n}</button></td></tr>`;
       });
       body+='</tbody></table>';
     } else {
-      body+='<div class="hint" style="margin:6px 0 0">No one else mapped to this process has spare capacity today — bump someone\'s available minutes, add a mapping, or let the rest roll to tomorrow.</div>';
+      body+='<div class="hint" style="margin:6px 0 0">No one else mapped to this process has spare time today — raise someone\'s available minutes, add a mapping, or let the rest roll to tomorrow.</div>';
     }
   } else if(snap.leftover<0){
     body+=`<div style="font-size:12.5px;font-weight:700;color:#b26b00">⚠ Over-assigned by ${-snap.leftover} — that's more than exist in this process's pool. The allocator will simply run out of tickets for whoever's last in line.</div>`;
@@ -2636,24 +3050,17 @@ function renderCapacityPopup(key){
 }
 function hideCapacityPopup(){ const el=$('capacityPopup'); if(el) el.style.display='none'; }
 if($('cpClose')) $('cpClose').addEventListener('click', hideCapacityPopup);
+$('cpBody').addEventListener('click',e=>{
+  const g=e.target.closest('[data-give]'); if(!g) return;
+  const k=g.dataset.give; ttOverrides[k]=currentTT(k)+(+g.dataset.n||0);
+  const inp=[...document.querySelectorAll('#workTable input[data-tt]')].find(i=>i.dataset.tt===k); if(inp) inp.value=ttOverrides[k];
+  refreshWorkLive(); renderCapacityPopup($('capacityPopup').dataset.key||k); saveSession();
+});
 
+function setTTFromInput(inp){ ttOverrides[inp.dataset.tt]=Math.max(0, parseInt(inp.value)||0); }
 $('workTable').addEventListener('input',e=>{
   const k=e.target.dataset.tt;
-  if(k){
-    ttOverrides[k]=parseInt(e.target.value)||0;
-    // live kpi update
-    const {pool}=buildPool(); const defs=defaultTTs(pool);
-    let toAlloc=0, leTotal=0; const act=new Set();
-    const allKeys=new Set([...Object.keys(defs), ...Object.keys(ttOverrides)]);
-    allKeys.forEach(key=>{
-      const v=(ttOverrides[key]!=null?ttOverrides[key]:defs[key]||0);
-      if(key.endsWith('|'+LE_PROC)) leTotal+=v; else toAlloc+=v;
-      if(v>0)act.add(key.split('|')[0]);
-    });
-    $('wk2').textContent=toAlloc;$('wk5').textContent=leTotal;$('wk4').textContent=act.size;
-    renderCapacityPopup(k);   // show live "who's left / who can take it" for the touched process
-    return;
-  }
+  if(k){ setTTFromInput(e.target); refreshWorkLive(); renderCapacityPopup(k); return; }
   const kmin=e.target.dataset.agemin, kmax=e.target.dataset.agemax;
   if(kmin || kmax){
     const key=kmin||kmax;
@@ -2665,7 +3072,32 @@ $('workTable').addEventListener('input',e=>{
     if(row.min==null && row.max==null) delete ttAgeRange[key]; else ttAgeRange[key]=row;
   }
 });
+$('workTable').addEventListener('click',e=>{
+  const st=e.target.closest('[data-step]');
+  if(st){
+    const k=st.dataset.step; ttOverrides[k]=Math.max(0, currentTT(k)+(+st.dataset.d));
+    const inp=st.parentNode.querySelector('input[data-tt]'); inp.value=ttOverrides[k];
+    refreshWorkLive(); renderCapacityPopup(k); saveSession(); return;
+  }
+  const rv=e.target.closest('[data-revert]');
+  if(rv){ const k=rv.dataset.revert; delete ttOverrides[k]; refreshWorkLive(); renderCapacityPopup(k); saveSession(); toast('Back to the auto default'); return; }
+  const rp=e.target.closest('[data-resetproc]');
+  if(rp){ const p=rp.dataset.resetproc; let n=0; Object.keys(ttOverrides).forEach(k=>{ if(k.split('|')[1]===p){ delete ttOverrides[k]; n++; } });
+    renderWork(); renderCapacityPopup('|'+p); saveSession(); toast(n?('Reset '+n+' manual count(s) for '+p):'Nothing to reset for '+p); return; }
+  const sc=e.target.closest('[data-showcap]');
+  if(sc){ renderCapacityPopup('|'+sc.dataset.showcap); return; }
+});
+// Enter / Shift+Enter walks down / up the Assign TT column — no mouse needed
+$('workTable').addEventListener('keydown',e=>{
+  if(e.key!=='Enter' || !e.target.dataset || !e.target.dataset.tt) return;
+  e.preventDefault();
+  const all=[...document.querySelectorAll('#workTable tr[data-key]')].filter(tr=>tr.style.display!=='none').map(tr=>tr.querySelector('input[data-tt]'));
+  const i=all.indexOf(e.target), nx=all[i+(e.shiftKey?-1:1)];
+  if(nx){ nx.focus(); nx.select(); }
+});
 $('workTable').addEventListener('change',e=>{
+  const k=e.target.dataset.tt;
+  if(k){ e.target.value=ttOverrides[k]!=null?ttOverrides[k]:currentTT(k); }
   // auto-correct an inverted range (min typed higher than max) once the field is committed
   const key=e.target.dataset.agemin||e.target.dataset.agemax;
   if(key){
@@ -2679,23 +3111,25 @@ $('workTable').addEventListener('change',e=>{
   saveSession();   // persist once the value is committed, not every keystroke
 });
 $('resetTT').addEventListener('click',()=>{
+  if(!requireDate()) return;
   // Resets only Work Allocation: TT counts back to capacity-based defaults and
   // clears the last generated allocation/summary, so it can be changed and
   // "Generate Allocation" run again. Daily Planning / Verification are untouched.
-  ttOverrides={}; ttAgeRange={}; allocCache=null; leftoverCache={};
-  $('mail2card').style.display='none'; $('workSummary').innerHTML='';
+  ttOverrides={}; ttAgeRange={}; allocCache=null; leftoverCache={}; allocMeta=null;
+  $('mail2card').style.display='none'; $('workSummary').innerHTML=''; $('allocCheck').innerHTML='';
   $('dlAudit').style.display='none'; $('dlExtra').style.display='none';
   hideCapacityPopup();
   renderWork(); saveSession();
   toast('Work Allocation reset — adjust and regenerate');
 });
 $('genMail2').addEventListener('click',()=>{
+  if(!requireDate()) return;
   if(!dumpRows){alert('Upload the dump first.');return;}
-  const {pool}=buildPool(); const defs=defaultTTs(pool);
-  // use every default key (auditor|process), applying overrides
-  const tts={}; Object.keys(defs).forEach(key=>{ tts[key]=(ttOverrides[key]!=null?ttOverrides[key]:defs[key]||0); });
+  const {pool,defs,tts}=allocInputsNow();   // same pool / defaults / "overrides win" rule as always
   allocCache=allocate(pool,tts,ttAgeRange);
+  allocMeta=buildAllocMeta(tts,defs);
   renderMail2Summary(allocCache, pool);
+  renderAllocCheck();
   saveSession();
 });
 /* -------- renders the Work Allocation summary card from an already-computed
@@ -2740,14 +3174,15 @@ function renderMail2Summary(alloc, pool, showToast){
   if(showToast) toast(realRows.length+' tickets + '+leTotal+' LE allocated'+(extraTotal>0?' · '+extraTotal+' extra left over':''));
 }
 $('dlAudit').addEventListener('click',()=>{
+  const SM=statusMap();
   const d=fmtDate(new Date($('rdate').value+'T00:00:00'));
   const realRows=allocCache.filter(r=>r.id)
     .sort((a,b)=>a.proc.localeCompare(b.proc)||a.who.localeCompare(b.who))
-    .map(r=>[d, r.proc, r.id, r.who, r.age!=null?r.age:'']);
+    .map(r=>[d, r.proc, r.id, r.who, r.age!=null?r.age:'', SM[r.id]||'']);
   const leRows=allocCache.filter(r=>r.proc===LE_PROC && r.count)
     .sort((a,b)=>a.who.localeCompare(b.who))
-    .map(r=>[d, LE_PROC, r.count, r.who, '']);   // count goes in the Short ID column instead of a fake ID
-  const header=['Date','Task','Short ID','Auditor','Age'];
+    .map(r=>[d, LE_PROC, r.count, r.who, '', '']);   // count goes in the Short ID column instead of a fake ID
+  const header=['Date','Task','Short ID','Auditor','Age','Status'];
   const rows=[...realRows,...leRows];
   const dTag=d.replace(/\//g,'-');
   if(typeof XLSX==='undefined'){
@@ -2767,6 +3202,7 @@ $('dlAudit').addEventListener('click',()=>{
    that's the slice of leftovers most relevant to them), plus one catch-all
    file per process for whatever's left outside any auditor's age band. -------- */
 function buildExtraTicketFiles(){
+  const SM=statusMap();
   const d=new Date($('rdate').value+'T00:00:00');
   const dLabel=fmtDate(d);
   const dTag=(dLabel.replace(/\//g,'-'));
@@ -2784,16 +3220,16 @@ function buildExtraTicketFiles(){
       const matched=extra.filter(t=>t.age>=lo && t.age<=hi);
       if(!matched.length) return;
       const label=(r.min!=null?r.min:'0')+'-'+(r.max!=null?r.max:'plus');
-      const header=['Date','Task','Short ID','Auditor','Age'];
-      const rows=matched.map(t=>[dLabel, p, t.id, a, t.age]);
+      const header=['Date','Task','Short ID','Auditor','Age','Status'];
+      const rows=matched.map(t=>[dLabel, p, t.id, a, t.age, SM[t.id]||'']);
       const content=aoaToXlsxArrayBuffer(header, rows, 'Extra');
       files.push({name:`Extra_${sanitizeFilePart(p)}_${sanitizeFilePart(a)}_Age${sanitizeFilePart(label)}_${dTag}.xlsx`, content, binary:true});
       const matchedIds=new Set(matched.map(t=>t.id));
       extra=extra.filter(t=>!matchedIds.has(t.id));   // don't double-count in the catch-all below
     });
     if(extra.length){
-      const header=['Date','Task','Short ID','Age'];
-      const rows=extra.map(t=>[dLabel, p, t.id, t.age]);
+      const header=['Date','Task','Short ID','Age','Status'];
+      const rows=extra.map(t=>[dLabel, p, t.id, t.age, SM[t.id]||'']);
       const content=aoaToXlsxArrayBuffer(header, rows, 'Extra');
       files.push({name:`Extra_${sanitizeFilePart(p)}_Unassigned_${dTag}.xlsx`, content, binary:true});
     }
@@ -2890,13 +3326,18 @@ $('lookupClear').addEventListener('click',()=>{
 /* ============ BLOCK 4: VERIFICATION (worked dump -> verifier CSVs) ============ */
 let workedRows=null, verifFiles=null, sampleRows=null;
 const wdrop=$('wdrop'), wfile=$('wfile');
-wdrop.addEventListener('click',()=>wfile.click());
+wdrop.addEventListener('click',()=>{ if(!requireDate()) return; wfile.click(); });
 wdrop.addEventListener('dragover',e=>{e.preventDefault();wdrop.classList.add('hot');});
 wdrop.addEventListener('dragleave',()=>wdrop.classList.remove('hot'));
 wdrop.addEventListener('drop',e=>{e.preventDefault();wdrop.classList.remove('hot');if(e.dataTransfer.files[0])loadWorked(e.dataTransfer.files[0]);});
-wfile.addEventListener('change',e=>{if(e.target.files[0])loadWorked(e.target.files[0]);});
+wfile.addEventListener('change',e=>{if(e.target.files[0])loadWorked(e.target.files[0]); e.target.value='';});
 function loadWorked(f){
+  if(!requireDate()) return;
+  if(currentDate!==todayISO() && !confirm('You are loading this worked dump into '+currentDate+', which is NOT today ('+todayISO()+').\n\nContinue?')) return;
+  if(verifFiles && verifFiles.length && !confirm('Verification files were already generated for '+currentDate+'. Loading a new worked dump replaces the sample — you will need to regenerate. Continue?')) return;
+  const forDate=currentDate;
   readTabularFile(f, (raw)=>{
+    if(forDate!==currentDate){ toast('Date was changed while the file was reading — upload ignored'); return; }
     workedRows=raw.map(r=>({
       task: norm((r["Task Name"]||r["Task_Name"]||r["Task"]||r["AssignedGroup"]||"").trim()),
       date: (r["Date"]||"").trim(),
@@ -2924,7 +3365,7 @@ function renderSampleTable(){
       <td>${esc(r.auditor)}</td>
       <td>${r.auditCount}</td>
       <td>${r.verfPct}</td>
-      <td><input class="num" data-smpi="${i}" value="${r.sample}" min="0" max="${r.auditCount}" style="width:70px"></td>
+      <td><input class="num" type="number" data-smpi="${i}" value="${r.sample}" min="0" max="${r.auditCount}" style="width:70px"></td>
       <td><button class="btn danger" data-delsmp="${i}">✕</button></td>
     </tr>`;
   });
@@ -2976,6 +3417,7 @@ function renderVerifSummary(persist){
   if(persist) saveSession();
 }
 $('genVerif').addEventListener('click',()=>{
+  if(!requireDate()) return;
   if(!workedRows){alert('Upload the worked dump first.');return;}
   if(!sampleRows || !sampleRows.length){alert('No sample rows to generate from — check the Sample Preview table.');return;}
   const sampled=[];
@@ -2986,6 +3428,7 @@ $('genVerif').addEventListener('click',()=>{
   if(!sampled.length){alert('All Sample counts are 0 — nothing to verify.');return;}
   verifFiles=generateVerification(sampled);
   if(!verifFiles.length){alert('No files generated — check that verifiers are set in Main for these processes.');return;}
+  verifMeta=verifSigObj();
   renderVerifSummary();
   const conflicts=verifFiles.filter(f=>f.conflict).reduce((s,f)=>s+f.rows.length,0);
   toast(verifFiles.length+' verification files generated'+(conflicts>0?' ('+conflicts+' flagged)':''));
@@ -2995,7 +3438,7 @@ $('resetVerif').addEventListener('click',()=>{
   // (undoing any manual sample-count edits/deletions) and clears the generated
   // verifier files, including the capacity reserved from Work Allocation, so the
   // sample can be adjusted and "Generate Verification Files" run again.
-  verifFiles=null; verifCommittedMin={};
+  verifFiles=null; verifCommittedMin={}; verifMeta=null;
   $('verifCard').style.display='none'; $('verifSummary').innerHTML='';
   $('dlVerifZip').style.display='none'; $('dlVerifIndiv').style.display='none';
   if(workedRows && workedRows.length){ buildSampleRows(); renderSampleTable(); }
@@ -3033,8 +3476,8 @@ $('dlVerifIndiv').addEventListener('click',async()=>{
 /* ---- reset ---- */
 $('resetBtn').addEventListener('click',()=>{
   const msg = mainLocked
-    ? 'Reset config — Main is locked, so processes/auditors/mappings/verifiers stay as-is. This still clears any uploaded dump, allocation, and verification results. Continue?'
-    : 'Reset all processes, auditors, mappings & verifiers to defaults — this also clears any uploaded dump, allocation, and verification results. Continue?';
+    ? 'Reset config — Main is locked, so processes/auditors/mappings/verifiers stay as-is. This still clears the dump, counts, allocation and verification results of the CURRENTLY SELECTED DATE (other dates are kept). Continue?'
+    : 'Reset all processes, auditors, mappings & verifiers to defaults — this also clears the dump, counts, allocation and verification results of the CURRENTLY SELECTED DATE (other dates are kept). Continue?';
   if(confirm(msg)){resetCfg();clearSession();renderProcTable();renderVerMain();renderLeaves();renderWork();toast(mainLocked?'Reset done — Main block preserved (locked)':'Everything reset');}
 });
 
@@ -3061,11 +3504,103 @@ updateFolderStatus();
   }
 })();
 
+/* ============ NEW PROCESS DETECTION + SETUP CHECKS ============
+   Process names come ONLY from the dump (AssignedGroup) / worked dump (Task Name).
+   Anything not yet configured is listed here and asked for its AHT; then the
+   setup check tells you which auditor / verifier mappings still need adding. */
+let _gcRef=null,_gcVal={};
+function dumpGroupCounts(){
+  if(!dumpRows) return {};
+  if(_gcRef===dumpRows) return _gcVal;
+  const m={}; dumpRows.forEach(r=>{ const g=norm(r.AssignedGroup); if(g) m[g]=(m[g]||0)+1; });
+  _gcRef=dumpRows; _gcVal=m; return m;
+}
+function newProcessList(){
+  const out=[], ign=new Set(CFG.ignoredProcs||[]);
+  const dg=dumpGroupCounts();
+  Object.keys(dg).sort().forEach(g=>{ if(g===LE_PROC||ign.has(g)) return; if(!(g in CFG.aht)) out.push({name:g,n:dg[g],src:'dump'}); });
+  const wt={}; (workedRows||[]).forEach(r=>{ if(r.task) wt[r.task]=(wt[r.task]||0)+1; });
+  Object.keys(wt).sort().forEach(t=>{
+    if(t===LE_PROC||ign.has(t)) return;
+    if(t in CFG.aht || t in CFG.verifAht || out.some(o=>o.name===t)) return;
+    out.push({name:t,n:wt[t],src:'worked'});
+  });
+  return out;
+}
+function setupIssues(){
+  const out=[], dg=dumpGroupCounts();
+  realProcesses().forEach(p=>{
+    const n=dg[p]||0; if(!n) return;      // only processes that actually have tickets in this dump
+    const m=[];
+    if(!(+CFG.aht[p]>0)) m.push('audit AHT is 0 — its tickets cannot be allocated');
+    if(!mapForProcess(p).length) m.push('<b>no auditor mapped</b> — its '+n+' ticket(s) will stay unassigned');
+    if(!verifiersForProc(p).length) m.push('<b>no verifier mapped</b>');
+    if(!(verifAhtForProcess(p)>0)) m.push('verification AHT not set');
+    if(m.length) out.push({p,n,m});
+  });
+  return out;
+}
+let _npList=[], _npSig='', _suSig='';
+function renderSetupCards(){
+  const card=$('newProcCard'), su=$('setupCard'); if(!card||!su) return;
+  if(!currentDate){ card.style.display='none'; su.style.display='none'; return; }
+  const list=newProcessList(), sig=JSON.stringify(list);
+  if(sig!==_npSig){      // only redraw when the list changes, so half-typed values aren't wiped
+    _npSig=sig; _npList=list;
+    if(!list.length){ card.style.display='none'; card.innerHTML=''; }
+    else{
+      card.style.display='block';
+      card.innerHTML=`<h2><span class="l">🆕 New process / task found</span><span class="pill">${list.length}</span></h2>
+        <div class="hint" style="margin-top:0">These names are in your upload but not set up yet. Enter the details so they are counted. <b>Until you add one, it is left out of HC, Daily Planning and allocation.</b> After adding, check <b>Main → Auditors &amp; Process Mapping</b> and <b>Verifiers &amp; Verification Mapping</b> and tag people to it.</div>`
+      + list.map((it,i)=>`<div class="np-row"><div class="np-name"><b>${esc(it.name)}</b><span>${it.n} ${it.src==='dump'?'ticket(s) in the dump':'row(s) in the worked dump'}</span></div>`
+        + (it.src==='dump'?`<label>Audit AHT (min) *<input class="num np-aht" inputmode="decimal" placeholder="e.g. 8.5"></label>`:'')
+        + `<label>Verif AHT (sec)${it.src==='worked'?' *':''}<input class="num np-vaht" inputmode="decimal" placeholder="${it.src==='worked'?'required':'optional'}"></label>
+           <label>Sample %<input class="num np-sp" inputmode="decimal" value="20"></label>
+           <button class="btn sm" type="button" data-npadd="${i}">+ Add process</button>
+           <button class="btn ghost sm" type="button" data-npignore="${i}" title="Don't ask about this name again">Ignore</button></div>`).join('');
+    }
+  }
+  const iss=setupIssues(), sig2=JSON.stringify(iss);
+  if(sig2!==_suSig){
+    _suSig=sig2;
+    if(!iss.length){ su.style.display='none'; su.innerHTML=''; }
+    else{
+      su.style.display='block';
+      su.innerHTML=`<details open><summary>🔧 Setup check — ${iss.length} process${iss.length>1?'es':''} in this dump need attention</summary><ul>`
+        + iss.map(x=>`<li><b>${esc(x.p)}</b> (${x.n} tickets): ${x.m.join(' · ')}</li>`).join('')
+        + `</ul><div style="margin-top:10px"><button class="btn sm" type="button" data-gomain>Go to Main to fix →</button></div></details>`;
+    }
+  }
+}
+$('newProcCard').addEventListener('click',e=>{
+  const add=e.target.closest('[data-npadd]'), ig=e.target.closest('[data-npignore]');
+  if(ig){ const it=_npList[+ig.dataset.npignore]; if(!it) return; (CFG.ignoredProcs=CFG.ignoredProcs||[]).push(it.name); save(); _npSig=''; scheduleStatus(); toast('Ignoring "'+it.name+'" — add it later with "+ Add process" in Main if needed'); return; }
+  if(!add) return;
+  const it=_npList[+add.dataset.npadd]; if(!it) return;
+  const row=add.closest('.np-row'), val=c=>{ const el=row.querySelector(c); return el?parseFloat(el.value):NaN; };
+  const aht=val('.np-aht'), vs=val('.np-vaht'), sp=val('.np-sp');
+  if(it.src==='dump' && !(aht>0)){ toast('Enter the audit AHT (minutes) for '+it.name); row.querySelector('.np-aht').focus(); return; }
+  if(it.src==='worked' && !(vs>0)){ toast('Enter the verification AHT (seconds) for '+it.name); row.querySelector('.np-vaht').focus(); return; }
+  if(it.src==='dump') CFG.aht[it.name]=aht;
+  if(vs>0) CFG.verifAht[it.name]=Math.round(vs/60*1000)/1000;
+  CFG.sampleRate[it.name]=(isNaN(sp)?20:sp)/100;
+  save(); _npSig=''; _suSig='';
+  renderProcTable(); renderVerMain(); renderLeaves($('lsearch').value); renderWork(); scheduleStatus();
+  toast('Added "'+it.name+'" — now map auditors / verifiers to it in Main');
+});
+$('newProcCard').addEventListener('keydown',e=>{ if(e.key==='Enter' && e.target.matches('input')){ const b=e.target.closest('.np-row').querySelector('[data-npadd]'); if(b) b.click(); } });
+document.addEventListener('click',e=>{
+  if(!e.target.closest('[data-gomain]')) return;
+  document.querySelector('.navb[data-p=main]').click();
+  setTimeout(()=>{ const m=$('mapTable'); if(m) m.scrollIntoView({behavior:'smooth',block:'center'}); },80);
+});
+
 /* ---- init ---- */
-loadSession();
-renderProcTable();
-renderVerMain();
-renderLeaves();
+migrateLegacy();
+document.body.classList.add('no-date');
+renderStoredDays();
+let _lastDate=''; try{ _lastDate=sessionStorage.getItem(LAST_DATE_KEY)||''; }catch(e){}
+setCurrentDate(_lastDate);   // refresh keeps the date you were on; a fresh visit asks you to pick one
 
 </script>
 
