@@ -861,7 +861,37 @@ const DEFAULTS = {
    values, or the new updated names themselves — down to ONE canonical name (the
    Updated SharePoint Task Name). Everything downstream (mapping, AHT, verifiers,
    sampleRate, file naming) is keyed on these canonical names. */
-const GROUP_ALIAS = {};   // no renaming: process names are taken exactly as they appear in the dump (only trimmed)
+const GROUP_ALIAS = {
+  // -> Invalid and Hijack clean up
+  "3p clean-up":"Invalid and Hijack clean up","3P Clean-up":"Invalid and Hijack clean up","3p Clean up":"Invalid and Hijack clean up","Invalid And Hijack Clean Up":"Invalid and Hijack clean up","Invalid and Hijack Clean Up":"Invalid and Hijack clean up",
+  // -> BLMA & GTIN Exemption
+  "GTIN Maintenance":"BLMA & GTIN Exemption","BLMA and GTIN Exemption":"BLMA & GTIN Exemption","Blma & Gtin Exemption":"BLMA & GTIN Exemption",
+  // -> Item Identity Anchoring
+  "Anchor Appeals - GCO":"Item Identity Anchoring","Anchor Appeals":"Item Identity Anchoring","Anchor Appeal":"Item Identity Anchoring",
+  // -> Legacy Barcode Suppressions
+  "Barcode":"Legacy Barcode Suppressions","Barcode Suppression":"Legacy Barcode Suppressions","Barcode Unsuppression":"Legacy Barcode Suppressions",
+  // -> GTA Listing Error 8572 (MBO matching)
+  "MBO Matching":"GTA Listing Error 8572 (MBO matching)","MBO Matching team":"GTA Listing Error 8572 (MBO matching)","Mbo Matching":"GTA Listing Error 8572 (MBO matching)","GTA Listing Error 8572 (MBO Matching)":"GTA Listing Error 8572 (MBO matching)",
+  // -> UPCx Appeals
+  "UPCX Access":"UPCx Appeals","UPCX access":"UPCx Appeals","Upcx Access":"UPCx Appeals",
+  // -> Non BLMA Barcode Suppression
+  "Non-BLMA Suppressions":"Non BLMA Barcode Suppression","Non-BLMA Barcode suppressions":"Non BLMA Barcode Suppression","BTAP GTIN Update":"Non BLMA Barcode Suppression","Non-Blma Barcode Suppression":"Non BLMA Barcode Suppression"
+};
+/* Case- and whitespace-insensitive lookup built from GROUP_ALIAS: every alias AND every
+   canonical name (the table's values) is indexed by its lower-cased, single-spaced form, so
+   e.g. "upcx ACCESS", "invalid and hijack clean up" or "Barcode  Suppression" still resolve.
+   Defined before load() runs because migrateProcessNames() needs it at startup. */
+const _aliasKey = s => String(s==null?'':s).trim().replace(/\s+/g,' ').toLowerCase();
+const ALIAS_LC = (()=>{
+  const m={};
+  Object.keys(GROUP_ALIAS).forEach(k=>{ m[_aliasKey(k)]=GROUP_ALIAS[k]; });
+  Object.keys(GROUP_ALIAS).forEach(k=>{ const v=GROUP_ALIAS[k]; m[_aliasKey(v)]=v; });
+  return m;
+})();
+function normProc(g){
+  g=String(g==null?'':g).trim();
+  return ALIAS_LC[_aliasKey(g)]||g;
+}
 const QUIP = "https://quip-amazon.com/a61zADvbDFTo/Capacity-Planner-2026";
 const WORK_MIN = 480;
 const LE_PROC = "LE Validation";     // default filler task for leftover minutes (1 min = 1 LE)
@@ -910,7 +940,7 @@ function load(){
    using the SAME alias table the dump uses (GROUP_ALIAS) — so a saved config never
    drifts out of sync with what norm() would produce for a fresh dump upload. */
 function migrateProcessNames(cfg){
-  const canon = p => GROUP_ALIAS[(p||'').trim()] || p;
+  const canon = p => p ? normProc(p) : p;
   if(cfg.aht){
     const merged={};
     Object.keys(cfg.aht).forEach(p=>{ const np=canon(p); if(merged[np]==null) merged[np]=cfg.aht[p]; });
@@ -941,6 +971,7 @@ function migrateProcessNames(cfg){
   }
   if(Array.isArray(cfg.mapping)) cfg.mapping.forEach(m=>{ m[1]=canon(m[1]); });
   if(Array.isArray(cfg.verifiers)) cfg.verifiers.forEach(v=>{ v[1]=canon(v[1]); });
+  if(Array.isArray(cfg.ignoredProcs)) cfg.ignoredProcs=[...new Set(cfg.ignoredProcs.map(canon))];
   return cfg;
 }
 function ensureLE(cfg){ cfg=cfg||CFG; if(cfg.aht && cfg.aht[LE_PROC]==null) cfg.aht[LE_PROC]=1; }
@@ -1135,7 +1166,7 @@ function verifierNames(){ return [...new Set(CFG.verifiers.map(v=>v[0]))].sort()
 function mapForProcess(p){ return CFG.mapping.filter(m=>m[1]===p); }
 function procsForAuditor(a){ return CFG.mapping.filter(m=>m[0]===a).map(m=>m[1]); }
 
-const norm = g => { g=(g||'').trim(); return GROUP_ALIAS[g]||g; };
+const norm = g => normProc(g);
 const bucketOf = a => { const n=parseFloat(a); return (isNaN(n)||n<5)?'<5':'Backlog'; };
 
 /* -------- rows-of-arrays -> array of {header: value} objects (shared by CSV + XLSX paths) -------- */
