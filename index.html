@@ -341,7 +341,10 @@
   color-scheme: light;
 }
 body { background: var(--color-bg); color: var(--color-text); }
-a { color: var(--color-link, var(--color-primary)); }</style>
+a { color: var(--color-link, var(--color-primary)); }
+  .btn:active{transform:translateY(1px) scale(.985)}
+  .btn.busy{opacity:.65;pointer-events:none}
+</style>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Work Allocation Dashboard</title>
@@ -609,8 +612,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     <div><h1>Work Allocation Dashboard</h1><div class="sub">Main · Daily Planning · Work Allocation · Verification</div></div>
     <div class="spacer"></div>
     <span id="saveStatus" style="font-size:11px;max-width:320px;text-align:right;margin-right:6px"></span>
-    <span id="folderStatus" style="font-size:11px;color:var(--text2);max-width:260px;text-align:right;margin-right:4px"></span>
-    <button class="btn ghost sm" id="chooseFolderBtn" title="Pick one folder (e.g. on your Desktop). Every file you download from anywhere on this page will be saved there, sorted into a sub-folder per report date, replacing older files of the same name.">📁 Set save folder</button>
+    <span id="folderStatus" hidden style="display:none;font-size:11px;color:var(--text2);max-width:260px;text-align:right;margin-right:4px"></span>
+    <button class="btn ghost sm" id="chooseFolderBtn" hidden style="display:none" title="Pick one folder (e.g. on your Desktop). Every file you download from anywhere on this page will be saved there, sorted into a sub-folder per report date, replacing older files of the same name.">📁 Set save folder</button>
     <button class="btn ghost sm" id="lockMainBtn">🔓 Lock Main</button>
     <button class="btn ghost sm" id="resetBtn">↺ Reset config</button>
   </header>
@@ -1726,6 +1729,32 @@ function strBytes(s){return new TextEncoder().encode(s);}
    archive tools always compress and bare-minimum store-only zips are a technique
    sometimes used to dodge content scanning. A standard compressed zip from a
    well-known library is far less likely to trip a false "potentially harmful" flag. */
+/* ===== Plain browser download (same as the original behaviour) =====
+   Runs synchronously inside the click, then shows a small bar with a manual link in case
+   Edge/Chrome silently blocks the automatic download. ===== */
+function triggerBlobDownload(blob, name){
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download=name; a.style.display='none';
+  document.body.appendChild(a); a.click(); a.remove();
+  showDlBar(url, name);
+  setTimeout(()=>{ try{URL.revokeObjectURL(url);}catch(e){} }, 120000);
+}
+let _dlBarT=null;
+function showDlBar(url, name){
+  let bar=document.getElementById('dlBar');
+  if(!bar){
+    bar=document.createElement('div'); bar.id='dlBar';
+    bar.style.cssText='position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:99999;background:#111827;color:#fff;border-radius:12px;padding:10px 14px;font-size:13px;box-shadow:0 8px 28px rgba(0,0,0,.28);display:flex;gap:12px;align-items:center;max-width:92vw';
+    document.body.appendChild(bar);
+  }
+  bar.innerHTML='';
+  const t=document.createElement('span'); t.textContent='⬇ '+name; t.style.cssText='overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:46vw';
+  const l=document.createElement('a'); l.href=url; l.download=name; l.textContent='Not downloaded? Click here'; l.style.cssText='color:#FFB84D;font-weight:700;text-decoration:underline;white-space:nowrap';
+  const x=document.createElement('span'); x.textContent='✕'; x.style.cssText='cursor:pointer;opacity:.7'; x.onclick=()=>{bar.style.display='none';};
+  bar.append(t,l,x); bar.style.display='flex';
+  clearTimeout(_dlBarT); _dlBarT=setTimeout(()=>{bar.style.display='none';},25000);
+}
 async function downloadZip(filename, files){
   if(typeof JSZip==='undefined'){
     alert('Zip library failed to load (check your internet connection). Try "Download files individually" instead.');
@@ -1734,9 +1763,7 @@ async function downloadZip(filename, files){
   const zip=new JSZip();
   files.forEach(f=>zip.file(f.name, f.content));
   const blob=await zip.generateAsync({type:'blob', compression:'DEFLATE', compressionOptions:{level:6}});
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(blob); a.download=filename; a.click();
-  setTimeout(()=>URL.revokeObjectURL(a.href),1500);
+  triggerBlobDownload(blob, filename);
   return true;
 }
 /* -------- fallback: download every file individually (no zip wrapper at all) —
@@ -1746,9 +1773,7 @@ function downloadFilesIndividually(files){
     setTimeout(()=>{
       const type = f.binary ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' : 'text/csv;charset=utf-8';
       const blob=new Blob([f.content],{type});
-      const a=document.createElement('a');
-      a.href=URL.createObjectURL(blob); a.download=f.name; a.click();
-      setTimeout(()=>URL.revokeObjectURL(a.href),1500);
+      triggerBlobDownload(blob, f.name);
     }, i*120);   // stagger slightly so the browser doesn't block a burst of downloads
   });
 }
@@ -1857,55 +1882,18 @@ function updateFolderStatus(folderName){
    <folder>/<report date>/ — overwriting same-named files — and the browser's
    normal Downloads folder is never touched. Otherwise it falls back to
    whatever the button used to do. */
-/* Returns the saved folder ONLY if permission is already granted. Never opens a picker or
-   permission prompt, so a download button can never hang waiting on a popup. */
-async function quietRootDir(){
-  try{
-    let h=rootDirHandle;
-    if(!h){ h=await fsIdbGet(FS_IDB_KEY); if(h) rootDirHandle=h; }
-    if(!h) return null;
-    if((await h.queryPermission({mode:'readwrite'}))==='granted') return h;
-  }catch(e){}
-  return null;
-}
 function browserDownload(f){
   const type = f.binary ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' : 'text/csv;charset=utf-8';
-  const blob=new Blob([f.content],{type});
-  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=f.name;
-  document.body.appendChild(a); a.click(); a.remove();
-  setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+  triggerBlobDownload(new Blob([f.content],{type}), f.name);
 }
 async function saveFiles(files, opts){
   opts=opts||{};
   if(!files || !files.length) return false;
-  // 1) Optional save-folder: used only if already set AND permission is already granted.
-  if(FS_SUPPORTED){
-    try{
-      const root=await quietRootDir();
-      if(root){
-        const dayName=dateFolderName();
-        const work=(async()=>{
-          const dayDir=await root.getDirectoryHandle(dayName,{create:true});
-          for(const f of files){
-            const fh=await dayDir.getFileHandle(f.name,{create:true});
-            const w=await fh.createWritable(); await w.write(f.content); await w.close();
-          }
-        })();
-        await Promise.race([work, new Promise((_,rej)=>setTimeout(()=>rej(Object.assign(new Error('timeout'),{name:'Timeout'})),4000))]);
-        updateFolderStatus(dayName);
-        toast('Saved '+files.length+' file(s) → '+root.name+' / '+dayName);
-        return true;
-      }
-    }catch(err){
-      console.error('Save-folder write failed:', err);
-      toast('Folder save failed ('+((err&&err.name)||'error')+') — downloading normally instead.');
-    }
-  }
-  // 2) Normal browser download (always works)
   try{
-    if(files.length===1){ browserDownload(files[0]); toast('Downloading '+files[0].name); }
+    if(files.length===1){ browserDownload(files[0]); }
     else if(opts.fallbackMode==='individual'){ downloadFilesIndividually(files); }
     else { await downloadZip(opts.fallbackName || ('Files_'+Date.now()+'.zip'), files); }
+    toast('Downloaded '+(files.length===1?files[0].name:files.length+' files'));
   }catch(err){
     console.error(err); alert('Download failed: '+(err&&err.message||err));
     return false;
@@ -1913,6 +1901,12 @@ async function saveFiles(files, opts){
   return true;
 }
 
+
+/* quick busy-state on download buttons so a click always feels acknowledged */
+['dlAudit','dlExtra','dlVerifZip','dlVerifIndiv'].forEach(id=>{
+  const b=document.getElementById(id); if(!b) return;
+  b.addEventListener('click',()=>{ b.classList.add('busy'); setTimeout(()=>b.classList.remove('busy'),1200); },true);
+});
 /* ================= VERIFICATION ================= */
 // Task_Name (canonical, post-normalize) -> filename prefix — copied EXACTLY from
 // your Get_Task_File_Prefix macro (Select Case block) so verification filenames
@@ -2188,7 +2182,7 @@ function downloadCSV(filename, header, rows){
   const esc=v=>{v=String(v==null?'':v); return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;};
   const lines=[header.map(esc).join(',')].concat(rows.map(r=>r.map(esc).join(',')));
   const blob=new Blob([lines.join('\n')],{type:'text/csv;charset=utf-8;'});
-  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=filename; a.click();
+  triggerBlobDownload(blob, filename);
   setTimeout(()=>URL.revokeObjectURL(a.href),1000);
 }
 /* ============ REAL EXCEL (.xlsx) EXPORT HELPERS ============
@@ -2216,7 +2210,7 @@ function downloadXLSX(filename, header, rows, sheetName){
   }
   const buf=aoaToXlsxArrayBuffer(header, rows, sheetName);
   const blob=new Blob([buf],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
-  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=filename; a.click();
+  triggerBlobDownload(blob, filename);
   setTimeout(()=>URL.revokeObjectURL(a.href),1000);
 }
 function sanitizeFilePart(s){ return String(s==null?'':s).replace(/[^A-Za-z0-9]+/g,'_').replace(/^_+|_+$/g,''); }
