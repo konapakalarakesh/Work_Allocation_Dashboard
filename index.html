@@ -1862,7 +1862,12 @@ async function saveFiles(files, opts){
   if(!files || !files.length) return false;
   if(FS_SUPPORTED){
     try{
-      const folderName = await writeFilesToDisk(files);
+      toast('Preparing '+files.length+' file(s)… if Edge asks to allow file access, click Allow');
+      // Never hang silently: if the folder step (e.g. an unanswered permission prompt) takes >6s, fall back to a normal download.
+      const folderName = await Promise.race([
+        writeFilesToDisk(files),
+        new Promise((_,rej)=>setTimeout(()=>rej(Object.assign(new Error('timeout'),{name:'Timeout'})),6000))
+      ]);
       if(folderName){
         updateFolderStatus(folderName);
         toast('Saved '+files.length+' file(s) → '+rootDirHandle.name+' / '+folderName);
