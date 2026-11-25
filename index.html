@@ -1861,13 +1861,20 @@ async function saveFiles(files, opts){
   opts=opts||{};
   if(!files || !files.length) return false;
   if(FS_SUPPORTED){
-    const folderName = await writeFilesToDisk(files);
-    if(folderName){
-      updateFolderStatus(folderName);
-      toast('Saved '+files.length+' file(s) → '+rootDirHandle.name+' / '+folderName);
-      return true;
+    try{
+      const folderName = await writeFilesToDisk(files);
+      if(folderName){
+        updateFolderStatus(folderName);
+        toast('Saved '+files.length+' file(s) → '+rootDirHandle.name+' / '+folderName);
+        return true;
+      }
+    }catch(err){
+      // Folder write failed (file open in Excel, folder moved/deleted, permission revoked...).
+      // Don't fail silently — tell the user and fall through to a normal browser download.
+      console.error('Save-folder write failed:', err);
+      toast('Could not save to folder ('+((err&&err.name)||'error')+') — downloading normally instead. Close the file in Excel / re-set the folder if this repeats.');
     }
-    // picker was cancelled / permission refused — fall through to a plain browser download below
+    // picker cancelled / permission refused / write failed — fall through to a plain browser download below
   }
   if(files.length===1){
     const f=files[0];
